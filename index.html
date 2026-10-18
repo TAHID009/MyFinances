@@ -49,7 +49,7 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw);pad
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.r3,.bt{grid-template-columns:1fr}.kp{grid-template-columns:1fr 1fr}}
 @media(max-width:800px){body{flex-direction:column}aside{width:auto;flex-direction:row;overflow-x:auto;padding:10px}aside .sec,.foot{display:none}.brand{padding:0 12px 0 0}.it{white-space:nowrap;width:auto}.kp{grid-template-columns:1fr}}
 .inc2{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:14px;align-items:start}aside{position:sticky;top:0;height:100vh;align-self:flex-start}#ct tr[data-q]{cursor:pointer}#yt tr[data-m]{cursor:pointer}#yt tr[data-m]:hover,#ct tr[data-q]:hover{background:#f6f8fc}
-@media(max-width:900px){.inc2{grid-template-columns:1fr}}@media(max-width:800px){aside{position:static;height:auto}}</style></head><body>
+@media(max-width:900px){.inc2{grid-template-columns:1fr}}@media(max-width:800px){aside{position:static;height:auto}}.tx>.ic{flex:none}.tip{position:absolute;transform:translate(-50%,-115%);background:var(--ink);color:#fff;padding:6px 10px;border-radius:6px;font-size:12px;white-space:nowrap;pointer-events:none;z-index:3;line-height:1.35}</style></head><body>
 <aside><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1558d6"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button>
 <button class="it" data-pg="income"><i data-i="income"></i>Income</button>
@@ -59,7 +59,7 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw);pad
 <div class="sec" style="padding:0;height:1px;background:rgba(255,255,255,.12);margin:10px 8px"></div>
 <button class="it" data-pg="cats"><i data-i="tag"></i>Categories</button>
 <button class="it" id="ie"><i data-i="swap"></i>Import / Export</button>
-<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 10</div></div></aside>
+<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 11</div></div></aside>
 <main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
 <div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
 <section class="pg" id="p-dash"><div class="layout"><div class="col">
@@ -67,6 +67,7 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw);pad
 <div class="r3"><div class="card"><h3>Expense by Category</h3><div class="row" id="cd"></div></div>
 <div class="card" id="ov"><h3>Monthly Overview<span class="m" style="font-weight:400;font-size:10.5px"><span style="color:#2e9e5b">■</span> Income &nbsp;<span style="color:#2f6fe0">■</span> Expenses &nbsp;<span style="color:#0f2a5b">●</span> Savings</span></h3><div id="mo"></div></div>
 <div class="card" id="pm"><h3>Payment Method</h3><div id="pd"></div></div></div>
+<div class="card" id="dx"><h3><span>Daily Expenses</span><span id="dxr" class="m" style="font-weight:600;font-size:12px"></span></h3><div id="dxc" style="position:relative;padding-top:34px"><div id="dxt" class="tip" hidden></div><div id="dxs"></div></div><div class="m" style="font-size:11px;margin-top:4px">Hover or tap a bar to see the amount &nbsp;·&nbsp; <span style="color:#16a34a">- - -</span> daily average &nbsp;·&nbsp; <span style="color:#e11d48">■</span> above average</div></div>
 <div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Quick Add by Category</span><button class="btn w" id="mc" style="padding:5px 10px"><i data-i="edit" data-s="14"></i>Manage</button></h3><div class="f" style="max-width:380px"><div class="ddw"><button type="button" class="dd ph" id="dq">Select category to add an expense</button><div class="chips dp" id="qq"></div></div></div></div></div>
 </div><div class="col">
 <div class="card"><h3><span><i data-i="cal"></i> Select Date</span></h3><div class="row" style="justify-content:space-between;margin-bottom:6px"><button class="kb" id="pv">‹</button><b id="cm"></b><button class="kb" id="nx">›</button></div><div class="cal" id="cal"></div></div>
@@ -161,7 +162,7 @@ function render(){
  // calendar
  $("#cm").textContent=MN[mi]+" "+y;const f=new Date(y,mi,1).getDay(),dm=new Date(y,mi+1,0).getDate();
  $("#cal").innerHTML=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<span class="h">${d}</span>`).join("")+"<span></span>".repeat(f)+Array.from({length:dm},(_,k)=>`<span data-d="${k+1}" class="${k+1===+sel.slice(8)?"s":""}">${k+1}</span>`).join("");
- $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);renderCats(eN,E);renderMonthly(y,mi);
+ $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);renderDx(m,eN,E);renderCats(eN,E);renderMonthly(y,mi);
 }
 function setSel(d){sel=d;render()}
 const shift=k=>{let[y,o]=sel.slice(0,7).split("-").map(Number);o+=k;if(o<1){o=12;y--}if(o>12){o=1;y++}const dm=new Date(y,o,0).getDate();setSel(y+"-"+String(o).padStart(2,"0")+"-"+String(Math.min(+sel.slice(8),dm)).padStart(2,"0"))};
@@ -260,6 +261,17 @@ function renderMonthly(y,mi){let tI=0,tE=0;const rows=MS.map((nm,k)=>{const mm=y
  $("#yt").innerHTML=rows+`<tr><td><b>${y} total</b></td><td class="ra"><b>${num(tI)}</b></td><td class="ra"><b>${num(tE)}</b></td><td class="ra"><b>${num(tI-tE)}</b></td><td class="ra"><b>${tI?((tI-tE)/tI*100).toFixed(1)+"%":"—"}</b></td></tr>`}
 $("#yt").onclick=e=>{const r=e.target.closest("[data-m]");if(r)$("#mon").value=r.dataset.m,$("#mon").onchange({target:$("#mon")})};
 $("#ct").onclick=e=>{const t=e.target.closest("[data-q]");if(t)openE(t.dataset.q)};
+function renderDx(m,eN,E){const dm=new Date(+m.slice(0,4),+m.slice(5),0).getDate(),pad=n=>String(n).padStart(2,"0"),t=new Date().toLocaleDateString("en-CA"),cur=t.slice(0,7),td=+t.slice(8),per=Array.from({length:dm},()=>({t:0,n:0}));
+ eN.forEach(x=>{const o=per[+x.date.slice(8)-1];if(o){o.t+=x.amount;o.n++}});
+ const el=m<cur?dm:m===cur?td:0,avg=el?E/el:0,mx=Math.max(1,avg,...per.map(o=>o.t)),W=640,H=170,bw=W/dm,sdn=+sel.slice(8);
+ let g=`<svg viewBox="0 0 ${W} ${H+20}" width="100%" style="display:block">`;
+ for(let k=0;k<=3;k++){const y=H-k/3*H;g+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="#eef2f8"/>`}
+ per.forEach((o,k)=>{const d=k+1,h=o.t/mx*H,x=k*bw;g+=`<rect data-l="${fd(m+"-"+pad(d))}" data-a="${o.t}" data-n="${o.n}" data-y="${1-o.t/mx}" x="${x}" y="0" width="${bw}" height="${H}" fill="transparent" style="cursor:pointer"/><rect x="${x+bw*.15}" y="${H-h}" width="${bw*.7}" height="${o.t?Math.max(h,2):1}" rx="2" fill="${d===sdn?"#0f2a5b":avg&&o.t>avg?"#e11d48":o.t?"#2f6fe0":"#dbe3f0"}" pointer-events="none"/><text x="${x+bw/2}" y="${H+13}" font-size="8" text-anchor="middle" fill="${d===sdn?"#0f2a5b":"#6b7a99"}" font-weight="${d===sdn?700:400}" pointer-events="none">${d}</text>`});
+ if(avg)g+=`<line x1="0" x2="${W}" y1="${H-avg/mx*H}" y2="${H-avg/mx*H}" stroke="#16a34a" stroke-dasharray="5 4" pointer-events="none"/>`;
+ $("#dxs").innerHTML=g+"</svg>";$("#dxt").hidden=true;$("#dxr").textContent=E?"Total "+fmt(E)+" · avg "+fmt(avg)+"/day":"No expenses this month"}
+const dxShow=e=>{const b=e.target.closest&&e.target.closest("[data-l]"),tp=$("#dxt");if(!b){tp.hidden=true;return}const c=$("#dxc").getBoundingClientRect(),r=b.getBoundingClientRect(),n=+b.dataset.n;
+ tp.innerHTML=`<b>${b.dataset.l}</b><br>${fmt(+b.dataset.a)}${n?" · "+n+" entr"+(n==1?"y":"ies"):""}`;tp.hidden=false;tp.style.left=Math.min(Math.max(r.left-c.left+r.width/2,55),Math.max(c.width-55,55))+"px";tp.style.top=(r.top-c.top+r.height*(+b.dataset.y))+"px";$("#dxr").textContent=b.dataset.l+" · "+fmt(+b.dataset.a)};
+$("#dxc").addEventListener("pointerover",dxShow);$("#dxc").addEventListener("pointerdown",dxShow);$("#dxc").addEventListener("pointerleave",e=>{if(e.pointerType==="mouse")$("#dxt").hidden=true});
 $("#add2").onclick=()=>openE();
 const PGS={dash:["Personal Finance Dashboard","Manage your income, expenses and savings — all in one place."],income:["Income","Record and review your income for the month."],log:["Expense Log","Every expense you have recorded. Filter by day, week, month or all."],daily:["Daily Cost Analysis","See how much you spend each day."],monthly:["Monthly Overview","Income, expenses and savings, month by month."],cats:["Categories","Spending by category this month and your category list."]};
 function go(p){if(!PGS[p])p="dash";$$(".pg").forEach(x=>x.hidden=x.id!=="p-"+p);$$("aside .it[data-pg]").forEach(b=>b.classList.toggle("on",b.dataset.pg===p));$("#pt").textContent=PGS[p][0];$("#ps").textContent=PGS[p][1];closeDD();window.scrollTo(0,0)}
