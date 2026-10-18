@@ -155,7 +155,7 @@ $("#fl").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";try{await
 $("#fc").onsubmit=e=>{e.preventDefault();const o={};for(const m of e.target.cfg.value.matchAll(/(\w+)\s*:\s*["']([^"']*)["']/g))o[m[1]]=m[2];if(!o.apiKey||!o.projectId)return toast("Paste the full firebaseConfig (apiKey and projectId needed)");localStorage.setItem("fbcfg",JSON.stringify(o));location.reload()};
 $("#ie").onclick=()=>$("#dS").showModal();$("#cf").onclick=()=>{$("#dS").close();op("#dC")};$("#so").onclick=()=>{$("#dS").close();AU&&AU.signOut(auth)};
 // ---- expense add / edit / delete
-const openE=(c,r)=>{const f=$("#fe");f.reset();fillCat();if(r&&!CAT[r.cat])$("#ec").insertAdjacentHTML("beforeend",`<option>${esc(r.cat)}</option>`);f.rid.value=r?r.id:"";f.date.value=r?r.date:sel;
+const openE=(c,r)=>{const f=$("#fe");f.reset();fillCat();if(r&&!CAT[r.cat])$("#ec").insertAdjacentHTML("beforeend",`<option>${esc(r.cat)}</option>`);f.elements.rid.value=r?r.id:"";f.elements.date.value=r?r.date:sel;
  if(r){$("#ec").value=r.cat;f.amount.value=r.amount;f.method.value=r.method;f.notes.value=r.notes||""}else if(c)$("#ec").value=c;
  fillItems();if(r){if((CAT[r.cat]||FB).items.includes(r.item))$("#ei").value=r.item;else{$("#ei").value="__o";togO();$("#eo").value=r.item}}
  $("#et").textContent=r?"Edit Expense":"Add Expense";$("#dE").showModal()};
@@ -189,7 +189,7 @@ $("#file").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)
 const fillCat=()=>{$("#ec").innerHTML='<option value="" disabled selected>Select Category</option>'+Object.keys(CAT).map(c=>`<option>${esc(c)}</option>`).join("")};
 const togO=()=>{const o=$("#ei").value==="__o";$("#eo").hidden=!o;$("#eo").required=o;if(!o)$("#eo").value=""};
 const fillItems=()=>{const c=$("#ec").value,e=$("#ei");e.disabled=!c;e.innerHTML='<option value="" disabled selected>Select Item</option>'+(CAT[c]||FB).items.map(i=>`<option>${esc(i)}</option>`).join("")+'<option value="__o">✏️ Other (type manually)</option>';e.value="";togO()};
-fillCat();fillItems();$("#ec").onchange=fillItems;$("#ei").onchange=togO;$("#lo").onclick=()=>{AU&&AU.signOut(auth)};
+fillCat();fillItems();$("#ec").addEventListener("change",fillItems);$("#ei").addEventListener("change",togO);$("#lo").onclick=()=>{AU&&AU.signOut(auth)};
 ["#dE","#dS","#dK"].forEach(id=>{const d=$(id);d.onmousedown=e=>d._o=e.target===d;d.onclick=e=>{if(e.target===d&&d._o)d.close()}});
 const kRows=L=>{$("#kl").innerHTML=L.map(x=>`<div class="kr" data-o="${esc(x.o??x.n)}" data-c="${x.c}"><div class="row" style="flex-wrap:nowrap"><input class="ki" value="${esc(x.i)}" style="width:52px;text-align:center"><input class="kn" value="${esc(x.n)}" placeholder="Category name" style="flex:1"><button type="button" class="kb" data-kd title="Remove">🗑</button></div><input class="kt2" value="${esc(x.items.join(", "))}" placeholder="Items, comma separated" style="width:100%;margin:4px 0 10px"></div>`).join("")};
 const readK=()=>[...$$("#kl .kr")].map(r=>({o:r.dataset.o,c:r.dataset.c,i:r.querySelector(".ki").value.trim()||"🏷️",n:r.querySelector(".kn").value.trim(),items:r.querySelector(".kt2").value.split(",").map(s=>s.trim()).filter(Boolean)}));
