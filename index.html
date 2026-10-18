@@ -48,35 +48,46 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw);pad
 #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;display:none}
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.r3,.bt{grid-template-columns:1fr}.kp{grid-template-columns:1fr 1fr}}
 @media(max-width:800px){body{flex-direction:column}aside{width:auto;flex-direction:row;overflow-x:auto;padding:10px}aside .sec,.foot{display:none}.brand{padding:0 12px 0 0}.it{white-space:nowrap;width:auto}.kp{grid-template-columns:1fr}}
-</style></head><body>
+.inc2{display:grid;grid-template-columns:minmax(300px,380px) minmax(0,1fr);gap:14px;align-items:start}aside{position:sticky;top:0;height:100vh;align-self:flex-start}#ct tr[data-q]{cursor:pointer}#yt tr[data-m]{cursor:pointer}#yt tr[data-m]:hover,#ct tr[data-q]:hover{background:#f6f8fc}
+@media(max-width:900px){.inc2{grid-template-columns:1fr}}@media(max-width:800px){aside{position:static;height:auto}}</style></head><body>
 <aside><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1558d6"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
-<button class="it on" data-go="top"><i data-i="home"></i>Dashboard</button>
-<button class="it" data-go="inc"><i data-i="income"></i>Income</button>
-<button class="it" data-go="log"><i data-i="receipt"></i>Expense Log</button>
-<button class="it" data-go="da"><i data-i="chart"></i>Daily Analysis</button>
-<button class="it" data-go="ov"><i data-i="cal"></i>Monthly Overview</button>
+<button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button>
+<button class="it" data-pg="income"><i data-i="income"></i>Income</button>
+<button class="it" data-pg="log"><i data-i="receipt"></i>Expense Log</button>
+<button class="it" data-pg="daily"><i data-i="chart"></i>Daily Analysis</button>
+<button class="it" data-pg="monthly"><i data-i="cal"></i>Monthly Overview</button>
 <div class="sec" style="padding:0;height:1px;background:rgba(255,255,255,.12);margin:10px 8px"></div>
-<button class="it" id="kc"><i data-i="tag"></i>Categories</button>
+<button class="it" data-pg="cats"><i data-i="tag"></i>Categories</button>
 <button class="it" id="ie"><i data-i="swap"></i>Import / Export</button>
-<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 9</div></div></aside>
-<main id="top"><div class="top"><div><h1>Personal Finance Dashboard</h1><p>Manage your income, expenses and savings — all in one place.</p></div>
-<div class="tr"><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
-<div class="layout"><div class="col">
+<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 10</div></div></aside>
+<main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
+<div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
+<section class="pg" id="p-dash"><div class="layout"><div class="col">
 <div class="kp" id="kp"></div>
 <div class="r3"><div class="card"><h3>Expense by Category</h3><div class="row" id="cd"></div></div>
 <div class="card" id="ov"><h3>Monthly Overview<span class="m" style="font-weight:400;font-size:10.5px"><span style="color:#2e9e5b">■</span> Income &nbsp;<span style="color:#2f6fe0">■</span> Expenses &nbsp;<span style="color:#0f2a5b">●</span> Savings</span></h3><div id="mo"></div></div>
 <div class="card" id="pm"><h3>Payment Method</h3><div id="pd"></div></div></div>
-<div class="card" id="da"><h3><span>Daily Cost Analysis</span><span class="m" style="font-weight:400;font-size:11px">Click a bar or a row to pick that day</span></h3><div class="dk" id="dk"></div><div id="dc" style="margin-bottom:10px"></div><div class="tw" style="max-height:280px;overflow:auto"><table style="min-width:520px"><thead><tr><th>Date</th><th>Entries</th><th>Top category</th><th class="ra">Total (৳)</th><th style="width:28%">Compared with daily average</th></tr></thead><tbody id="dt"></tbody></table></div></div>
-<div class="card" id="log"><h3><span>Daily Expense Log</span><span class="row"><input type="date" id="sd"><span class="tabs" id="lr" style="margin:0"><button data-r="day">Day</button><button data-r="week">Week</button><button data-r="month" class="on">Month</button><button data-r="all">All</button></span><button class="btn" id="add"><i data-i="plus" data-s="15"></i>Add Expense</button><button class="btn w" id="ex"><i data-i="down" data-s="15"></i>Export</button></span></h3>
-<div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Item / Details</th><th class="ra">Amount (৳)</th><th>Payment Method</th><th>Notes</th><th></th></tr></thead><tbody id="tb"></tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td class="ra"><b id="tt"></b></td><td colspan="3"></td></tr></tfoot></table></div></div>
 <div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Quick Add by Category</span><button class="btn w" id="mc" style="padding:5px 10px"><i data-i="edit" data-s="14"></i>Manage</button></h3><div class="f" style="max-width:380px"><div class="ddw"><button type="button" class="dd ph" id="dq">Select category to add an expense</button><div class="chips dp" id="qq"></div></div></div></div></div>
 </div><div class="col">
 <div class="card"><h3><span><i data-i="cal"></i> Select Date</span></h3><div class="row" style="justify-content:space-between;margin-bottom:6px"><button class="kb" id="pv">‹</button><b id="cm"></b><button class="kb" id="nx">›</button></div><div class="cal" id="cal"></div></div>
 <div class="card"><h3>Recent Transactions<a href="#log" style="color:var(--pri);font-size:11px;font-weight:400;text-decoration:none">View All</a></h3><div id="rt"></div></div>
+</div></div></section>
+<section class="pg" id="p-income" hidden><div class="inc2">
 <div class="card" id="inc"><h3>Quick Income Entry</h3><div class="tabs" id="tabs"><button class="on">Salary</button><button>Family</button><button>Others</button></div>
 <form class="f" id="fi"><div class="f2"><div class="f"><label>Date</label><input type="date" name="date" required></div><div class="f"><label>Amount (৳)</label><input type="number" name="amount" min="0" step="any" placeholder="Enter amount" required></div></div><label>Payment Method</label><select name="method"><option>Bank</option><option>Cash</option><option>Card</option></select><label>Notes (optional)</label><input name="notes" placeholder="e.g. Monthly salary"><button class="btn" style="margin-top:10px;padding:11px">Save Income</button></form></div>
-<div class="card"><h3>Income This Month</h3><div id="il"></div></div>
-</div></div></main>
+<div class="card"><h3><span>Income This Month</span><b id="itot"></b></h3><div id="il"></div></div>
+</div></section>
+<section class="pg" id="p-log" hidden>
+<div class="card" id="log"><h3><span>Daily Expense Log</span><span class="row"><input type="date" id="sd"><span class="tabs" id="lr" style="margin:0"><button data-r="day">Day</button><button data-r="week">Week</button><button data-r="month" class="on">Month</button><button data-r="all">All</button></span><button class="btn" id="add"><i data-i="plus" data-s="15"></i>Add Expense</button><button class="btn w" id="ex"><i data-i="down" data-s="15"></i>Export</button></span></h3>
+<div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Item / Details</th><th class="ra">Amount (৳)</th><th>Payment Method</th><th>Notes</th><th></th></tr></thead><tbody id="tb"></tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td class="ra"><b id="tt"></b></td><td colspan="3"></td></tr></tfoot></table></div></div>
+</section>
+<section class="pg" id="p-daily" hidden>
+<div class="card" id="da"><h3><span>Daily Cost Analysis</span><span class="m" style="font-weight:400;font-size:11px">Click a bar or a row to pick that day</span></h3><div class="dk" id="dk"></div><div id="dc" style="margin-bottom:10px"></div><div class="tw" style="max-height:280px;overflow:auto"><table style="min-width:520px"><thead><tr><th>Date</th><th>Entries</th><th>Top category</th><th class="ra">Total (৳)</th><th style="width:28%">Compared with daily average</th></tr></thead><tbody id="dt"></tbody></table></div></div>
+</section>
+<section class="pg" id="p-monthly" hidden><div class="card"><h3><span>Income vs Expenses</span><span class="m" style="font-weight:400;font-size:10.5px"><span style="color:#2e9e5b">■</span> Income &nbsp;<span style="color:#2f6fe0">■</span> Expenses &nbsp;<span style="color:#0f2a5b">●</span> Savings</span></h3><div id="mo2" style="max-width:760px"></div></div>
+<div class="card" style="margin-top:14px"><h3><span>Year Summary</span><span class="m" style="font-weight:400;font-size:11px">Click a month to open it</span></h3><div class="tw"><table style="min-width:520px"><thead><tr><th>Month</th><th class="ra">Income (৳)</th><th class="ra">Expenses (৳)</th><th class="ra">Savings (৳)</th><th class="ra">Savings rate</th></tr></thead><tbody id="yt"></tbody></table></div></div></section>
+<section class="pg" id="p-cats" hidden><div class="card"><h3><span>Spending by Category</span><button class="btn w" id="mc2" style="padding:5px 10px"><i data-i="edit" data-s="14"></i>Edit categories</button></h3><div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th>Items</th><th class="ra">This month (৳)</th><th class="ra">Share</th><th style="width:20%"></th></tr></thead><tbody id="ct"></tbody></table></div></div></section>
+</main>
 
 <dialog id="dE"><form class="f" id="fe"><h3 style="margin:0" id="et">Add Expense</h3><input type="hidden" name="rid"><label>Date <b class="rq">*</b></label><input type="date" name="date" required><label>Category <b class="rq">*</b></label><div class="ddw"><button type="button" class="dd ph" id="dbC">Select Category</button><div id="ec" class="chips dp"></div></div><label>Item <b class="rq">*</b> <span style="font-weight:400">(tick one or more)</span></label><div class="ddw"><button type="button" class="dd ph" id="dbI" disabled>Select Item</button><div id="ei" class="chips dp"></div></div><input id="eo" placeholder="Type item(s), separate with comma" hidden style="margin-top:6px"><div id="ew" hidden><label style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ink)"><input type="checkbox" id="es" checked style="width:auto"> Save new item(s) to the category list</label></div><label>Amount (৳) <b class="rq">*</b></label><input type="number" name="amount" min="0" step="any" required><label>Payment Method</label><div class="ddw"><button type="button" class="dd" id="dbM">Cash</button><div class="chips dp" id="em"><label class="chip r"><input type="radio" name="method" value="Cash" checked>Cash</label><label class="chip r"><input type="radio" name="method" value="Bank">Bank</label><label class="chip r"><input type="radio" name="method" value="Card">Card</label><label class="chip r"><input type="radio" name="method" value="Others">Others</label></div></div><label>Notes (optional)</label><input name="notes"><div class="row" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn w" data-x>Cancel</button><button class="btn">Save Expense</button></div></form></dialog>
 <dialog id="dL"><form class="f" id="fl"><h3 style="margin:0">My Finance — Sign in</h3><label>Email</label><input type="email" name="email" required autocomplete="username"><label>Password</label><input type="password" name="password" required autocomplete="current-password"><div class="r" id="le" style="min-height:16px;margin-top:6px"></div><button class="btn" style="padding:11px">Sign in</button></form></dialog>
@@ -139,7 +150,7 @@ function render(){
  const mx=Math.max(100000,Math.ceil(Math.max(...D.flat())/20000)*20000),Y=v=>180-v/mx*170,n=D.length,sl=330/n;let s=`<svg viewBox="0 0 380 205" width="100%">`;
  for(let t=0;t<=5;t++){const v=mx/5*t;s+=`<line x1="40" x2="375" y1="${Y(v)}" y2="${Y(v)}" stroke="#e6ebf3"/><text x="34" y="${Y(v)+3}" font-size="8" text-anchor="end" fill="#6b7a99">${v?v/1000+"K":0}</text>`}
  D.forEach((d,k)=>{const x=44+k*sl,w=sl*.3;s+=`<rect x="${x+sl*.15}" y="${Y(d[0])}" width="${w}" height="${180-Y(d[0])}" fill="#2e9e5b"/><rect x="${x+sl*.15+w}" y="${Y(d[1])}" width="${w}" height="${180-Y(d[1])}" fill="#2f6fe0"/><text x="${x+sl*.45}" y="195" font-size="8" text-anchor="middle" fill="#6b7a99">${MS[k]}</text>`});
- const pts=D.map((d,k)=>[44+k*sl+sl*.45,Y(Math.max(0,d[2]))]);s+=`<polyline fill="none" stroke="#0f2a5b" stroke-width="1.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.5" fill="#0f2a5b"/>`).join("")+`</svg>`;$("#mo").innerHTML=s;
+ const pts=D.map((d,k)=>[44+k*sl+sl*.45,Y(Math.max(0,d[2]))]);s+=`<polyline fill="none" stroke="#0f2a5b" stroke-width="1.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.5" fill="#0f2a5b"/>`).join("")+`</svg>`;$("#mo").innerHTML=s;$("#mo2").innerHTML=s;
  // table
  const st=new Date(Date.UTC(+sel.slice(0,4),+sel.slice(5,7)-1,+sel.slice(8))-6*864e5).toISOString().slice(0,10);
  const rows=db.expenses.filter(x=>lrange==="day"?x.date===sel:lrange==="week"?x.date>=st&&x.date<=sel:lrange==="all"?true:x.date.startsWith(m)).sort((a,b)=>b.date.localeCompare(a.date));
@@ -150,7 +161,7 @@ function render(){
  // calendar
  $("#cm").textContent=MN[mi]+" "+y;const f=new Date(y,mi,1).getDay(),dm=new Date(y,mi+1,0).getDate();
  $("#cal").innerHTML=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<span class="h">${d}</span>`).join("")+"<span></span>".repeat(f)+Array.from({length:dm},(_,k)=>`<span data-d="${k+1}" class="${k+1===+sel.slice(8)?"s":""}">${k+1}</span>`).join("");
- $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);
+ $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);renderCats(eN,E);renderMonthly(y,mi);
 }
 function setSel(d){sel=d;render()}
 const shift=k=>{let[y,o]=sel.slice(0,7).split("-").map(Number);o+=k;if(o<1){o=12;y--}if(o>12){o=1;y++}const dm=new Date(y,o,0).getDate();setSel(y+"-"+String(o).padStart(2,"0")+"-"+String(Math.min(+sel.slice(8),dm)).padStart(2,"0"))};
@@ -161,7 +172,6 @@ $("#sd").onchange=e=>e.target.value&&setSel(e.target.value);
 $("#add").onclick=()=>openE();$("#qq").onclick=e=>{const b=e.target.closest("[data-q]");if(b){closeDD();openE(b.dataset.q)}};
 $$("[data-x]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
 $("#tabs").onclick=e=>{if(e.target.tagName!=="BUTTON")return;$$("#tabs button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");inType=e.target.textContent};
-$$("[data-go]").forEach(b=>b.onclick=()=>{$$(".it").forEach(x=>x.classList.remove("on"));b.classList.add("on");document.getElementById(b.dataset.go).scrollIntoView({behavior:"smooth"})});
 // ---- login / config
 $("#dL").oncancel=e=>e.preventDefault();$("#dC").oncancel=e=>{if(!localStorage.getItem("fbcfg"))e.preventDefault()};
 $("#fl").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";try{await AU.signInWithEmailAndPassword(auth,e.target.email.value.trim(),e.target.password.value)}catch(x){$("#le").textContent=(x.code||x.message).replace("auth/","").replace(/-/g," ")}};
@@ -182,7 +192,7 @@ $("#fe").onsubmit=async e=>{e.preventDefault();const f=e.target,cat=cv();if(!cat
 $("#fi").onsubmit=async e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target));r.amount=+r.amount;r.type=inType;e.target.amount.value=e.target.notes.value="";sel=r.date;render();await put("income",uid(),r)};
 $("#tb").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit)openE(null,db.expenses.find(x=>x.id===b.dataset.edit));if(b.dataset.del&&confirm("Delete this expense?"))await rm("expenses",b.dataset.del)};
 $("#il").onclick=async e=>{const b=e.target.closest("[data-di]");if(b&&confirm("Delete this income entry?"))await rm("income",b.dataset.di)};
-function renderInc(){$("#il").innerHTML=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:11px">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b><button class="kb" data-di="${x.id}" title="Delete">${ico("trash",16)}</button></div>`).join("")||'<span class="m">No income this month.</span>'}
+function renderInc(){$("#itot").textContent=fmt(sum(mon(db.income,sel.slice(0,7))));$("#il").innerHTML=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:11px">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b><button class="kb" data-di="${x.id}" title="Delete">${ico("trash",16)}</button></div>`).join("")||'<span class="m">No income this month.</span>'}
 // ---- export / import
 const dl=(n,t,ty)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:ty}));a.download=n;a.click()};
 const q=v=>`"${String(v).replace(/"/g,'""')}"`,toCsv=(h,rows)=>h+"\n"+rows.map(r=>r.map(q).join(",")).join("\n");
@@ -219,7 +229,7 @@ $("#fe").addEventListener("click",e=>{if(!e.target.closest(".ddw"))closeDD()});$
 ["#dE","#dS","#dK"].forEach(id=>{const d=$(id);d.addEventListener("mousedown",e=>{d._o=e.target===d});d.addEventListener("click",e=>{if(e.target===d&&d._o)d.close()})});
 const kRows=L=>{$("#kl").innerHTML=L.map(x=>`<div class="kr" data-o="${esc(x.o??x.n)}" data-c="${x.c}"><div class="row" style="flex-wrap:nowrap"><input class="ki" value="${esc(x.i)}" style="width:52px;text-align:center"><input class="kn" value="${esc(x.n)}" placeholder="Category name" style="flex:1"><button type="button" class="kb" data-kt title="Show / hide items">${ico("chev",18)}</button><button type="button" class="kb" data-kd title="Remove">${ico("trash",16)}</button></div><div class="kx"><input class="kt2" value="${esc(x.items.join(", "))}" placeholder="Items, comma separated" style="width:100%;margin:6px 0 4px"></div></div>`).join("")};
 const readK=()=>[...$$("#kl .kr")].map(r=>({o:r.dataset.o,c:r.dataset.c,i:r.querySelector(".ki").value.trim()||"🏷️",n:r.querySelector(".kn").value.trim(),items:r.querySelector(".kt2").value.split(",").map(s=>s.trim()).filter(Boolean)}));
-$("#mc").onclick=$("#kc").onclick=()=>{if(!user)return toast("Sign in first");kRows(CATS.map(x=>({...x,o:x.n})));$("#dK").showModal()};
+$("#mc").onclick=$("#mc2").onclick=()=>{if(!user)return toast("Sign in first");kRows(CATS.map(x=>({...x,o:x.n})));$("#dK").showModal()};
 $("#ka").onclick=()=>{const L=readK();L.push({n:"",i:"🏷️",c:PAL[L.length%PAL.length],items:[],o:""});kRows(L);const l=$("#kl");l.scrollTop=l.scrollHeight;l.lastElementChild.classList.add("open");l.lastElementChild.querySelector(".kn").focus()};
 $("#kr").onclick=()=>{if(confirm("Reset to the default category list?"))kRows(defCats().map(x=>({...x,o:x.n})))};
 $("#kl").onclick=e=>{const t=e.target.closest("[data-kt]");if(t)t.closest(".kr").classList.toggle("open");const r=e.target.closest("[data-kd]");if(r&&confirm("Remove this category? Past expenses keep their data and show as 'Other / removed'."))r.closest(".kr").remove()};
@@ -244,5 +254,17 @@ $("#lr").onclick=e=>{const b=e.target.closest("button");if(!b)return;lrange=b.da
 $("#dq").onclick=()=>{const o=$("#qq").classList.contains("open");closeDD();if(!o)$("#qq").classList.add("open")};
 document.addEventListener("click",e=>{if(!e.target.closest(".ddw"))closeDD()});
 $$("[data-i]").forEach(e=>e.innerHTML=ico(e.dataset.i,+e.dataset.s||18));
+function renderCats(eN,E){const pad=t=>t,L=CATS.map(x=>({n:x.n,i:x.i,c:CAT[x.n].c,it:x.items.join(", "),t:sum(eN.filter(e=>e.cat===x.n))})),lo=E-L.reduce((a,x)=>a+x.t,0);if(lo>0)L.push({n:"Other / removed",i:FB.i,c:FB.c,it:"",t:lo,x:1});
+ $("#ct").innerHTML=L.map(x=>`<tr${x.x?"":` data-q="${esc(x.n)}"`}><td>${x.i} <b>${esc(x.n)}</b></td><td class="m" style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.it)}</td><td class="ra">${x.t?num(x.t):"—"}</td><td class="ra">${E&&x.t?Math.round(x.t/E*100)+"%":"—"}</td><td><div style="background:#eef2f8;border-radius:4px;height:8px"><div style="width:${E?x.t/E*100:0}%;height:8px;border-radius:4px;background:${x.c}"></div></div></td></tr>`).join("")+`<tr><td colspan="2"><b>Total</b></td><td class="ra"><b>${num(E)}</b></td><td colspan="2"></td></tr>`}
+function renderMonthly(y,mi){let tI=0,tE=0;const rows=MS.map((nm,k)=>{const mm=y+"-"+String(k+1).padStart(2,"0"),a=sum(mon(db.income,mm)),b=sum(mon(db.expenses,mm)),v=a-b;tI+=a;tE+=b;return`<tr data-m="${mm}"${k===mi?' style="background:#eef4ff"':""}><td>${MN[k]}</td><td class="ra">${a?num(a):"—"}</td><td class="ra">${b?num(b):"—"}</td><td class="ra ${v<0?"r":"g"}">${a||b?num(v):"—"}</td><td class="ra">${a?(v/a*100).toFixed(1)+"%":"—"}</td></tr>`}).join("");
+ $("#yt").innerHTML=rows+`<tr><td><b>${y} total</b></td><td class="ra"><b>${num(tI)}</b></td><td class="ra"><b>${num(tE)}</b></td><td class="ra"><b>${num(tI-tE)}</b></td><td class="ra"><b>${tI?((tI-tE)/tI*100).toFixed(1)+"%":"—"}</b></td></tr>`}
+$("#yt").onclick=e=>{const r=e.target.closest("[data-m]");if(r)$("#mon").value=r.dataset.m,$("#mon").onchange({target:$("#mon")})};
+$("#ct").onclick=e=>{const t=e.target.closest("[data-q]");if(t)openE(t.dataset.q)};
+$("#add2").onclick=()=>openE();
+const PGS={dash:["Personal Finance Dashboard","Manage your income, expenses and savings — all in one place."],income:["Income","Record and review your income for the month."],log:["Expense Log","Every expense you have recorded. Filter by day, week, month or all."],daily:["Daily Cost Analysis","See how much you spend each day."],monthly:["Monthly Overview","Income, expenses and savings, month by month."],cats:["Categories","Spending by category this month and your category list."]};
+function go(p){if(!PGS[p])p="dash";$$(".pg").forEach(x=>x.hidden=x.id!=="p-"+p);$$("aside .it[data-pg]").forEach(b=>b.classList.toggle("on",b.dataset.pg===p));$("#pt").textContent=PGS[p][0];$("#ps").textContent=PGS[p][1];closeDD();window.scrollTo(0,0)}
+window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
+$$("aside .it[data-pg]").forEach(b=>b.onclick=()=>{location.hash=b.dataset.pg;go(b.dataset.pg)});
+go(location.hash.slice(1));
 render();boot();
 </script></body></html>
