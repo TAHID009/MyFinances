@@ -57,7 +57,7 @@ main{height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:12p
 .top{margin-bottom:10px}.top h1{font-size:20px}.top p{font-size:12px;margin:0}
 #p-dash{flex:1;min-height:0}#p-dash .layout{height:100%;min-height:0}
 #p-dash .col{align-content:stretch;min-height:0;gap:10px}
-#p-dash .col:first-child{grid-template-rows:auto minmax(0,1fr) auto auto}
+#p-dash .col:first-child{grid-template-rows:auto minmax(0,1.5fr) minmax(0,1fr) auto}
 #p-dash .col:last-child{grid-template-rows:auto minmax(0,1fr) auto}
 #p-dash .r3{min-height:0;gap:10px}
 #p-dash .card{padding:10px 14px;min-height:0}
@@ -65,11 +65,12 @@ main{height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:12p
 #p-dash .card h3{margin:0 0 6px}
 #p-dash #cd,#p-dash #pd,#p-dash #rt{flex:1;min-height:0;overflow:auto}
 #p-dash #mo{flex:1;min-height:0}#p-dash #mo svg{width:100%;height:100%}
-#p-dash .dn{width:110px;height:110px}#p-dash .dn::after{inset:24px}#p-dash .dn b{font-size:13px}
+#p-dash .dn{width:clamp(96px,17vh,140px);height:clamp(96px,17vh,140px)}#p-dash .dn b{font-size:12px}#p-dash #pd{display:flex;align-items:center}#p-dash #pd>div{width:100%}#p-dash #dx{display:flex;flex-direction:column}#p-dash #dxc,#p-dash #dxs{flex:1;min-height:0;display:flex;flex-direction:column}#p-dash .dxb{flex:1;height:auto;min-height:36px}
 #p-dash .kp .card{padding:10px 14px;gap:8px}#p-dash .kp .ic{width:42px;height:42px}#p-dash .kp .ic svg{width:21px;height:21px}#p-dash .kv{font-size:20px}#p-dash .brk{padding-top:4px}#p-dash .brk div{padding:1px 0}#p-dash .sr{padding:7px 12px}
 #p-dash .cal span{padding:4px 0}
 #p-dash .tx{padding:6px 0}#p-dash .tx .ic{width:34px;height:34px}
 }
+.dn::after{inset:20%}.dn b{padding:0 20%}.dn small{display:block;font-size:9px;line-height:1.15;white-space:normal;margin-top:1px}
 </style></head><body>
 <aside><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1558d6"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button>
@@ -80,7 +81,7 @@ main{height:100vh;overflow-y:auto;display:flex;flex-direction:column;padding:12p
 <div class="sec" style="padding:0;height:1px;background:rgba(255,255,255,.12);margin:10px 8px"></div>
 <button class="it" data-pg="cats"><i data-i="tag"></i>Categories</button>
 <button class="it" id="ie"><i data-i="swap"></i>Import / Export</button>
-<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 13</div></div></aside>
+<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 14</div></div></aside>
 <main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
 <div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
 <section class="pg" id="p-dash"><div class="layout"><div class="col">
