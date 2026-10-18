@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Finance</title>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>My Finance</title><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%20100%20100%27%3E%3Crect%20width=%27100%27%20height=%27100%27%20rx=%2722%27%20fill=%27%230b2d63%27/%3E%3Crect%20x=%2718%27%20y=%2758%27%20width=%2714%27%20height=%2724%27%20rx=%273%27%20fill=%27%235eead4%27/%3E%3Crect%20x=%2743%27%20y=%2746%27%20width=%2714%27%20height=%2736%27%20rx=%273%27%20fill=%27%235eead4%27/%3E%3Crect%20x=%2768%27%20y=%2732%27%20width=%2714%27%20height=%2750%27%20rx=%273%27%20fill=%27%235eead4%27/%3E%3Cpolyline%20points=%2716%2C42%2040%2C28%2056%2C34%2084%2C14%27%20fill=%27none%27%20stroke=%27%23fff%27%20stroke-width=%276%27%20stroke-linecap=%27round%27%20stroke-linejoin=%27round%27/%3E%3C/svg%3E"><meta name="theme-color" content="#0b2d63"><meta name="description" content="My Finance - personal income and expense tracker">
 <style>
 :root{--ink:#0f1f3d;--mut:#6b7a99;--line:#e6ebf3;--pri:#1558d6;--side:#0a2a5e}
 *{box-sizing:border-box}body{margin:0;display:flex;min-height:100vh;background:#f5f8fc;color:var(--ink);font:13px/1.4 system-ui,Segoe UI,Roboto,sans-serif}
@@ -36,18 +36,18 @@ input,select{font:inherit;color:var(--ink);padding:8px 10px;border:1px solid var
 .tx{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.tx:last-child{border:0}.tx .ic{width:40px;height:40px;font-size:18px}.tx>div{flex:1}
 .tabs{display:flex;background:#f1f5fb;border-radius:6px;margin-bottom:10px}.tabs button{flex:1;border:0;background:none;padding:7px;font:inherit;cursor:pointer;color:var(--mut)}.tabs .on{color:var(--pri);font-weight:600;border-bottom:2px solid var(--pri)}
 .f{display:grid;gap:4px}.f label{font-size:11px;color:var(--mut);margin-top:6px}.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.f input,.f select{width:100%}
-dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw)}
+dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw);padding:0}dialog>.f{padding:16px}dialog::backdrop{background:rgba(15,31,61,.45)}
 .kb{border:0;background:none;font-size:18px;cursor:pointer;color:var(--mut)}
 #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:9px 16px;border-radius:8px;display:none}
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.r3,.bt{grid-template-columns:1fr}.kp{grid-template-columns:1fr 1fr}}
 @media(max-width:800px){body{flex-direction:column}aside{width:auto;flex-direction:row;overflow-x:auto;padding:10px}aside .sec,.foot{display:none}.brand{padding:0 12px 0 0}.it{white-space:nowrap;width:auto}.kp{grid-template-columns:1fr}}
 </style></head><body>
-<aside><div class="brand"><span>🌿</span><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
+<aside><div class="brand"><span>💰</span><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <button class="it on" data-go="top"><i>🏠</i>Dashboard</button>
 <div class="sec">Income</div><button class="it" data-go="inc"><i>🧾</i>Income Log</button>
 <div class="sec">Expenses</div><button class="it" data-go="log"><i>💸</i>Daily Expense Log</button><button class="it" data-go="log"><i>📄</i>Documents</button>
 <div class="sec">Reports &amp; Analysis</div><button class="it" data-go="ov"><i>📊</i>Monthly Analysis</button><button class="it" data-go="ov"><i>🗓️</i>Yearly Overview</button>
-<div class="sec">Settings</div><button class="it" data-go="qc"><i>⚙️</i>Categories</button><button class="it" data-go="pm"><i>💳</i>Payment Methods</button><button class="it" id="ie"><i>☁️</i>Import / Export</button>
+<div class="sec">Settings</div><button class="it" id="kc"><i>⚙️</i>Categories</button><button class="it" data-go="pm"><i>💳</i>Payment Methods</button><button class="it" id="ie"><i>☁️</i>Import / Export</button>
 <div class="foot">Small steps<br>make big savings.</div></aside>
 <main id="top"><div class="top"><div><h1>Personal Finance Dashboard</h1><p>Manage your income, expenses and savings — all in one place.</p></div>
 <div class="tr"><div class="pill">📅 <input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span></div></div></div>
@@ -58,7 +58,7 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw)}
 <div class="card" id="pm"><h3>Payment Method</h3><div id="pd"></div></div></div>
 <div class="card" id="log"><h3><span>Daily Expense Log</span><span class="row"><input type="date" id="sd"><button class="btn" id="add">+ Add Expense</button><button class="btn w" id="ex">⬇ Export</button></span></h3>
 <div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Item / Details</th><th class="ra">Amount (৳)</th><th>Payment Method</th><th>Notes</th><th></th></tr></thead><tbody id="tb"></tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td class="ra"><b id="tt"></b></td><td colspan="3"></td></tr></tfoot></table></div></div>
-<div class="bt"><div class="card" id="qc"><h3>Quick Categories</h3><div class="qc" id="qq"></div></div><div class="card row" style="color:var(--mut)">💡 Better planning today, a brighter tomorrow. 📊</div></div>
+<div class="bt"><div class="card" id="qc"><h3><span>Quick Categories</span><button class="btn w" id="mc" style="padding:5px 10px">✏️ Manage</button></h3><div class="qc" id="qq"></div></div><div class="card row" style="color:var(--mut)">💡 Better planning today, a brighter tomorrow. 📊</div></div>
 </div><div class="col">
 <div class="card"><h3><span>📅 Select Date</span></h3><div class="row" style="justify-content:space-between;margin-bottom:6px"><button class="kb" id="pv">‹</button><b id="cm"></b><button class="kb" id="nx">›</button></div><div class="cal" id="cal"></div></div>
 <div class="card"><h3>Recent Transactions<a href="#log" style="color:var(--pri);font-size:11px;font-weight:400;text-decoration:none">View All</a></h3><div id="rt"></div></div>
@@ -67,15 +67,20 @@ dialog{border:1px solid var(--line);border-radius:12px;width:min(420px,92vw)}
 <div class="card"><h3>Income This Month</h3><div id="il"></div></div>
 </div></div></main>
 
-<dialog id="dE"><form class="f" id="fe"><h3 style="margin:0" id="et">Add Expense</h3><input type="hidden" name="rid"><label>Date</label><input type="date" name="date" required><label>Category</label><select name="cat" id="ec"></select><label>Item / Details</label><input name="item" required><label>Amount (৳)</label><input type="number" name="amount" min="0" step="any" required><label>Payment Method</label><select name="method"><option>Cash</option><option>Bank</option><option>Card</option><option>Others</option></select><label>Notes (optional)</label><input name="notes"><div class="row" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn w" data-x>Cancel</button><button class="btn">Save Expense</button></div></form></dialog>
-<dialog id="dL"><form class="f" id="fl"><h3 style="margin:0">🌿 My Finance — Sign in</h3><label>Email</label><input type="email" name="email" required autocomplete="username"><label>Password</label><input type="password" name="password" required autocomplete="current-password"><div class="r" id="le" style="min-height:16px;margin-top:6px"></div><button class="btn" style="padding:11px">Sign in</button></form></dialog>
+<dialog id="dE"><form class="f" id="fe"><h3 style="margin:0" id="et">Add Expense</h3><input type="hidden" name="rid"><label>Date</label><input type="date" name="date" required><label>Category</label><select name="cat" id="ec"></select><label>Item / Details</label><input name="item" required list="dl" autocomplete="off"><datalist id="dl"></datalist><label>Amount (৳)</label><input type="number" name="amount" min="0" step="any" required><label>Payment Method</label><select name="method"><option>Cash</option><option>Bank</option><option>Card</option><option>Others</option></select><label>Notes (optional)</label><input name="notes"><div class="row" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn w" data-x>Cancel</button><button class="btn">Save Expense</button></div></form></dialog>
+<dialog id="dL"><form class="f" id="fl"><h3 style="margin:0">💰 My Finance — Sign in</h3><label>Email</label><input type="email" name="email" required autocomplete="username"><label>Password</label><input type="password" name="password" required autocomplete="current-password"><div class="r" id="le" style="min-height:16px;margin-top:6px"></div><button class="btn" style="padding:11px">Sign in</button></form></dialog>
 <dialog id="dC"><form class="f" id="fc"><h3 style="margin:0">Connect Firebase</h3><label>Paste your firebaseConfig (Firebase console → Project settings → Your apps → Web app)</label><textarea name="cfg" rows="9" required style="width:100%;font:12px monospace;padding:8px;border:1px solid var(--line);border-radius:6px" placeholder='const firebaseConfig = {&#10;  apiKey: "...",&#10;  authDomain: "...",&#10;  projectId: "...",&#10;  appId: "..."&#10;};'></textarea><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn">Save &amp; connect</button></div></form></dialog>
 <dialog id="dS"><div class="f"><h3 style="margin:0">Import / Export &amp; Settings</h3><label>Import CSV into</label><select id="it"><option value="expenses">Expenses (Date, Category, Item, Amount, Method, Notes)</option><option value="income">Income (Date, Type, Amount, Method, Notes)</option></select><div class="row" style="margin-top:8px"><button type="button" class="btn w" id="tp">Download template</button><button type="button" class="btn" id="bi">Import CSV / JSON</button><input type="file" id="file" accept=".csv,.json" hidden></div><label style="margin-top:14px">Export</label><div class="row"><button type="button" class="btn w" id="bc">Expenses CSV</button><button type="button" class="btn w" id="bn">Income CSV</button><button type="button" class="btn w" id="bj">Backup JSON</button></div><div class="row" style="justify-content:space-between;margin-top:16px"><span class="row"><button type="button" class="btn w" id="cf">Firebase config</button><button type="button" class="btn w" id="so">Sign out</button></span><button type="button" class="btn w" data-x>Close</button></div></div></dialog>
+<dialog id="dK" style="width:min(560px,94vw)"><div class="f"><h3 style="margin:0">Categories &amp; Items</h3><p class="m" style="margin:4px 0 0">Edit icon, name and example items (comma separated). Renaming also updates past expenses.</p><div id="kl" style="max-height:55vh;overflow:auto;margin:10px 0"></div><div class="row" style="justify-content:space-between"><span class="row"><button type="button" class="btn w" id="ka">+ Add category</button><button type="button" class="btn w" id="kr">Reset defaults</button></span><span class="row"><button type="button" class="btn w" data-x>Cancel</button><button type="button" class="btn" id="ks">Save</button></span></div></div></dialog>
 <div id="toast"></div>
 <script type="module">
 const $=s=>$$(s)[0],$$=s=>document.querySelectorAll(s);
 const MN=["January","February","March","April","May","June","July","August","September","October","November","December"],MS=MN.map(x=>x.slice(0,3));
-const CAT={"Food & Grocery":{c:"#3b82f6",bg:"#fff1d6",fg:"#b45309",i:"🛒"},Household:{c:"#5aa469",bg:"#ffefd9",fg:"#c2610c",i:"🧹"},Utilities:{c:"#f5a94a",bg:"#e0ebff",fg:"#1d4ed8",i:"⚡"},Transport:{c:"#a855f7",bg:"#f3e8ff",fg:"#7e22ce",i:"🚗"},Education:{c:"#f5c518",bg:"#e6e8ff",fg:"#3730a3",i:"🎓"},Health:{c:"#1bb5a6",bg:"#ffe4e6",fg:"#e11d48",i:"❤️"},Others:{c:"#9ca3af",bg:"#ebe9ff",fg:"#4f46e5",i:"👤"}};
+const PAL=["#3b82f6","#f59e0b","#ef4444","#22c55e","#a855f7","#ec4899","#f97316","#0ea5e9","#14b8a6","#eab308","#84cc16","#6366f1","#d946ef","#f43f5e","#06b6d4","#10b981","#8b5cf6","#fb923c","#0f766e","#b91c1c","#ca8a04","#64748b"];
+const DEF=[["Groceries","🛒","Rice, Oil, Sugar, Salt, Flour"],["Dairy & Eggs","🥛","Liquid Milk, Eggs, Butter, Cheese"],["Meat & Fish","🍗","Chicken, Beef, Fish"],["Fruits & Vegetables","🥦","Fruits, Vegetables, Potatoes, Onions"],["Snacks & Beverages","☕","Biscuits, Juice, Tea, Coffee"],["Dining Out","🍽️","Restaurant Meals, Fast Food"],["Other Food Items","🍱","Other Food Items"],["Transportation","🚌","Bus, CNG, Rickshaw, Uber/Pathao"],["House Rent","🏠","Monthly Rent"],["Utilities & Bills","⚡","Electricity, Gas, Water"],["Household Items","🧹","Cleaning Supplies, Kitchenware, Home Essentials"],["Mobile & Internet","📱","Mobile Recharge, Internet Bill"],["Personal Care","🧴","Soap, Shampoo, Haircut, Skincare"],["Clothing & Footwear","👕","Clothes, Shoes, Sandals"],["Family & Child","👶","Baby Food, Diapers, Toys"],["Medical & Healthcare","💊","Medicines, Doctor Fees, Tests"],["Education & Learning","📚","Books, Stationery, Courses"],["Entertainment","🎬","Movies, Games, Subscriptions"],["Savings","🏦","Savings Deposit, Emergency Fund"],["Loan & Debt","💳","Loan Repayment, Debt Payment"],["Gifts & Donations","🎁","Gifts, Charity"],["Other Expenses","📦","Miscellaneous, Unexpected Costs"]];
+const defCats=()=>DEF.map((d,k)=>({n:d[0],i:d[1],c:PAL[k],items:d[2].split(", ")}));
+let CATS=defCats();const FB={c:"#9ca3af",bg:"#f1f5f9",fg:"#475569",i:"🏷️",items:[]},CAT={};
+const buildCat=()=>{for(const k in CAT)delete CAT[k];CATS.forEach(x=>CAT[x.n]={c:x.c,bg:x.c+"26",fg:`color-mix(in srgb,${x.c} 55%,#000)`,i:x.i,items:x.items})};buildCat();
 const PM={Cash:"#3b82f6",Bank:"#5aa469",Card:"#f5a94a",Others:"#a855f7"};
 const fmt=n=>"৳ "+Math.round(n).toLocaleString("en-US"),num=n=>Math.round(n).toLocaleString("en-US");
 const fd=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1]+" "+d.slice(0,4),fs=d=>MS[+d.slice(5,7)-1]+" "+(+d.slice(8))+", "+d.slice(0,4);
@@ -96,7 +101,7 @@ async function boot(){
   AU.onAuthStateChanged(auth,u=>{un.forEach(x=>x());un=[];
    if(!u){user=null;db={income:[],expenses:[]};render();op("#dL");return}
    user=u;$("#dL").close();$("#un").textContent=u.email;$("#av").textContent=u.email.slice(0,2).toUpperCase();
-   ["income","expenses"].forEach(k=>un.push(F.onSnapshot(col(k),s=>{db[k]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>toast(e.message))))});
+   un.push(F.onSnapshot(dref("settings","categories"),s=>{CATS=s.exists()&&Array.isArray(s.data().list)?s.data().list:defCats();buildCat();fillCat();render()},e=>toast(e.message)));["income","expenses"].forEach(k=>un.push(F.onSnapshot(col(k),s=>{db[k]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>toast(e.message))))});
  }catch(e){toast("Firebase setup error: "+e.message);op("#dC")}}
 const pmo=m=>{let[y,o]=m.split("-").map(Number);o--;if(!o){o=12;y--}return y+"-"+String(o).padStart(2,"0")};
 const tr=(a,b,inv)=>{const p=b?Math.round((a-b)/b*100):0,up=p>=0;return`<span class="${up!==!!inv?"g":"r"}">${up?"↑":"↓"} ${Math.abs(p)}%</span> <span class="m">vs. last month</span>`};
@@ -112,8 +117,8 @@ function render(){
  <div class="card"><div class="ic" style="background:#ef4a5f">👛</div><div><div class="kt">Total Expenses</div><div class="kv">${fmt(E)}</div>${tr(E,pE,1)}</div></div>
  <div class="card"><div class="ic" style="background:#2f6fe0">🐷</div><div><div class="kt">Total Savings</div><div class="kv">${fmt(S)}</div>${tr(S,pI-pE)}</div><div class="sr"><span>Savings Rate</span><span>${I?(S/I*100).toFixed(1):"0.0"}%</span></div></div>
  <div class="card"><div class="ic" style="background:#dbe7ff">🎯</div><div><div class="kt">Remaining Balance</div><div class="kv">${fmt(S)}</div><span class="m">Income - Expenses</span></div></div>`;
- const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);
- $("#cd").innerHTML=donut(bc,E,"Total Expenses")+legend(bc,E);
+ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);const lo=E-bc.reduce((t,q)=>t+q[1],0);if(lo>0)bc.push(["Other / removed",lo,"#9ca3af"]);
+ $("#cd").innerHTML=donut(bc,E,"Total Expenses")+legend(bc.filter(q=>q[1]>0),E);
  const bp=Object.keys(PM).map(c=>[c,sum(eN.filter(x=>x.method===c)),PM[c]]);
  $("#pd").innerHTML=`<div style="display:grid;justify-items:center;gap:12px">${donut(bp,E,"Total Expenses")}${legend(bp,E).replace('class="leg"','class="leg" style="width:100%"')}</div>`;
  // monthly overview
@@ -125,10 +130,10 @@ function render(){
  // table
  const st=new Date(Date.UTC(+sel.slice(0,4),+sel.slice(5,7)-1,+sel.slice(8))-6*864e5).toISOString().slice(0,10);
  const rows=db.expenses.filter(x=>x.date>=st&&x.date<=sel).sort((a,b)=>b.date.localeCompare(a.date));
- $("#tb").innerHTML=rows.map(x=>{const c=CAT[x.cat]||CAT.Others;return`<tr><td>${fd(x.date)}</td><td><span class="tag" style="background:${c.bg};color:${c.fg}">${c.i} ${x.cat}</span></td><td>${esc(x.item)}</td><td class="ra">${num(x.amount)}</td><td><span class="mt" style="background:${x.method==="Card"?"#ffe4e6":"#dcfce7"};color:${x.method==="Card"?"#e11d48":"#15803d"}">${x.method}</span></td><td>${esc(x.notes||"-")}</td><td><button class="kb" data-edit="${x.id}" title="Edit">✏️</button><button class="kb" data-del="${x.id}" title="Delete">🗑</button></td></tr>`}).join("")||`<tr><td colspan="7" class="m">No expenses in these 7 days. Add one to get started.</td></tr>`;
+ $("#tb").innerHTML=rows.map(x=>{const c=CAT[x.cat]||FB;return`<tr><td>${fd(x.date)}</td><td><span class="tag" style="background:${c.bg};color:${c.fg}">${c.i} ${x.cat}</span></td><td>${esc(x.item)}</td><td class="ra">${num(x.amount)}</td><td><span class="mt" style="background:${x.method==="Card"?"#ffe4e6":"#dcfce7"};color:${x.method==="Card"?"#e11d48":"#15803d"}">${x.method}</span></td><td>${esc(x.notes||"-")}</td><td><button class="kb" data-edit="${x.id}" title="Edit">✏️</button><button class="kb" data-del="${x.id}" title="Delete">🗑</button></td></tr>`}).join("")||`<tr><td colspan="7" class="m">No expenses in these 7 days. Add one to get started.</td></tr>`;
  $("#tt").textContent="৳ "+num(sum(rows));
  $("#qq").innerHTML=Object.keys(CAT).map(c=>`<button data-q="${c}" style="background:${CAT[c].bg};color:${CAT[c].fg}">${CAT[c].i} ${c}</button>`).join("");
- $("#rt").innerHTML=[...db.expenses].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(x=>{const c=CAT[x.cat]||CAT.Others;return`<div class="tx"><div class="ic" style="background:${c.bg}">${c.i}</div><div><b>${esc(x.item.split(",")[0].replace("Rice","Grocery"))}</b> <span class="m">(${x.cat})</span><br><span class="m" style="font-size:11px">${fs(x.date)} • ${x.method}</span></div><b>৳ ${num(x.amount)}</b></div>`}).join("")||'<span class="m">No transactions yet.</span>';
+ $("#rt").innerHTML=[...db.expenses].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(x=>{const c=CAT[x.cat]||FB;return`<div class="tx"><div class="ic" style="background:${c.bg}">${c.i}</div><div><b>${esc(x.item.split(",")[0])}</b> <span class="m">(${x.cat})</span><br><span class="m" style="font-size:11px">${fs(x.date)} • ${x.method}</span></div><b>৳ ${num(x.amount)}</b></div>`}).join("")||'<span class="m">No transactions yet.</span>';
  // calendar
  $("#cm").textContent=MN[mi]+" "+y;const f=new Date(y,mi,1).getDay(),dm=new Date(y,mi+1,0).getDate();
  $("#cal").innerHTML=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<span class="h">${d}</span>`).join("")+"<span></span>".repeat(f)+Array.from({length:dm},(_,k)=>`<span data-d="${k+1}" class="${k+1===+sel.slice(8)?"s":""}">${k+1}</span>`).join("");
@@ -140,7 +145,6 @@ $("#pv").onclick=()=>shift(-1);$("#nx").onclick=()=>shift(1);
 $("#cal").onclick=e=>{if(e.target.dataset.d)setSel(sel.slice(0,8)+String(e.target.dataset.d).padStart(2,"0"))};
 $("#mon").onchange=e=>{if(e.target.value)setSel(e.target.value+"-"+String(Math.min(+sel.slice(8),new Date(+e.target.value.slice(0,4),+e.target.value.slice(5),0).getDate())).padStart(2,"0"))};
 $("#sd").onchange=e=>e.target.value&&setSel(e.target.value);
-$("#ec").innerHTML=Object.keys(CAT).map(c=>`<option>${c}</option>`).join("");
 $("#add").onclick=()=>openE();$("#qq").onclick=e=>e.target.dataset.q&&openE(e.target.dataset.q);
 $$("[data-x]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
 $("#tabs").onclick=e=>{if(e.target.tagName!=="BUTTON")return;$$("#tabs button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");inType=e.target.textContent};
@@ -151,7 +155,7 @@ $("#fl").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";try{await
 $("#fc").onsubmit=e=>{e.preventDefault();const o={};for(const m of e.target.cfg.value.matchAll(/(\w+)\s*:\s*["']([^"']*)["']/g))o[m[1]]=m[2];if(!o.apiKey||!o.projectId)return toast("Paste the full firebaseConfig (apiKey and projectId needed)");localStorage.setItem("fbcfg",JSON.stringify(o));location.reload()};
 $("#ie").onclick=()=>$("#dS").showModal();$("#cf").onclick=()=>{$("#dS").close();op("#dC")};$("#so").onclick=()=>{$("#dS").close();AU&&AU.signOut(auth)};
 // ---- expense add / edit / delete
-const openE=(c,r)=>{const f=$("#fe");f.reset();f.rid.value=r?r.id:"";f.date.value=r?r.date:sel;if(r){$("#ec").value=r.cat;f.item.value=r.item;f.amount.value=r.amount;f.method.value=r.method;f.notes.value=r.notes||""}else if(c)$("#ec").value=c;$("#et").textContent=r?"Edit Expense":"Add Expense";$("#dE").showModal()};
+const openE=(c,r)=>{const f=$("#fe");f.reset();fillCat();if(r&&!CAT[r.cat])$("#ec").insertAdjacentHTML("beforeend",`<option>${esc(r.cat)}</option>`);f.rid.value=r?r.id:"";f.date.value=r?r.date:sel;if(r){$("#ec").value=r.cat;f.item.value=r.item;f.amount.value=r.amount;f.method.value=r.method;f.notes.value=r.notes||""}else if(c)$("#ec").value=c;$("#et").textContent=r?"Edit Expense":"Add Expense";fillItems();$("#dE").showModal()};
 $("#fe").onsubmit=async e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target)),id=r.rid||uid();delete r.rid;r.amount=+r.amount;$("#dE").close();sel=r.date;render();await put("expenses",id,r)};
 $("#fi").onsubmit=async e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target));r.amount=+r.amount;r.type=inType;e.target.amount.value=e.target.notes.value="";sel=r.date;render();await put("income",uid(),r)};
 $("#tb").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit)openE(null,db.expenses.find(x=>x.id===b.dataset.edit));if(b.dataset.del&&confirm("Delete this expense?"))await rm("expenses",b.dataset.del)};
@@ -165,10 +169,10 @@ const expCsv=()=>dl("expenses.csv",toCsv(EH,db.expenses.map(e=>[e.date,e.cat,e.i
 $("#ex").onclick=$("#bc").onclick=expCsv;
 $("#bn").onclick=()=>dl("income.csv",toCsv(IH,db.income.map(e=>[e.date,e.type,e.amount,e.method,e.notes||""])),"text/csv");
 $("#bj").onclick=()=>dl("finance-backup.json",JSON.stringify(db,null,1),"application/json");
-$("#tp").onclick=()=>$("#it").value==="income"?dl("income-template.csv",IH+'\n2026-10-01,Salary,75000,Bank,Monthly salary\n',"text/csv"):dl("expenses-template.csv",EH+'\n2026-10-17,Food & Grocery,"Rice, Oil",2450,Cash,Weekly grocery\n',"text/csv");
+$("#tp").onclick=()=>$("#it").value==="income"?dl("income-template.csv",IH+'\n2026-10-01,Salary,75000,Bank,Monthly salary\n',"text/csv"):dl("expenses-template.csv",EH+'\n2026-10-17,Groceries,"Rice, Oil",2450,Cash,Weekly grocery\n',"text/csv");
 function parseCSV(t){const R=[];let r=[],v="",k=0;for(let i=0;i<t.length;i++){const c=t[i];if(k){if(c=='"'){if(t[i+1]=='"'){v+='"';i++}else k=0}else v+=c}else if(c=='"')k=1;else if(c==","){r.push(v);v=""}else if(c=="\n"||c=="\r"){if(c=="\r"&&t[i+1]=="\n")i++;r.push(v);v="";R.push(r);r=[]}else v+=c}if(v||r.length){r.push(v);R.push(r)}return R.filter(r=>r.some(x=>x.trim()))}
 const OK=/^\d{4}-\d{2}-\d{2}$/,pick=(v,L,d)=>L.find(x=>x.toLowerCase()===String(v||"").trim().toLowerCase())||d,s_=v=>String(v||"").trim(),am=v=>+String(v).replace(/,/g,"");
-const nE=o=>{const a=am(o.amount),d=s_(o.date);return OK.test(d)&&a>0?{date:d,cat:pick(o.cat,Object.keys(CAT),"Others"),item:s_(o.item)||"-",amount:a,method:pick(o.method,Object.keys(PM),"Others"),notes:s_(o.notes)}:null};
+const nE=o=>{const a=am(o.amount),d=s_(o.date);return OK.test(d)&&a>0?{date:d,cat:pick(o.cat,Object.keys(CAT),"Other Expenses"),item:s_(o.item)||"-",amount:a,method:pick(o.method,Object.keys(PM),"Others"),notes:s_(o.notes)}:null};
 const nI=o=>{const a=am(o.amount),d=s_(o.date);return OK.test(d)&&a>0?{date:d,type:pick(o.type,["Salary","Family","Others"],"Others"),amount:a,method:pick(o.method,["Bank","Cash","Card","Others"],"Others"),notes:s_(o.notes)}:null};
 async function bulk(items){for(let i=0;i<items.length;i+=400){const b=F.writeBatch(fdb);items.slice(i,i+400).forEach(([c,id,d])=>b.set(dref(c,id),d));await b.commit()}}
 $("#bi").onclick=()=>{if(!user)return toast("Sign in first");$("#file").click()};
@@ -178,5 +182,19 @@ $("#file").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)
  if(!items.length)throw Error("No valid rows found"+(bad?` (${bad} invalid)`:""));
  if(!confirm(`Import ${items.length} records${bad?` (${bad} invalid rows skipped)`:""}? Importing the same file twice creates duplicates.`))return;
  toast("Importing…");await bulk(items);$("#dS").close();toast("Imported "+items.length+" records")}catch(x){toast(x.message)}};
+// ---- categories editor, dialog behaviour
+const fillCat=()=>{$("#ec").innerHTML=Object.keys(CAT).map(c=>`<option>${esc(c)}</option>`).join("")};
+const fillItems=()=>{$("#dl").innerHTML=((CAT[$("#ec").value]||FB).items).map(i=>`<option value="${esc(i)}">`).join("")};
+fillCat();$("#ec").onchange=fillItems;
+["#dE","#dS","#dK"].forEach(id=>{const d=$(id);d.onmousedown=e=>d._o=e.target===d;d.onclick=e=>{if(e.target===d&&d._o)d.close()}});
+const kRows=L=>{$("#kl").innerHTML=L.map(x=>`<div class="kr" data-o="${esc(x.o??x.n)}" data-c="${x.c}"><div class="row" style="flex-wrap:nowrap"><input class="ki" value="${esc(x.i)}" style="width:52px;text-align:center"><input class="kn" value="${esc(x.n)}" placeholder="Category name" style="flex:1"><button type="button" class="kb" data-kd title="Remove">🗑</button></div><input class="kt2" value="${esc(x.items.join(", "))}" placeholder="Items, comma separated" style="width:100%;margin:4px 0 10px"></div>`).join("")};
+const readK=()=>[...$$("#kl .kr")].map(r=>({o:r.dataset.o,c:r.dataset.c,i:r.querySelector(".ki").value.trim()||"🏷️",n:r.querySelector(".kn").value.trim(),items:r.querySelector(".kt2").value.split(",").map(s=>s.trim()).filter(Boolean)}));
+$("#mc").onclick=$("#kc").onclick=()=>{if(!user)return toast("Sign in first");kRows(CATS.map(x=>({...x,o:x.n})));$("#dK").showModal()};
+$("#ka").onclick=()=>{const L=readK();L.push({n:"",i:"🏷️",c:PAL[L.length%PAL.length],items:[],o:""});kRows(L);const l=$("#kl");l.scrollTop=l.scrollHeight;l.lastElementChild.querySelector(".kn").focus()};
+$("#kr").onclick=()=>{if(confirm("Reset to the default category list?"))kRows(defCats().map(x=>({...x,o:x.n})))};
+$("#kl").onclick=e=>{const r=e.target.closest("[data-kd]");if(r&&confirm("Remove this category? Past expenses keep their data and show as 'Other / removed'."))r.closest(".kr").remove()};
+$("#ks").onclick=async()=>{const L=readK();if(L.some(x=>!x.n))return toast("Every category needs a name");const nm=L.map(x=>x.n.toLowerCase());if(new Set(nm).size<nm.length)return toast("Category names must be unique");
+ const ups=[];L.filter(x=>x.o&&x.o!==x.n).forEach(x=>db.expenses.filter(e=>e.cat===x.o).forEach(e=>{const{id,...d}=e;ups.push(["expenses",id,{...d,cat:x.n}])}));
+ try{await F.setDoc(dref("settings","categories"),{list:L.map(({n,i,c,items})=>({n,i,c,items}))});if(ups.length)await bulk(ups);$("#dK").close();toast("Categories saved")}catch(e){toast(e.message)}};
 render();boot();
 </script></body></html>
