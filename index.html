@@ -443,15 +443,17 @@ const FIREBASE_CONFIG={
 };
 async function boot(){
  const c=FIREBASE_CONFIG;
- if(!c.apiKey||/PASTE_/.test(c.apiKey)){op("#dL");toast("Firebase config missing in index.html (FIREBASE_CONFIG)");return}
+ if(!c.apiKey||/PASTE_/.test(c.apiKey)){op("#dL");window.bootErr="Firebase config not filled in index.html (FIREBASE_CONFIG)";toast(window.bootErr);return}
  try{const V="https://www.gstatic.com/firebasejs/10.12.2/";
-  const[A,a,f]=await Promise.all([import(V+"firebase-app.js"),import(V+"firebase-auth.js"),import(V+"firebase-firestore.js")]);
+  window.bootErr="Firebase library is still loading from gstatic.com. Check internet/VPN/ad-blocker and reload (v2)";
+  const tm=new Promise((_,r)=>setTimeout(()=>r(new Error("Could not load Firebase library from gstatic.com (blocked or offline)")),20000));
+  const[A,a,f]=await Promise.race([Promise.all([import(V+"firebase-app.js"),import(V+"firebase-auth.js"),import(V+"firebase-firestore.js")]),tm]);window.bootErr=null;
   AU=a;F=f;const app=A.initializeApp(c);auth=AU.getAuth(app);fdb=F.initializeFirestore(app,{localCache:F.persistentLocalCache()});
   AU.onAuthStateChanged(auth,u=>{un.forEach(x=>x());un=[];
    if(!u){user=null;db={income:[],expenses:[]};BUD={total:0,goal:0,cats:{}};bdraft={};$("#btot").value=$("#bgoal").value="";render();op("#dL");return}
    user=u;enterApp(u.email);newSnaps();$("#un").textContent=u.email;$("#av").textContent=u.email.slice(0,2).toUpperCase();
    un.push(F.onSnapshot(dref("settings","budgets"),s=>{BUD=s.exists()?{total:0,goal:0,cats:{},...s.data()}:{total:0,goal:0,cats:{}};bdraft={};$("#btot").value=BUD.total||"";$("#bgoal").value=BUD.goal||"";render()},e=>toast(e.message)));un.push(F.onSnapshot(dref("settings","categories"),s=>{CATS=s.exists()&&Array.isArray(s.data().list)?s.data().list:defCats();buildCat();{const k=ticked();fillCat(cv());fillItems(k)}render()},e=>toast(e.message)));["income","expenses"].forEach(k=>un.push(F.onSnapshot(col(k),s=>{db[k]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>toast(e.message))))});
- }catch(e){toast("Firebase setup error: "+e.message);op("#dL")}}
+ }catch(e){window.bootErr="Firebase setup error: "+e.message;toast(window.bootErr);op("#dL")}}
 const IC={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',income:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',cal:'<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/>',swap:'<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',logout:'<path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',plus:'<path d="M12 5v14M5 12h14"/>',down:'<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',wallet:'<path d="M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l2-3h12M16 14h2"/>',bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',bank:'<path d="M3 10l9-6 9 6M5 10v8M10 10v8M14 10v8M19 10v8M3 20h18"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',chev:'<path d="M6 9l6 6 6-6"/>'};
 Object.assign(IC,{budget:'<circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-.8-1.4-1.2-2.5-1.2-1.4 0-2.5.7-2.5 1.8 0 2.6 5 1.4 5 4 0 1.1-1.1 1.9-2.5 1.9-1.2 0-2.1-.5-2.6-1.3M12 6.5V8M12 16v1.5"/>',insight:'<path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.2 1.1 2v.7h5v-.7c0-.8.4-1.5 1.1-2A6 6 0 0 0 12 3z"/><path d="M9.5 19.2h5M10.5 21.4h3"/>',alert:'<path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.01"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/>'});const ico=(n,z=18)=>`<svg viewBox="0 0 24 24" width="${z}" height="${z}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
 const pmo=m=>{let[y,o]=m.split("-").map(Number);o--;if(!o){o=12;y--}return y+"-"+String(o).padStart(2,"0")};
@@ -506,10 +508,10 @@ $("#dL").oncancel=e=>e.preventDefault();
 $("#fl").onsubmit=async e=>{e.preventDefault();const f=e.target,le=$("#le"),sb=$("#sb"),gc=$("#gc");le.textContent="";le.classList.remove("good");
  const fail=m=>{le.classList.remove("good");le.textContent=m;gc.classList.remove("shake");void gc.offsetWidth;gc.classList.add("shake")};
  if(!f.email.value.trim()||!f.password.value)return fail("Enter your email and password");
- if(!AU)return fail("Still connecting, try again in a moment");
+ if(!AU)return fail(window.bootErr||"Still connecting, try again in a moment");
  sb.disabled=true;sb.classList.add("ld");
  try{await AU.setPersistence(auth,$("#rem").checked?AU.browserLocalPersistence:AU.browserSessionPersistence);await AU.signInWithEmailAndPassword(auth,f.email.value.trim(),f.password.value)}
- catch(x){const c=x.code||x.message||"";fail(/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?"Incorrect email or password":/too-many/.test(c)?"Too many attempts, try again later":/network/.test(c)?"Network error, check your connection":c.replace("auth/","").replace(/-/g," "));sb.disabled=false;sb.classList.remove("ld")}};
+ catch(x){const c=x.code||x.message||"";fail(/invalid-credential|wrong-password|user-not-found|invalid-login/.test(c)?"Incorrect email or password":/too-many/.test(c)?"Too many attempts, try again later":/network/.test(c)?"Network error, check your connection":/unauthorized-domain/.test(c)?"This domain is not authorized in Firebase (Auth → Settings → Authorized domains)":/api-key/.test(c)?"Invalid Firebase API key in FIREBASE_CONFIG":/operation-not-allowed/.test(c)?"Email/Password sign-in is not enabled in Firebase":/invalid-email/.test(c)?"Invalid email address":c.replace("auth/","").replace(/-/g," "));sb.disabled=false;sb.classList.remove("ld")}};
 $("#eye").onclick=()=>{const i=$("#lpw"),sh=i.type==="password";i.type=sh?"text":"password";$("#eye").setAttribute("aria-label",sh?"Hide password":"Show password");$("#eye").style.color=sh?"#fff":""};
 $("#fp").onclick=async()=>{const le=$("#le"),em=$("#lem").value.trim();le.classList.remove("good");
  if(!em){le.textContent="Enter your email above, then click Forgot password";return}
