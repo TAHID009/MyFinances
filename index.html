@@ -283,6 +283,48 @@ aside .sec{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),tr
 main{overflow-y:auto!important;overflow-x:hidden;min-height:0}
 main>.top{flex:0 0 auto}
 main>.pg:not(#p-dash){flex:0 0 auto!important;height:auto!important;min-height:auto!important;overflow:visible!important;padding-bottom:24px}
+@media(min-width:1251px) and (min-height:600px){
+main{overflow:hidden!important}
+main>.pg:not(#p-dash):not([hidden]){flex:1 1 0!important;min-height:0!important;height:auto!important;overflow:hidden!important;display:flex!important;flex-direction:column;padding-bottom:2px}
+main>.pg:not(#p-dash)>*{min-height:0}
+.pg:not(#p-dash) .tw{flex:1 1 auto;min-height:0;max-height:none!important;overflow:auto}
+.pg:not(#p-dash) th{position:sticky;top:0;z-index:1}
+/* Income & Expenses */
+#p-log .inc2{flex:1;grid-template-rows:minmax(0,1fr);align-items:stretch}
+#p-log .inc2>.col{display:flex;flex-direction:column;gap:10px;min-height:0}
+#p-log .card{display:flex;flex-direction:column;flex-wrap:nowrap;min-height:0;margin:0}
+#p-log #inc{flex:0 0 auto}
+#p-log .inc2>.col:first-child>.card:last-child{flex:1 1 0;overflow:hidden}
+#p-log #il{flex:1;min-height:0;overflow:auto}
+#p-log #log{flex:1 1 0;overflow:hidden}
+/* Budgets & Goals */
+#p-budget #bk{flex:0 0 auto}
+#p-budget .bt3{flex:1;margin-top:10px;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);align-items:stretch}
+#p-budget .bt3>.card{display:flex;flex-direction:column;flex-wrap:nowrap;min-height:0;overflow:hidden}
+#p-budget .bt3>.col{display:flex;flex-direction:column;gap:10px;min-height:0}
+#p-budget .bt3>.col>.card{flex:0 0 auto}#p-budget .bt3>.col>.card:last-child{flex:1 1 0;min-height:0;overflow:auto}
+#nGoal{flex:1;min-height:0;overflow:auto}#nGoal .bkk{grid-template-columns:1fr!important}
+/* Daily & Monthly */
+.an2g{flex:1;grid-template-rows:minmax(0,1fr);align-items:stretch}
+.an2g .col{display:flex;flex-direction:column;gap:10px;min-height:0}
+.an2g .card{display:flex;flex-direction:column;flex-wrap:nowrap;flex:0 0 auto;min-height:0}
+#da,.an2g .col:last-child>.card:last-child{flex:1 1 0;overflow:hidden}
+#dc svg,#mo2 svg{max-height:22vh}
+/* Insights */
+#p-insights>.bt2{flex:1;grid-template-rows:minmax(0,1fr);align-items:stretch}
+#p-insights>.bt2>.card{display:flex;flex-direction:column;flex-wrap:nowrap;overflow:hidden}
+#p-insights>.bt2>.col{display:flex;flex-direction:column;gap:10px;min-height:0}
+#p-insights>.bt2>.col>.card{flex:1 1 0;min-height:0;overflow:auto}
+/* Accounts & Net Worth */
+.acg{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:14px}
+.acl{min-height:0;overflow:auto;padding-right:4px}
+#nNW .bkk{grid-template-columns:repeat(2,minmax(0,1fr))}#nNW .bt2{grid-template-columns:1fr}
+.gd[open]{max-height:45vh;overflow:auto}
+/* Bills */
+#p-bills>#nBill{flex:1;display:flex;flex-direction:column;gap:10px}
+.fillc{flex:1 1 0;min-height:0;display:flex}.fillc>.card{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;flex-wrap:nowrap;overflow:hidden}
+.fillc>.card>div[style*="overflow"]{flex:1;min-height:0;overflow:auto!important}
+}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#065f46"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <nav class="nv"><div class="sl">MAIN</div><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Income &amp; Expenses</button><button class="it" data-pg="bills"><i data-i="bell"></i>Bills &amp; Recurring</button><button class="it" data-pg="budget"><i data-i="budget"></i>Budgets &amp; Goals</button><div class="sl">ANALYTICS</div><button class="it" data-pg="daily"><i data-i="chart"></i>Daily &amp; Monthly</button><button class="it" data-pg="insights"><i data-i="insight"></i>Spending Insights</button><div class="sl">MONEY</div><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Net Worth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button></nav><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -317,26 +359,26 @@ main>.pg:not(#p-dash){flex:0 0 auto!important;height:auto!important;min-height:a
 
 <section class="pg" id="p-budget" hidden>
 <div class="bkk" id="bk"></div>
-<div class="bt2">
+<div class="bt2 bt3">
 <div class="card"><h3><span>Category Budgets <span class="m" style="font-weight:400;font-size:11px">· spending for the selected month</span></span><span class="row" style="gap:6px"><span id="bdirty" class="bdt" hidden>Unsaved changes</span><button class="btn w" id="bauto" style="padding:5px 10px" title="Suggest limits from your last 3 months">Auto-fill</button><button class="btn w" id="bclr" style="padding:5px 10px">Clear</button><button class="btn w" id="bexp" style="padding:5px 10px">Export</button></span></h3>
 <div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th class="ra" style="width:120px">Budget (৳)</th><th class="ra">Spent</th><th class="ra">Left</th><th style="width:28%">Progress</th></tr></thead><tbody id="bb"></tbody></table></div></div>
 <div class="col">
 <div class="card f"><h3><span>Monthly Plan</span></h3><label for="btot" style="margin-top:0">Total monthly budget (৳) <span class="m">· optional, otherwise the sum of categories</span></label><input id="btot" inputmode="numeric" placeholder="e.g. 30000"><label for="bgoal">Monthly savings goal (৳)</label><input id="bgoal" inputmode="numeric" placeholder="e.g. 10000"><button type="button" class="btn" id="bsave" style="margin-top:12px;padding:10px">Save budgets &amp; plan</button><div id="bgp" style="margin-top:14px"></div></div>
 <div class="card"><h3><span>Alerts</span></h3><div id="bal"></div></div>
-</div></div><div class="card" style="margin-top:14px"><h3><span>Savings Goals</span><span class="m" style="font-weight:400;font-size:11px">Targets you are saving toward</span></h3><div id="nGoal"></div></div></section>
+</div><div class="card"><h3><span>Savings Goals</span><span class="m" style="font-weight:400;font-size:11px">Targets you are saving toward</span></h3><div id="nGoal"></div></div></div></section>
 <section class="pg" id="p-insights" hidden>
 <div class="card"><h3><span>Highlights</span><span class="m" style="font-weight:400" id="imn"></span></h3><div class="dk" id="ik" style="margin-bottom:0"></div></div>
 <div class="bt2">
 <div class="card"><h3><span>Category change vs last month</span></h3><div class="tw"><table style="min-width:520px"><thead><tr><th>Category</th><th class="ra">This month</th><th class="ra">Last month</th><th class="ra">Change</th><th class="ra">%</th></tr></thead><tbody id="icmp"></tbody></table></div></div>
-<div class="col"><div class="card"><h3><span>Spending by weekday</span></h3><div id="iw"></div></div><div class="card"><h3><span>Top 5 expenses</span></h3><div id="itop"></div></div></div>
-</div><div style="margin-top:14px"><div class="card"><h3><span>Spending by Category</span><button class="btn w" id="mc2" hidden><i data-i="edit" data-s="14"></i>Edit categories</button></h3><div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th>Items</th><th class="ra">This month (৳)</th><th class="ra">Share</th><th style="width:20%"></th></tr></thead><tbody id="ct"></tbody></table></div></div></div></section>
+<div class="col"><div class="card"><h3><span>Spending by weekday</span></h3><div id="iw"></div></div><div class="card"><h3><span>Top 5 expenses</span></h3><div id="itop"></div></div><div class="card"><h3><span>Spending by Category</span><button class="btn w" id="mc2" hidden><i data-i="edit" data-s="14"></i>Edit categories</button></h3><div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th>Items</th><th class="ra">This month (৳)</th><th class="ra">Share</th><th style="width:20%"></th></tr></thead><tbody id="ct"></tbody></table></div></div></div>
+</div></section>
 
 <section class="pg" id="p-accounts" hidden><details class="gd"><summary>How to use Accounts &amp; Wallets (click to open)</summary>
 <h4>1. Add your accounts</h4><ol><li>Press <b>+ Add account</b>. Create one for each place you keep money: Cash Wallet, your bank, bKash, Nagad, Rocket, Upay.</li><li>Type the <b>real balance today</b> in <b>Opening balance</b> and keep <b>Opening balance as of</b> as today. Only records dated on or after that day change the balance.</li><li>Use the same name as the payment method you already use (e.g. “Cash”, “bKash”) so old and new income/expense entries are matched automatically.</li></ol>
 <h4>2. Income and expenses</h4><p>Income adds to an account and expenses subtract from it. Records tied to an account (bills marked paid) use that account. Older records are matched by payment method name.</p>
 <h4>3. Move money between your accounts</h4><ol><li>Press <b>⇄ Transfer money</b>, choose From and To, enter the amount and date.</li><li>One transfer record lowers the first account and raises the second. It is <b>not</b> income or an expense, so your totals stay correct.</li><li>Wrong amount? Press <b>Edit</b>. Cancelled? Press <b>Void</b> (you can <b>Restore</b> it). Balances correct themselves, nothing is double counted.</li></ol>
 <h4>4. Check and manage</h4><ol><li><b>History</b> lists every income, expense and transfer for that account.</li><li><b>Deactivate</b> hides an account from transfers and bills but keeps its history and balance.</li><li>If a balance differs from your real wallet, check the opening balance and its date, then the history.</li></ol>
-<h4>Good to know</h4><p>Balances are calculated, never typed in, which is why edits are safe. Savings goals linked to an account follow its balance. Net Worth adds all account balances, so a savings account is counted once.</p></details><div id="nAcc"></div><h2 style="margin:24px 0 10px;font-size:17px">Net worth</h2><div id="nNW"></div></section><section class="pg" id="p-bills" hidden><div id="nBill"></div></section><section class="pg" id="p-setp" hidden><div class="bkk" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start"><div id="nSetp"></div><div id="nSetf"></div><div id="nSetc"></div><div id="nSetb"></div></div></section></main>
+<h4>Good to know</h4><p>Balances are calculated, never typed in, which is why edits are safe. Savings goals linked to an account follow its balance. Net Worth adds all account balances, so a savings account is counted once.</p></details><div class="acg"><div class="acl"><div id="nAcc"></div></div><div class="acl"><h2 style="margin:0 0 10px;font-size:17px">Net worth</h2><div id="nNW"></div></div></div></section><section class="pg" id="p-bills" hidden><div id="nBill"></div></section><section class="pg" id="p-setp" hidden><div class="bkk" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start"><div id="nSetp"></div><div id="nSetf"></div><div id="nSetc"></div><div id="nSetb"></div></div></section></main>
 
 <dialog id="dE"><form class="f" id="fe"><h3 style="margin:0" id="et">Add Expense</h3><input type="hidden" name="rid"><label>Date <b class="rq">*</b></label><input type="date" name="date" required><label>Category <b class="rq">*</b></label><div class="ddw"><button type="button" class="dd ph" id="dbC">Select Category</button><div id="ec" class="chips dp"></div></div><label>Item <b class="rq">*</b> <span style="font-weight:400">(tick one or more)</span></label><div class="ddw"><button type="button" class="dd ph" id="dbI" disabled>Select Item</button><div id="ei" class="chips dp"></div></div><input id="eo" placeholder="Type item(s), separate with comma" hidden style="margin-top:6px"><div id="ew" hidden><label style="display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ink)"><input type="checkbox" id="es" checked style="width:auto"> Save new item(s) to the category list</label></div><label>Amount (৳) <b class="rq">*</b></label><input type="number" name="amount" min="0" step="any" required><label>Payment Method</label><div class="ddw"><button type="button" class="dd" id="dbM">Cash</button><div class="chips dp" id="em"><label class="chip r"><input type="radio" name="method" value="Cash" checked>Cash</label><label class="chip r"><input type="radio" name="method" value="Bank">Bank</label><label class="chip r"><input type="radio" name="method" value="bKash">bKash</label><label class="chip r"><input type="radio" name="method" value="Nagad">Nagad</label><label class="chip r"><input type="radio" name="method" value="Card">Card</label><label class="chip r"><input type="radio" name="method" value="Others">Others</label></div></div><label>Notes (optional)</label><input name="notes"><div class="row" style="justify-content:flex-end;margin-top:10px"><button type="button" class="btn w" data-x>Cancel</button><button class="btn">Save Expense</button></div></form></dialog>
 <dialog id="dL"><div class="lg">
@@ -587,8 +629,7 @@ function renderNew(){try{
  const bs=ND.bills.slice().sort((x,y)=>x.next.localeCompare(y.next)),hist=[];ND.bills.forEach(b=>(b.paid||[]).forEach(p=>hist.push({n:b.name,...p})));hist.sort((x,y)=>y.at.localeCompare(x.at));
  const soon=bs.filter(b=>!b.done&&b.status==="Active"&&b.kind!=="Income"&&(b.next<=t||(Date.parse(b.next)-Date.parse(t))/864e5<=(b.remind||0)));
  $("#nBill").innerHTML=`<div class="row" style="margin-bottom:12px"><button class="btn" data-a="addB">+ New schedule / bill</button></div>${soon.length?`<div class="card" style="margin-bottom:14px">${soon.map(b=>`<div class="al ${b.next<t?"al-ov":"al-nr"}">${ico("alert",16)}<span><b>${esc(b.name)}</b> ${fmt(b.amount)} — ${b.next<t?"overdue since":b.next===t?"due today,":"due"} ${b.next}</span></div>`).join("")}</div>`:""}
- ${sec("Schedules",`<p class="m" style="margin:0 0 8px">A schedule is only planned. Nothing is recorded as income or expense until you press “Mark paid”.</p><div style="overflow:auto"><table><tr><th>Name</th><th>Type</th><th class="ra">Amount</th><th>Account</th><th>Next due</th><th>Repeats</th><th>Status</th><th></th></tr>${bs.map(b=>{const s=bst(b);return`<tr><td>${esc(b.name)}</td><td>${b.kind}</td><td class="ra">${fmt(b.amount)}</td><td>${esc(aName(b.acct))}</td><td>${b.next}</td><td>${b.freq}</td><td>${badge(s[0],s[1])}</td><td class="ra">${!b.done&&b.status==="Active"?bt("pay",b.id,"Mark paid"):""} ${bt("editB",b.id,"Edit")}</td></tr>`}).join("")||'<tr><td colspan="8" class="m">No schedules yet.</td></tr>'}</table></div>`)}
- <div style="margin-top:14px">${sec("Payment history",`<table style="min-width:0">${hist.slice(0,30).map(h=>`<tr><td>${h.at}</td><td>${esc(h.n)} <span class="m">(due ${h.due})</span></td><td class="ra">${fmt(h.amount||0)}</td></tr>`).join("")||'<tr><td class="m">No payments recorded yet.</td></tr>'}</table>`)}</div>`;
+ <div class="fillc">${sec("Schedules",`<p class="m" style="margin:0 0 8px">A schedule is only planned. Nothing is recorded as income or expense until you press “Mark paid”.</p><div style="overflow:auto"><table><tr><th>Name</th><th>Type</th><th class="ra">Amount</th><th>Account</th><th>Next due</th><th>Repeats</th><th>Status</th><th></th></tr>${bs.map(b=>{const s=bst(b);return`<tr><td>${esc(b.name)}</td><td>${b.kind}</td><td class="ra">${fmt(b.amount)}</td><td>${esc(aName(b.acct))}</td><td>${b.next}</td><td>${b.freq}</td><td>${badge(s[0],s[1])}</td><td class="ra">${!b.done&&b.status==="Active"?bt("pay",b.id,"Mark paid"):""} ${bt("editB",b.id,"Edit")}</td></tr>`}).join("")||'<tr><td colspan="8" class="m">No schedules yet.</td></tr>'}</table></div>`)}</div><div class="fillc" style="flex:0 0 30%">${sec("Payment history",`<div style="overflow:auto"><table style="min-width:0">${hist.slice(0,30).map(h=>`<tr><td>${h.at}</td><td>${esc(h.n)} <span class="m">(due ${h.due})</span></td><td class="ra">${fmt(h.amount||0)}</td></tr>`).join("")||'<tr><td class="m">No payments recorded yet.</td></tr>'}</table></div>`)}</div>`;
  const at=nwSeries(),now=at(t),pm=new Date(t.slice(0,7)+"-01T00:00:00Z");pm.setUTCDate(0);const eP=pm.toISOString().slice(0,10),eY=(+t.slice(0,4)-1)+t.slice(4),ser=[];
  for(let i=5;i>=0;i--){const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));ser.push([MS[e.getUTCMonth()]+" "+e.getUTCFullYear(),at(e.toISOString().slice(0,10)).N])}ser[5]=["Today",now.N];const mx=Math.max(1,...ser.map(x=>Math.abs(x[1]))),ch=(a,b)=>a-b;
  $("#nNW").innerHTML=`<div class="row" style="margin-bottom:12px"><button class="btn w" data-a="addL">+ Add manual asset / liability</button></div><div class="bkk">${K("Total assets",fmt(now.A),"Accounts + manual assets")}${K("Total liabilities",fmt(now.L),"Overdrawn accounts + manual debts","t-ov")}${K("Net worth",fmt(now.N),"Assets − liabilities",now.N<0?"t-ov":"t-ok")}${K("Monthly / yearly change",(ch(now.N,at(eP).N)>=0?"+":"")+fmt(ch(now.N,at(eP).N)),"Year: "+fmt(ch(now.N,at(eY).N)))}</div>
