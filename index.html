@@ -163,7 +163,7 @@ aside .it.on i{background:#059669}
 /* ===== Glass collapsible sidebar ===== */
 body{background:radial-gradient(240px 260px at 0 0,rgba(5,150,105,.42),transparent 70%),radial-gradient(240px 300px at 0 100%,rgba(20,184,166,.34),transparent 70%),radial-gradient(200px 240px at 0 52%,rgba(124,58,237,.18),transparent 70%),#f5f8fc;background-attachment:fixed}
 aside{background:linear-gradient(180deg,rgba(15,28,51,.80),rgba(15,28,51,.68))!important;-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-right:1px solid rgba(255,255,255,.14);box-shadow:inset -1px 0 0 rgba(255,255,255,.05),8px 0 30px -12px rgba(8,18,40,.35);z-index:30;transition:width .38s cubic-bezier(.4,0,.2,1),padding .38s cubic-bezier(.4,0,.2,1)}
-aside .it,aside .it i,.brand>div,.lb,.foot,.sbu>div:last-child{transition:opacity .22s ease,transform .25s ease,background .2s,width .38s cubic-bezier(.4,0,.2,1),max-width .38s cubic-bezier(.4,0,.2,1)}
+aside .it,aside .it i,.brand>div,.lb,.foot,.sbu>div:nth-child(2){transition:opacity .22s ease,transform .25s ease,background .2s,width .38s cubic-bezier(.4,0,.2,1),max-width .38s cubic-bezier(.4,0,.2,1)}
 aside .it:hover i{transform:translateY(-1px) scale(1.06)}
 .lb{white-space:nowrap;overflow:hidden;max-width:160px}
 .brand{white-space:nowrap}.brand>div{overflow:hidden;max-width:170px}
@@ -182,7 +182,7 @@ body.sbc aside .it{justify-content:center;gap:0;padding-left:0!important;padding
 body.sbc aside .it.on::before{left:-12px}
 body.sbc .foot{margin-top:0!important;opacity:0;height:0;padding:0!important;overflow:hidden;pointer-events:none}
 body.sbc .sbu{padding:8px;justify-content:center;gap:0;margin-top:auto}
-body.sbc .sbu>div:last-child{opacity:0;max-width:0;overflow:hidden;width:0}
+body.sbc .sbu>div:nth-child(2){opacity:0;max-width:0;overflow:hidden;width:0}
 aside .it[data-tip]:hover::after,aside .sbu[data-tip]:hover::after{content:none}
 body.sbc aside .it[data-tip]:hover::after,body.sbc .sbu[data-tip]:hover::after{content:attr(data-tip);position:absolute;left:calc(100% + 16px);top:50%;transform:translateY(-50%);padding:6px 11px;border-radius:8px;background:rgba(15,28,51,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:12px;font-weight:500;white-space:nowrap;pointer-events:none;box-shadow:0 8px 20px rgba(8,18,40,.3);z-index:50;animation:tip .15s ease both}
 .sbu{position:relative}
@@ -204,6 +204,34 @@ aside .it.on i,.sbu .a{background:linear-gradient(135deg,#059669,#0d9488)!import
 .tabs .on{color:#047857!important;border-bottom-color:#059669!important}
 input:focus,select:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.16)}
 .qc button:hover{filter:brightness(.96);transform:translateY(-1px)}
+
+/* ===== v4: account only at the bottom + premium menu icons ===== */
+@media(min-width:801px){.top .us{display:none!important}}
+.sbu{flex-wrap:wrap;row-gap:10px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.sbu>div:nth-child(2){flex:1;min-width:0}
+.sbu b{max-width:none!important;white-space:normal!important;overflow-wrap:anywhere;font-size:12px!important;line-height:1.25;font-weight:600}
+.sbu .a{background:linear-gradient(135deg,#10b981,#0d9488)!important;box-shadow:0 4px 12px -2px rgba(16,185,129,.55)}
+.sbo{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;color:#fda4af;font-size:12px;font-weight:600;background:rgba(244,63,94,.10);border:1px solid rgba(244,63,94,.22);transition:background .2s,color .2s,border-color .2s}
+.sbo:hover{background:rgba(244,63,94,.2);color:#fff;border-color:rgba(244,63,94,.45)}
+@media(min-width:801px){
+body.sbc .sbu{flex-direction:column;flex-wrap:nowrap;row-gap:8px;padding:8px}
+body.sbc .sbo{width:34px;height:34px;padding:0;gap:0}
+body.sbc .sbo .lb{display:none}
+body.sbc .sbu>div:nth-child(2){flex:none!important;height:0;margin:0;overflow:hidden}
+body.sbc .sbu{align-self:stretch}
+}
+@media(max-width:800px){.sbu{display:none}}
+
+/* premium menu items */
+aside .it{font-weight:500;letter-spacing:.15px;color:#b4c2da;border-radius:11px;margin-bottom:2px}
+aside .it svg{stroke-width:1.6}
+aside .it i{width:30px;height:30px;border-radius:9px;color:#9db1d2;background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04))!important;border:1px solid rgba(255,255,255,.10);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 6px -2px rgba(0,0,0,.35)}
+aside .it:hover{background:rgba(255,255,255,.055)}
+aside .it:hover i{color:#6ee7b7;background:linear-gradient(145deg,rgba(52,211,153,.24),rgba(52,211,153,.08))!important;border-color:rgba(110,231,183,.38);transform:translateY(-1px) scale(1.05)}
+aside .it.on{background:linear-gradient(90deg,rgba(16,185,129,.24),rgba(16,185,129,.05) 70%,transparent)!important;color:#fff;box-shadow:inset 0 0 0 1px rgba(110,231,183,.14)}
+aside .it.on i{color:#fff;background:linear-gradient(135deg,#10b981,#0d9488)!important;border-color:rgba(255,255,255,.28);box-shadow:0 8px 18px -6px rgba(16,185,129,.75),inset 0 1px 0 rgba(255,255,255,.35)}
+aside .it.on::before{background:linear-gradient(#6ee7b7,#10b981);box-shadow:0 0 12px rgba(52,211,153,.7)}
+aside .sec{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent)!important}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#065f46"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button>
@@ -214,7 +242,7 @@ input:focus,select:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px 
 <div class="sec" style="padding:0;height:1px;background:rgba(255,255,255,.12);margin:10px 8px"></div>
 <button class="it" data-pg="cats"><i data-i="tag"></i>Categories</button>
 <button class="it" id="ie"><i data-i="swap"></i>Import / Export</button>
-<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 14</div></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div></div></aside>
+<div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 14</div></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
 <main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
 <div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
 <section class="pg" id="p-dash"><div class="layout"><div class="col">
@@ -472,6 +500,7 @@ its.forEach(function(it,i){
   it.setAttribute("data-tip",t);it.setAttribute("aria-label",t);it.style.setProperty("--n",i);
 });
 var u=a.querySelector(".sbu");if(u){u.style.setProperty("--n",its.length+1);u.setAttribute("data-tip","Signed in")}
+var lo2=document.getElementById("lo2");if(lo2)lo2.onclick=function(){var l=document.getElementById("lo");if(l)l.click()};
 var btn=document.getElementById("sbt");
 function set(c,save){
   b.classList.toggle("sbc",c);
