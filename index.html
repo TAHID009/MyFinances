@@ -147,8 +147,51 @@ aside .it.on i{background:#1558d6}
 .sbu small{display:flex;align-items:center;gap:5px;font-size:11px;color:#8392ad}
 .sbu small::before{content:"";width:6px;height:6px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.18)}
 @media(max-width:800px){.sbu{display:none}aside .it.on::before{display:none}}
+
+/* ===== Donut cards fix: donut always fully visible, only the legend scrolls ===== */
+.leg{scrollbar-width:thin;scrollbar-color:#c3cde0 transparent}
+.leg::-webkit-scrollbar{width:6px}.leg::-webkit-scrollbar-thumb{background:#c3cde0;border-radius:6px}.leg::-webkit-scrollbar-track{background:transparent}
+@media(min-width:1201px) and (min-height:620px){
+#p-dash #cd,#p-dash #pd{overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:8px}
+#p-dash #cd>.dn,#p-dash #pd .dn{flex:none;width:clamp(84px,15vh,128px);height:clamp(84px,15vh,128px)}
+#p-dash #cd>.leg{flex:1;min-height:0;overflow:auto;width:100%;min-width:0;padding-right:4px}
+#p-dash #pd>div{display:flex!important;flex-direction:column;align-items:center;gap:8px!important;width:100%;flex:1;min-height:0}
+#p-dash #pd .leg{flex:1;min-height:0;overflow:auto;min-width:0;padding-right:4px}
+#p-dash .leg div{padding:2px 0}
+}
+
+/* ===== Glass collapsible sidebar ===== */
+body{background:radial-gradient(240px 260px at 0 0,rgba(21,88,214,.42),transparent 70%),radial-gradient(240px 300px at 0 100%,rgba(20,184,166,.34),transparent 70%),radial-gradient(200px 240px at 0 52%,rgba(124,58,237,.18),transparent 70%),#f5f8fc;background-attachment:fixed}
+aside{background:linear-gradient(180deg,rgba(15,28,51,.80),rgba(15,28,51,.68))!important;-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);border-right:1px solid rgba(255,255,255,.14);box-shadow:inset -1px 0 0 rgba(255,255,255,.05),8px 0 30px -12px rgba(8,18,40,.35);z-index:30;transition:width .38s cubic-bezier(.4,0,.2,1),padding .38s cubic-bezier(.4,0,.2,1)}
+aside .it,aside .it i,.brand>div,.lb,.foot,.sbu>div:last-child{transition:opacity .22s ease,transform .25s ease,background .2s,width .38s cubic-bezier(.4,0,.2,1),max-width .38s cubic-bezier(.4,0,.2,1)}
+aside .it:hover i{transform:translateY(-1px) scale(1.06)}
+.lb{white-space:nowrap;overflow:hidden;max-width:160px}
+.brand{white-space:nowrap}.brand>div{overflow:hidden;max-width:170px}
+.sbu{overflow:hidden}
+@keyframes sIn{from{opacity:0;transform:translateX(-14px)}}
+aside .it,.sbu{animation:sIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--n,0)*45ms + 80ms)}
+.sbt{position:absolute;top:26px;right:-14px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(15,28,51,.85);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#dbe6fa;display:grid;place-items:center;cursor:pointer;padding:0;z-index:40;box-shadow:0 4px 12px rgba(8,18,40,.3);transition:background .2s,transform .2s}
+.sbt:hover{background:#1558d6;color:#fff}
+.sbt svg{transition:transform .38s cubic-bezier(.4,0,.2,1)}
+@media(min-width:801px){
+body.sbc aside{width:76px;padding-left:12px;padding-right:12px}
+body.sbc .sbt svg{transform:rotate(180deg)}
+body.sbc .lb,body.sbc .brand>div{opacity:0;max-width:0}
+body.sbc .brand{padding-left:7px;padding-right:0;gap:0}
+body.sbc aside .it{justify-content:center;gap:0;padding-left:0!important;padding-right:0!important}
+body.sbc aside .it.on::before{left:-12px}
+body.sbc .foot{margin-top:0!important;opacity:0;height:0;padding:0!important;overflow:hidden;pointer-events:none}
+body.sbc .sbu{padding:8px;justify-content:center;gap:0;margin-top:auto}
+body.sbc .sbu>div:last-child{opacity:0;max-width:0;overflow:hidden;width:0}
+aside .it[data-tip]:hover::after,aside .sbu[data-tip]:hover::after{content:none}
+body.sbc aside .it[data-tip]:hover::after,body.sbc .sbu[data-tip]:hover::after{content:attr(data-tip);position:absolute;left:calc(100% + 16px);top:50%;transform:translateY(-50%);padding:6px 11px;border-radius:8px;background:rgba(15,28,51,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:12px;font-weight:500;white-space:nowrap;pointer-events:none;box-shadow:0 8px 20px rgba(8,18,40,.3);z-index:50;animation:tip .15s ease both}
+.sbu{position:relative}
+}
+@keyframes tip{from{opacity:0;transform:translate(-4px,-50%)}}
+@media(max-width:800px){.sbt{display:none}}
+@media(prefers-reduced-motion:reduce){aside,aside *{animation:none!important;transition:none!important}}
 </style></head><body>
-<aside><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1558d6"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
+<aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1558d6"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button>
 <button class="it" data-pg="income"><i data-i="income"></i>Income</button>
 <button class="it" data-pg="log"><i data-i="receipt"></i>Expense Log</button>
@@ -403,4 +446,33 @@ window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 $$("aside .it[data-pg]").forEach(b=>b.onclick=()=>{location.hash=b.dataset.pg;go(b.dataset.pg)});
 go(location.hash.slice(1));
 render();boot();
+</script><script>
+(function(){
+var b=document.body,a=document.querySelector("aside");
+var its=a.querySelectorAll(".it");
+its.forEach(function(it,i){
+  var t="";
+  Array.prototype.slice.call(it.childNodes).forEach(function(n){
+    if(n.nodeType===3&&n.textContent.trim()){t=n.textContent.trim();var sp=document.createElement("span");sp.className="lb";sp.textContent=t;it.replaceChild(sp,n)}
+  });
+  it.setAttribute("data-tip",t);it.setAttribute("aria-label",t);it.style.setProperty("--n",i);
+});
+var u=a.querySelector(".sbu");if(u){u.style.setProperty("--n",its.length+1);u.setAttribute("data-tip","Signed in")}
+var btn=document.getElementById("sbt");
+function set(c,save){
+  b.classList.toggle("sbc",c);
+  btn.title=c?"Expand menu ( [ )":"Collapse menu ( [ )";btn.setAttribute("aria-label",c?"Expand menu":"Collapse menu");
+  if(save){try{localStorage.setItem("sbc",c?"1":"0")}catch(e){}}
+  setTimeout(function(){window.dispatchEvent(new Event("resize"))},400);
+}
+var st=null;try{st=localStorage.getItem("sbc")}catch(e){}
+set(st==="1",false);
+btn.onclick=function(){set(!b.classList.contains("sbc"),true)};
+document.addEventListener("keydown",function(e){
+  if(e.key==="["&&!/INPUT|TEXTAREA|SELECT/.test((e.target.tagName||""))&&!e.ctrlKey&&!e.metaKey){set(!b.classList.contains("sbc"),true)}
+});
+// keep the user tooltip in sync with the signed-in email
+var sn=document.getElementById("sbn");
+if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textContent)}).observe(sn,{childList:true,characterData:true,subtree:true})}
+})();
 </script></body></html>
