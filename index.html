@@ -434,12 +434,12 @@ const col=c=>F.collection(fdb,"users",user.uid,c),dref=(c,id)=>F.doc(fdb,"users"
 const put=async(c,id,d)=>{try{await F.setDoc(dref(c,id),d);toast("Saved")}catch(e){toast(e.message)}};
 const rm=async(c,id)=>{try{await F.deleteDoc(dref(c,id));toast("Deleted")}catch(e){toast(e.message)}};
 const FIREBASE_CONFIG={
- apiKey:"PASTE_API_KEY",
- authDomain:"PASTE_PROJECT.firebaseapp.com",
- projectId:"PASTE_PROJECT_ID",
- storageBucket:"PASTE_PROJECT.appspot.com",
- messagingSenderId:"PASTE_SENDER_ID",
- appId:"PASTE_APP_ID"
+ apiKey:"AIzaSyAjIAo6I1TC4RgRLxXpS702iFzMzMXyCFs",
+ authDomain:"myfinances-80b54.firebaseapp.com",
+ projectId:"myfinances-80b54",
+ storageBucket:"myfinances-80b54.firebasestorage.app",
+ messagingSenderId:"1001054226842",
+ appId:"1:1001054226842:web:2a1ea08a0614274aff9223"
 };
 async function boot(){
  const c=FIREBASE_CONFIG;
