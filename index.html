@@ -12,7 +12,7 @@ aside{width:232px;flex:none;background:linear-gradient(#0b2d63,#071e47);color:#d
 main{flex:1;min-width:0;padding:18px 20px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.top h1{margin:0;font-size:24px}.top p{margin:2px 0 0;color:var(--mut);font-size:14px}
 .tr{display:flex;align-items:center;gap:16px}.pill{display:flex;gap:6px;align-items:center;font-size:14px}.pill input{border:0;background:none;font:inherit;color:var(--ink);cursor:pointer}
-.av{width:36px;height:36px;border-radius:50%;background:#0b2a5e;color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px}.us{display:flex;gap:10px;align-items:center;font-weight:600;font-size:14px;padding-left:16px;border-left:1px solid var(--line)}
+.av{width:36px;height:36px;border-radius:50%;background:#0b2a5e;color:#fff;display:grid;place-items:center;font-weight:600;font-size:13px}.us{display:flex;gap:10px;align-items:center;font-weight:600;font-size:14px}
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}.col{display:grid;gap:14px;align-content:start;min-width:0}
 .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;box-shadow:0 1px 3px rgba(15,31,61,.04)}
 .card h3{margin:0 0 10px;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -206,7 +206,16 @@ input:focus,select:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px 
 .qc button:hover{filter:brightness(.96);transform:translateY(-1px)}
 
 /* ===== v4: account only at the bottom + premium menu icons ===== */
-@media(min-width:801px){.top .us{display:none!important}}
+.sbu{display:none!important}
+.sr-due{background:#fff1f2;color:#be123c}
+.top .us{gap:10px;padding:5px 6px 5px 5px;border:1px solid var(--line);border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(15,28,51,.06)}
+.top .us .av{width:32px;height:32px;font-size:12px;background:linear-gradient(135deg,#10b981,#0d9488)}
+.top .us .ut{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.top .us #un{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:600}
+.top .us .ut small{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--mut)}
+.top .us .ut small::before{content:"";width:6px;height:6px;border-radius:50%;background:#34d399}
+.top .us .lo{padding:7px 12px;border-radius:999px}
+@media(max-width:800px){.top .us #un{max-width:120px}.top .us .lo span{display:none}.top .us .lo i{margin:0}}
 .sbu{flex-wrap:wrap;row-gap:10px;padding:12px;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
 .sbu>div:nth-child(2){flex:1;min-width:0}
 .sbu b{max-width:none!important;white-space:normal!important;overflow-wrap:anywhere;font-size:12px!important;line-height:1.25;font-weight:600}
@@ -264,7 +273,7 @@ aside .sec{background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),tr
 <button class="it" id="ie"><i data-i="swap"></i>Import / Export</button>
 <div class="foot">Small steps<br>make big savings.<div style="font-size:11px;opacity:.6;font-style:normal;margin-top:8px">Version 14</div></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
 <main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
-<div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><span id="un">Sarwar Osman</span><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
+<div class="tr"><button class="btn" id="add2"><i data-i="plus" data-s="15"></i>Add Expense</button><div class="pill"><i data-i="cal"></i><input type="month" id="mon"></div><div class="us"><div class="av" id="av">SO</div><div class="ut"><span id="un">Sarwar Osman</span><small>Synced</small></div><button class="lo" id="lo" title="Log out"><i data-i="logout" data-s="16"></i><span>Log out</span></button></div></div></div>
 <section class="pg" id="p-dash"><div class="layout"><div class="col">
 <div class="kp" id="kp"></div>
 <div class="r3"><div class="card"><h3>Expense by Category</h3><div class="row" id="cd"></div></div>
@@ -376,9 +385,11 @@ function render(){
  const ty=t=>sum(iN.filter(x=>x.type===t));
  $("#kp").innerHTML=`<div class="card"><div class="ic" style="background:#16a34a">${ico("wallet",26)}</div><div><div class="kt">Total Income</div><div class="kv">${fmt(I)}</div>${tr(I,pI)}</div><div class="brk">${["Salary","Family","Others"].map(t=>`<div><span class="m">${t}</span><span>${fmt(ty(t))}</span><span class="m">${I?Math.round(ty(t)/I*100):0}%</span></div>`).join("")}</div></div>
  <div class="card"><div class="ic" style="background:#ef4a5f">${ico("bag",26)}</div><div><div class="kt">Total Expenses</div><div class="kv">${fmt(E)}</div>${tr(E,pE,1)}</div>${bMini(E,m)}</div>
- <div class="card"><div class="ic" style="background:#2f6fe0">${ico("bank",26)}</div><div><div class="kt">Total Savings</div><div class="kv">${fmt(S)}</div>${tr(S,pI-pE)}</div><div class="sr"><span>Savings Rate</span><span>${I?(S/I*100).toFixed(1):"0.0"}%</span></div></div>
- <div class="card"><div class="ic" style="background:#dbe7ff;color:#059669">${ico("target",26)}</div><div><div class="kt">Remaining Balance</div><div class="kv">${fmt(S)}</div><span class="m">Income - Expenses</span></div>${gMini(S)}</div>`;
- const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);const lo=E-bc.reduce((t,q)=>t+q[1],0);if(lo>0)bc.push(["Other / removed",lo,"#9ca3af"]);
+ ${S<0?`<div class="card due"><div class="ic" style="background:#e11d48">${ico("alert",26)}</div><div><div class="kt">Loan / Due</div><div class="kv t-ov">${fmt(-S)}</div>${tr(-S,Math.max(0,pE-pI),1)}</div><div class="sr sr-due"><span>Deficit Rate</span><span>${I?(-S/I*100).toFixed(1):"0.0"}%</span></div></div>
+ <div class="card due"><div class="ic" style="background:#ffe4e6;color:#e11d48">${ico("target",26)}</div><div><div class="kt">Outstanding Due</div><div class="kv t-ov">${fmt(-S)}</div><span class="m">Expenses - Income</span></div></div>`
+ :`<div class="card"><div class="ic" style="background:#2f6fe0">${ico("bank",26)}</div><div><div class="kt">Total Savings</div><div class="kv">${fmt(S)}</div>${tr(S,pI-pE)}</div><div class="sr"><span>Savings Rate</span><span>${I?(S/I*100).toFixed(1):"0.0"}%</span></div></div>
+ <div class="card"><div class="ic" style="background:#dbe7ff;color:#059669">${ico("target",26)}</div><div><div class="kt">Remaining Balance</div><div class="kv">${fmt(S)}</div><span class="m">Income - Expenses</span></div>${gMini(S)}</div>`}`;
+const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);const lo=E-bc.reduce((t,q)=>t+q[1],0);if(lo>0)bc.push(["Other / removed",lo,"#9ca3af"]);
  $("#cd").innerHTML=donut(bc,E,"Total Expenses")+legend(bc.filter(q=>q[1]>0),E);
  const bp=Object.keys(PM).map(c=>[c,sum(eN.filter(x=>x.method===c)),PM[c]]);
  $("#pd").innerHTML=`<div style="display:grid;justify-items:center;gap:12px">${donut(bp,E,"Total Expenses")}${legend(bp,E).replace('class="leg"','class="leg" style="width:100%"')}</div>`;
