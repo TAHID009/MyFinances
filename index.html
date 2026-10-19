@@ -411,8 +411,7 @@ main>.pg:not(#p-dash)>*{min-height:0}
 <div class="sec2"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Protected by Firebase Authentication</div></div>
 <div class="welcome"><div class="tick"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><h3>Welcome back</h3><p class="sub" id="wn" style="margin:0">Loading your dashboard…</p><div class="bar"><i></i></div></div>
 </div></div></div></dialog>
-<dialog id="dC"><form class="f" id="fc"><h3 style="margin:0">Connect Firebase</h3><label>Paste your firebaseConfig (Firebase console → Project settings → Your apps → Web app)</label><textarea name="cfg" rows="9" required style="width:100%;font:12px monospace;padding:8px;border:1px solid var(--line);border-radius:6px" placeholder='const firebaseConfig = {&#10;  apiKey: "...",&#10;  authDomain: "...",&#10;  projectId: "...",&#10;  appId: "..."&#10;};'></textarea><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn">Save &amp; connect</button></div></form></dialog>
-<dialog id="dS"><div class="f"><h3 style="margin:0">Import / Export &amp; Settings</h3><label>Import CSV into</label><select id="it"><option value="expenses">Expenses (Date, Category, Item, Amount, Method, Notes)</option><option value="income">Income (Date, Type, Amount, Method, Notes)</option></select><div class="row" style="margin-top:8px"><button type="button" class="btn w" id="tp">Download template</button><button type="button" class="btn" id="bi">Import CSV / JSON</button><input type="file" id="file" accept=".csv,.json" hidden></div><label style="margin-top:14px">Export</label><div class="row"><button type="button" class="btn w" id="bc">Expenses CSV</button><button type="button" class="btn w" id="bn">Income CSV</button><button type="button" class="btn w" id="bj">Backup JSON</button></div><div class="row" style="justify-content:space-between;margin-top:16px"><span class="row"><button type="button" class="btn w" id="cf">Firebase config</button><button type="button" class="btn w" id="so">Sign out</button></span><button type="button" class="btn w" data-x>Close</button></div></div></dialog>
+<dialog id="dS"><div class="f"><h3 style="margin:0">Import / Export &amp; Settings</h3><label>Import CSV into</label><select id="it"><option value="expenses">Expenses (Date, Category, Item, Amount, Method, Notes)</option><option value="income">Income (Date, Type, Amount, Method, Notes)</option></select><div class="row" style="margin-top:8px"><button type="button" class="btn w" id="tp">Download template</button><button type="button" class="btn" id="bi">Import CSV / JSON</button><input type="file" id="file" accept=".csv,.json" hidden></div><label style="margin-top:14px">Export</label><div class="row"><button type="button" class="btn w" id="bc">Expenses CSV</button><button type="button" class="btn w" id="bn">Income CSV</button><button type="button" class="btn w" id="bj">Backup JSON</button></div><div class="row" style="justify-content:space-between;margin-top:16px"><span class="row"><button type="button" class="btn w" id="so">Sign out</button></span><button type="button" class="btn w" data-x>Close</button></div></div></dialog>
 <dialog id="dK" style="width:min(560px,94vw)"><div class="f"><h3 style="margin:0">Categories &amp; Items</h3><p class="m" style="margin:4px 0 0">Edit icon, name and example items (comma separated). Renaming also updates past expenses.</p><div id="kl" style="max-height:55vh;overflow:auto;margin:10px 0"></div><div class="row" style="justify-content:space-between"><span class="row"><button type="button" class="btn w" id="ka">+ Add category</button><button type="button" class="btn w" id="kr">Reset defaults</button></span><span class="row"><button type="button" class="btn w" data-x>Cancel</button><button type="button" class="btn" id="ks">Save</button></span></div></div></dialog>
 <div id="toast"></div>
 <script type="module">
@@ -434,9 +433,17 @@ const op=id=>{const d=$(id);if(!d.open)d.showModal()};
 const col=c=>F.collection(fdb,"users",user.uid,c),dref=(c,id)=>F.doc(fdb,"users",user.uid,c,id);
 const put=async(c,id,d)=>{try{await F.setDoc(dref(c,id),d);toast("Saved")}catch(e){toast(e.message)}};
 const rm=async(c,id)=>{try{await F.deleteDoc(dref(c,id));toast("Deleted")}catch(e){toast(e.message)}};
+const FIREBASE_CONFIG={
+ apiKey:"PASTE_API_KEY",
+ authDomain:"PASTE_PROJECT.firebaseapp.com",
+ projectId:"PASTE_PROJECT_ID",
+ storageBucket:"PASTE_PROJECT.appspot.com",
+ messagingSenderId:"PASTE_SENDER_ID",
+ appId:"PASTE_APP_ID"
+};
 async function boot(){
- const c=JSON.parse(localStorage.getItem("fbcfg")||"null");
- if(!c){op("#dC");return}
+ const c=FIREBASE_CONFIG;
+ if(!c.apiKey||/PASTE_/.test(c.apiKey)){op("#dL");toast("Firebase config missing in index.html (FIREBASE_CONFIG)");return}
  try{const V="https://www.gstatic.com/firebasejs/10.12.2/";
   const[A,a,f]=await Promise.all([import(V+"firebase-app.js"),import(V+"firebase-auth.js"),import(V+"firebase-firestore.js")]);
   AU=a;F=f;const app=A.initializeApp(c);auth=AU.getAuth(app);fdb=F.initializeFirestore(app,{localCache:F.persistentLocalCache()});
@@ -444,7 +451,7 @@ async function boot(){
    if(!u){user=null;db={income:[],expenses:[]};BUD={total:0,goal:0,cats:{}};bdraft={};$("#btot").value=$("#bgoal").value="";render();op("#dL");return}
    user=u;enterApp(u.email);newSnaps();$("#un").textContent=u.email;$("#av").textContent=u.email.slice(0,2).toUpperCase();
    un.push(F.onSnapshot(dref("settings","budgets"),s=>{BUD=s.exists()?{total:0,goal:0,cats:{},...s.data()}:{total:0,goal:0,cats:{}};bdraft={};$("#btot").value=BUD.total||"";$("#bgoal").value=BUD.goal||"";render()},e=>toast(e.message)));un.push(F.onSnapshot(dref("settings","categories"),s=>{CATS=s.exists()&&Array.isArray(s.data().list)?s.data().list:defCats();buildCat();{const k=ticked();fillCat(cv());fillItems(k)}render()},e=>toast(e.message)));["income","expenses"].forEach(k=>un.push(F.onSnapshot(col(k),s=>{db[k]=s.docs.map(d=>({id:d.id,...d.data()}));render()},e=>toast(e.message))))});
- }catch(e){toast("Firebase setup error: "+e.message);op("#dC")}}
+ }catch(e){toast("Firebase setup error: "+e.message);op("#dL")}}
 const IC={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>',income:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',receipt:'<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>',chart:'<path d="M5 20V10M12 20V4M19 20v-7"/>',cal:'<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/>',swap:'<path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>',logout:'<path d="M9 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',plus:'<path d="M12 5v14M5 12h14"/>',down:'<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',wallet:'<path d="M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l2-3h12M16 14h2"/>',bag:'<path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',bank:'<path d="M3 10l9-6 9 6M5 10v8M10 10v8M14 10v8M19 10v8M3 20h18"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',chev:'<path d="M6 9l6 6 6-6"/>'};
 Object.assign(IC,{budget:'<circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-.8-1.4-1.2-2.5-1.2-1.4 0-2.5.7-2.5 1.8 0 2.6 5 1.4 5 4 0 1.1-1.1 1.9-2.5 1.9-1.2 0-2.1-.5-2.6-1.3M12 6.5V8M12 16v1.5"/>',insight:'<path d="M12 3a6 6 0 0 0-3.6 10.8c.7.5 1.1 1.2 1.1 2v.7h5v-.7c0-.8.4-1.5 1.1-2A6 6 0 0 0 12 3z"/><path d="M9.5 19.2h5M10.5 21.4h3"/>',alert:'<path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5M12 17.2v.01"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.8"/>'});const ico=(n,z=18)=>`<svg viewBox="0 0 24 24" width="${z}" height="${z}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
 const pmo=m=>{let[y,o]=m.split("-").map(Number);o--;if(!o){o=12;y--}return y+"-"+String(o).padStart(2,"0")};
@@ -495,7 +502,7 @@ $("#add").onclick=()=>openE();$("#qq").onclick=e=>{const b=e.target.closest("[da
 $$("[data-x]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
 $("#tabs").onclick=e=>{if(e.target.tagName!=="BUTTON")return;$$("#tabs button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");inType=e.target.textContent};
 // ---- login / config
-$("#dL").oncancel=e=>e.preventDefault();$("#dC").oncancel=e=>{if(!localStorage.getItem("fbcfg"))e.preventDefault()};
+$("#dL").oncancel=e=>e.preventDefault();
 $("#fl").onsubmit=async e=>{e.preventDefault();const f=e.target,le=$("#le"),sb=$("#sb"),gc=$("#gc");le.textContent="";le.classList.remove("good");
  const fail=m=>{le.classList.remove("good");le.textContent=m;gc.classList.remove("shake");void gc.offsetWidth;gc.classList.add("shake")};
  if(!f.email.value.trim()||!f.password.value)return fail("Enter your email and password");
@@ -509,8 +516,7 @@ $("#fp").onclick=async()=>{const le=$("#le"),em=$("#lem").value.trim();le.classL
  if(!AU){le.textContent="Still connecting, try again in a moment";return}
  try{await AU.sendPasswordResetEmail(auth,em);le.classList.add("good");le.textContent="Reset link sent. Check your inbox."}catch(x){le.textContent=/invalid-email/.test(x.code||"")?"Enter a valid email address":"Could not send reset email, try again"}};
 window.enterApp=email=>{$("#sbn").textContent=email;$("#sba").textContent=email.slice(0,2).toUpperCase();const d=$("#dL");if(!d.open)return;$("#wn").textContent="Signed in as "+email;$("#gc").classList.add("ok");setTimeout(()=>{d.classList.add("leave");setTimeout(()=>{d.close();d.classList.remove("leave");$("#gc").classList.remove("ok");$("#sb").disabled=false;$("#sb").classList.remove("ld");$("#fl").reset()},600)},1100)};
-$("#fc").onsubmit=e=>{e.preventDefault();const o={};for(const m of e.target.cfg.value.matchAll(/(\w+)\s*:\s*["']([^"']*)["']/g))o[m[1]]=m[2];if(!o.apiKey||!o.projectId)return toast("Paste the full firebaseConfig (apiKey and projectId needed)");localStorage.setItem("fbcfg",JSON.stringify(o));location.reload()};
-$("#ie").onclick=()=>$("#dS").showModal();$("#cf").onclick=()=>{$("#dS").close();op("#dC")};$("#so").onclick=()=>{$("#dS").close();AU&&AU.signOut(auth)};
+$("#ie").onclick=()=>$("#dS").showModal();$("#so").onclick=()=>{$("#dS").close();AU&&AU.signOut(auth)};
 // ---- expense add / edit / delete
 const openE=(c,r)=>{const f=$("#fe");f.reset();f.elements.rid.value=r?r.id:"";f.elements.date.value=r?r.date:sel;fillCat(r?r.cat:c);let k=[];
  if(r){f.elements.amount.value=r.amount;f.elements.notes.value=r.notes||"";const m=f.querySelector(`[name=method][value="${r.method}"]`);if(m)m.checked=true;
