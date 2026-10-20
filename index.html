@@ -390,6 +390,18 @@ html,body{max-width:100%;overflow-x:hidden}
 .top .us #un{max-width:90px}
 .tr .btn{min-width:0}
 }
+
+/* ===== v16: today strip, loan card, idle banner ===== */
+.tdw{flex:1 1 460px;display:flex;align-items:center;justify-content:flex-end;gap:8px 12px;flex-wrap:wrap;padding-left:16px;border-left:1px solid var(--line)}
+.tdm{display:grid;gap:1px;margin-right:6px}.tdm .kv{font-size:22px;line-height:1.15}.tdm .m{font-size:11px}
+.tdi{display:grid;gap:1px;background:#f6f8fc;border-radius:8px;padding:6px 10px;min-width:112px;font-size:11px}.tdi b{font-size:14px}.tdi .m{font-size:10.5px}
+.lsb{width:100%;margin-top:2px;background:linear-gradient(135deg,#e11d48,#f43f5e)!important;box-shadow:0 2px 8px rgba(225,29,72,.28)!important}
+.lsb:hover{box-shadow:0 6px 16px rgba(225,29,72,.38)!important}
+#idl{display:none;position:fixed;inset:auto;top:12px;left:50%;right:auto;bottom:auto;transform:translateX(-50%);margin:0;border:0;z-index:99999;background:#0f1f3d;color:#fff;padding:10px 18px;border-radius:10px;box-shadow:0 8px 24px rgba(15,31,61,.35);font-size:13px;max-width:92vw;text-align:center}
+#idl.on{display:block}
+#idl:popover-open{display:block}
+@media(max-width:800px){.tdw{border-left:0;padding-left:0;justify-content:flex-start;flex:1 1 100%}}
+@media(min-width:1251px) and (min-height:600px){#p-cycle>#nCyc{flex:1 1 0;min-height:0;overflow:auto;padding-right:4px}}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#065f46"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#5eead4"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#5eead4"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#5eead4"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow</small></div></div>
 <nav class="nv"><div class="sl">MAIN</div><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Income &amp; Expenses</button><button class="it" data-pg="bills"><i data-i="bell"></i>Bills &amp; Recurring</button><button class="it" data-pg="cycle"><i data-i="cal"></i>Salary &amp; Loans</button><button class="it" data-pg="budget"><i data-i="budget"></i>Budgets &amp; Goals</button><div class="sl">ANALYTICS</div><button class="it" data-pg="daily"><i data-i="chart"></i>Daily &amp; Monthly</button><button class="it" data-pg="insights"><i data-i="insight"></i>Spending Insights</button><div class="sl">MONEY</div><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Net Worth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button></nav><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -401,7 +413,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <div class="card" id="ov"><h3>Monthly Overview<span class="m" style="font-weight:400;font-size:10.5px"><span style="color:#2e9e5b">■</span> Income &nbsp;<span style="color:#2f6fe0">■</span> Expenses &nbsp;<span style="color:#0f2a5b">●</span> Savings</span></h3><div id="mo"></div></div>
 <div class="card" id="pm"><h3>Payment Method</h3><div id="pd"></div></div></div>
 <div class="card" id="dx"><h3><span>Daily Expenses</span><span id="dxr" class="m" style="font-weight:600;font-size:12px"></span></h3><div id="dxc" style="position:relative;padding-top:30px"><div id="dxt" class="tip" hidden></div><div id="dxs"></div></div><div class="m" style="font-size:10px;margin-top:2px">Hover or tap a bar for the amount · <span style="color:#16a34a">- - -</span> average · <span style="color:#e11d48">■</span> above average</div></div>
-<div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Quick Add by Category</span><button class="btn w" id="mc" hidden><i data-i="edit" data-s="14"></i>Manage</button></h3><div class="f" style="max-width:380px"><div class="ddw"><button type="button" class="dd ph" id="dq">Select category to add an expense</button><div class="chips dp" id="qq"></div></div></div></div></div>
+<div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Quick Add by Category</span><button class="btn w" id="mc" hidden><i data-i="edit" data-s="14"></i>Manage</button></h3><div class="f" style="max-width:380px"><div class="ddw"><button type="button" class="dd ph" id="dq">Select category to add an expense</button><div class="chips dp" id="qq"></div></div></div><div class="tdw" id="td"></div></div></div>
 </div><div class="col">
 <div class="card"><h3><span><i data-i="cal"></i> Select Date</span></h3><div class="row" style="justify-content:space-between;margin-bottom:6px"><button class="kb" id="pv">‹</button><b id="cm"></b><button class="kb" id="nx">›</button></div><div class="cal" id="cal"></div></div>
 <div class="card"><h3>Recent Transactions<a href="#log" style="color:var(--pri);font-size:11px;font-weight:400;text-decoration:none">View All</a></h3><div id="rt"></div></div>
@@ -465,7 +477,7 @@ html,body{max-width:100%;overflow-x:hidden}
 </div></div></div></dialog>
 <dialog id="dS"><div class="f"><h3 style="margin:0">Import / Export &amp; Settings</h3><label>Import CSV into</label><select id="it"><option value="expenses">Expenses (Date, Category, Item, Amount, Method, Notes)</option><option value="income">Income (Date, Type, Amount, Method, Notes)</option></select><div class="row" style="margin-top:8px"><button type="button" class="btn w" id="tp">Download template</button><button type="button" class="btn" id="bi">Import CSV / JSON</button><input type="file" id="file" accept=".csv,.json" hidden></div><label style="margin-top:14px">Export</label><div class="row"><button type="button" class="btn w" id="bc">Expenses CSV</button><button type="button" class="btn w" id="bn">Income CSV</button><button type="button" class="btn w" id="bj">Backup JSON</button></div><div class="row" style="justify-content:space-between;margin-top:16px"><span class="row"><button type="button" class="btn w" id="so">Sign out</button></span><button type="button" class="btn w" data-x>Close</button></div></div></dialog>
 <dialog id="dK" style="width:min(560px,94vw)"><div class="f"><h3 style="margin:0">Categories &amp; Items</h3><p class="m" style="margin:4px 0 0">Edit icon, name and example items (comma separated). Renaming also updates past expenses.</p><div id="kl" style="max-height:55vh;overflow:auto;margin:10px 0"></div><div class="row" style="justify-content:space-between"><span class="row"><button type="button" class="btn w" id="ka">+ Add category</button><button type="button" class="btn w" id="kr">Reset defaults</button></span><span class="row"><button type="button" class="btn w" data-x>Cancel</button><button type="button" class="btn" id="ks">Save</button></span></div></div></dialog>
-<div id="toast"></div>
+<div id="idl" popover="manual" role="alert"></div><div id="toast"></div>
 <script type="module">
 const $=s=>$$(s)[0],$$=s=>document.querySelectorAll(s);
 const MN=["January","February","March","April","May","June","July","August","September","October","November","December"],MS=MN.map(x=>x.slice(0,3));
@@ -517,11 +529,11 @@ function render(){
  const m=sel.slice(0,7),y=+m.slice(0,4),mi=+m.slice(5)-1,pm=pmo(m);
  $("#mon").value=m;$("#sd").value=sel;
  const iN=mon(db.income,m),eN=mon(db.expenses,m),I=sum(iN),E=sum(eN),S=I-E,pI=sum(mon(db.income,pm)),pE=sum(mon(db.expenses,pm));
- const ty=t=>sum(iN.filter(x=>x.type===t)),LN=loanInfo(m);
- $("#kp").innerHTML=`<div class="card"><div class="ic" style="background:#16a34a">${ico("wallet",26)}</div><div><div class="kt">Total Income</div><div class="kv">${fmt(I)}</div>${tr(I,pI)}</div><div class="brk">${["Salary","Family","Others"].map(t=>`<div><span class="m">${t}</span><span>${fmt(ty(t))}</span><span class="m">${I?Math.round(ty(t)/I*100):0}%</span></div>`).join("")}</div></div>
+ const ty=t=>sum(iN.filter(x=>x.type===t)),LN=loanInfo(m),lr=LN.auto>0?`<div><span class="r">Loan auto-deducted</span><span class="r">− ${fmt(LN.auto)}</span><span class="m"></span></div><div><b>Net income</b><b>${fmt(LN.netInc)}</b><span class="m"></span></div>`:"";
+ $("#kp").innerHTML=`<div class="card"><div class="ic" style="background:#16a34a">${ico("wallet",26)}</div><div><div class="kt">Total Income</div><div class="kv">${fmt(I)}</div>${tr(I,pI)}</div><div class="brk">${["Salary","Family","Others"].map(t=>`<div><span class="m">${t}</span><span>${fmt(ty(t))}</span><span class="m">${I?Math.round(ty(t)/I*100):0}%</span></div>`).join("")+lr}</div></div>
  <div class="card"><div class="ic" style="background:#ef4a5f">${ico("bag",26)}</div><div><div class="kt">Total Expenses</div><div class="kv">${fmt(E)}</div>${tr(E,pE,1)}</div>${bMini(E,m)}</div>
- ${LN.debt>0?`<div class="card due"><div class="ic" style="background:#e11d48">${ico("alert",26)}</div><div><div class="kt">Loan / Due</div><div class="kv t-ov">${fmt(LN.debt)}</div><span class="m">${LN.open<0?"Includes "+fmt(-LN.open)+" carried over":"This month's deficit"}</span></div><div class="sr sr-due"><span>Deficit Rate</span><span>${I?(LN.debt/I*100).toFixed(1):"0.0"}%</span></div></div>
- <div class="card due"><div class="ic" style="background:#ffe4e6;color:#e11d48">${ico("target",26)}</div><div><div class="kt">Outstanding Due</div><div class="kv t-ov">${fmt(LN.debt)}</div><span class="m">Auto loan · carried forward</span><br><button class="btn w" data-a="settle" data-id="x" style="margin-top:6px;padding:4px 10px;font-size:12px">Settle</button></div></div>`
+  ${LN.debt>0?`<div class="card due"><div class="ic" style="background:#e11d48">${ico("alert",26)}</div><div><div class="kt">Loan / Due</div><div class="kv t-ov">${fmt(LN.debt)}</div><span class="m">${LN.open<0?"Includes "+fmt(-LN.open)+" carried over":"This month's deficit"}</span></div><div class="brk">${LN.open<0?`<div><span class="m">Carried over</span><span>${fmt(-LN.open)}</span><span class="m"></span></div>`:""}<div><span class="m">Auto-deducted from income</span><span class="g">${LN.auto?"− "+fmt(LN.auto):fmt(0)}</span><span class="m"></span></div>${LN.st?`<div><span class="m">Settled manually</span><span class="g">− ${fmt(LN.st)}</span><span class="m"></span></div>`:""}</div><button class="btn lsb" data-a="settle" data-id="x">Settle loan</button></div>
+  <div class="card"><div class="ic" style="background:#2f6fe0">${ico("bank",26)}</div><div><div class="kt">Net Income (after loan)</div><div class="kv">${fmt(LN.netInc)}</div>${tr(LN.netInc,pI-loanInfo(pm).auto)}</div><div class="sr sr-due"><span>Deficit Rate</span><span>${I?(LN.debt/I*100).toFixed(1):"0.0"}%</span></div></div>`
  :`<div class="card"><div class="ic" style="background:#2f6fe0">${ico("bank",26)}</div><div><div class="kt">Total Savings</div><div class="kv">${fmt(S)}</div>${tr(S,pI-pE)}</div><div class="sr"><span>Savings Rate</span><span>${I?(S/I*100).toFixed(1):"0.0"}%</span></div></div>
  <div class="card"><div class="ic" style="background:#dbe7ff;color:#059669">${ico("target",26)}</div><div><div class="kt">Remaining Balance</div><div class="kv">${fmt(LN.close)}</div><span class="m">${LN.open?"Incl. "+fmt(LN.open)+" carried over":"Income - Expenses"}</span></div>${gMini(S)}</div>`}`;
 const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);const lo=E-bc.reduce((t,q)=>t+q[1],0);if(lo>0)bc.push(["Other / removed",lo,"#9ca3af"]);
@@ -544,7 +556,7 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  // calendar
  $("#cm").textContent=MN[mi]+" "+y;const f=new Date(y,mi,1).getDay(),dm=new Date(y,mi+1,0).getDate();
  $("#cal").innerHTML=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<span class="h">${d}</span>`).join("")+"<span></span>".repeat(f)+Array.from({length:dm},(_,k)=>`<span data-d="${k+1}" class="${k+1===+sel.slice(8)?"s":""}">${k+1}</span>`).join("");
- $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);renderDx(m,eN,E);renderCats(eN,E);renderMonthly(y,mi);renderBudget(m,eN,I,E);renderCycle();
+ $$("#fi [name=date]")[0].value=sel;renderInc();renderDaily(m,eN,I,E);renderDx(m,eN,E);renderCats(eN,E);renderMonthly(y,mi);renderBudget(m,eN,I,E);renderCycle();renderToday();
 }
 function setSel(d){sel=d;render()}
 const shift=k=>{let[y,o]=sel.slice(0,7).split("-").map(Number);o+=k;if(o<1){o=12;y--}if(o>12){o=1;y++}const dm=new Date(y,o,0).getDate();setSel(y+"-"+String(o).padStart(2,"0")+"-"+String(Math.min(+sel.slice(8),dm)).padStart(2,"0"))};
@@ -583,7 +595,7 @@ $("#fe").onsubmit=async e=>{e.preventDefault();const f=e.target,cat=cv();if(!cat
  const nw=oth&&$("#es").checked&&CAT[cat]?tx.filter(t=>!CAT[cat].items.some(i=>i.toLowerCase()===t.toLowerCase())):[];
  if(nw.length){CATS=CATS.map(x=>x.n===cat?{...x,items:[...x.items,...nw]}:x);buildCat();F.setDoc(dref("settings","categories"),{list:CATS.map(({n,i,c,items})=>({n,i,c,items}))}).catch(x=>toast(x.message))}
  $("#dE").close();sel=r.date;render();await put("expenses",id,r);budgetAlert(r,id)};
-$("#fi").onsubmit=async e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target));r.amount=+r.amount;r.type=inType;e.target.amount.value=e.target.notes.value="";sel=r.date;render();await put("income",uid(),r)};
+$("#fi").onsubmit=async e=>{e.preventDefault();const r=Object.fromEntries(new FormData(e.target));r.amount=+r.amount;r.type=inType;e.target.amount.value=e.target.notes.value="";sel=r.date;const L0=loanInfo(r.date.slice(0,7));render();await put("income",uid(),r);loanMsg(L0,r.amount)};
 $("#tb").onclick=async e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.edit)openE(null,db.expenses.find(x=>x.id===b.dataset.edit));if(b.dataset.del&&confirm("Delete this expense?"))await rm("expenses",b.dataset.del)};
 $("#il").onclick=async e=>{const b=e.target.closest("[data-di]");if(b&&confirm("Delete this income entry?"))await rm("income",b.dataset.di)};
 function renderInc(){const IM=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date));$("#itot2").textContent=fmt(sum(IM));$("#il2").innerHTML=IM.slice(0,3).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:11px">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b></div>`).join("")+(IM.length>3?`<div class="m" style="font-size:11px;padding-top:6px">+ ${IM.length-3} more on the Income page</div>`:"")||'<span class="m">No income this month.</span>';$("#itot").textContent=fmt(sum(mon(db.income,sel.slice(0,7))));$("#il").innerHTML=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:11px">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b><button class="kb" data-di="${x.id}" title="Delete">${ico("trash",16)}</button></div>`).join("")||'<span class="m">No income this month.</span>'}
@@ -832,7 +844,10 @@ const SW=[25,27],mAdd=(m,k)=>new Date(Date.UTC(+m.slice(0,4),+m.slice(5,7)-1+k,1
 /* Position = carried-over balance + income - expenses + settlements, month after month. Negative position = auto loan. */
 function loanInfo(m){const all=[...db.income,...db.expenses,...ND.settles].map(x=>x.date.slice(0,7)).sort();let p=0,o=0,n=0,s=0;
  if(all.length)for(let k=all[0];k<=m;k=mAdd(k,1)){o=p;n=sum(mon(db.income,k))-sum(mon(db.expenses,k));s=sum(mon(ND.settles,k));p=o+n+s}
- return{open:o,net:n,st:s,close:p,debt:Math.max(0,-p)}}
+ const I=sum(mon(db.income,m)),E=sum(mon(db.expenses,m)),dO=Math.max(0,-o),auto=Math.min(Math.max(0,dO-s),I);
+ return{open:o,net:n,st:s,close:p,debt:Math.max(0,-p),inc:I,exp:E,auto,netInc:I-auto}}
+/* Income-first rule: any income that arrives while a loan is open first clears that loan automatically. */
+const loanMsg=(L0,a)=>{if(L0&&L0.debt>0){const d=Math.min(L0.debt,a);toast(fmt(d)+" of this income was auto-deducted to clear your loan. "+(L0.debt-d>0.5?"Remaining loan "+fmt(L0.debt-d):"Loan fully cleared"))}};
 function salInfo(){const t=TD(),tm=t.slice(0,7),d=+t.slice(8),sal=db.income.filter(x=>x.type==="Salary").sort((a,b)=>b.date.localeCompare(a.date)),got=sal.some(x=>x.date.startsWith(tm)),nm=got?mAdd(tm,1):tm,end=nm+"-"+SW[1],dl=Math.max(1,Math.round((Date.parse(end)-Date.parse(t))/864e5));
  return{last:sal[0],got,end,dl,ov:!got&&d>SW[1],st:got?"Salary received this month · next expected "+SW[0]+"–"+SW[1]+" "+MS[+nm.slice(5)-1]:d<SW[0]?"Salary expected "+SW[0]+"–"+SW[1]+" "+MS[+tm.slice(5)-1]+" — until then expenses show as a temporary due":d<=SW[1]?"Salary window is open — not recorded yet":"Salary not recorded — it was expected by the "+SW[1]+"th"}}
 function settleForm(){const L=loanInfo(TD().slice(0,7));if(L.debt<=0)return toast("No loan to settle");
@@ -840,21 +855,103 @@ function settleForm(){const L=loanInfo(TD().slice(0,7));if(L.debt<=0)return toas
  o=>{const a=+o.amount;if(!(a>0))throw Error("Enter an amount");if(a>L.debt+.005)throw Error("More than the loan ("+fmt(L.debt)+")");return sv("settles",uid(),{date:o.date,amount:a,notes:o.notes||""})})}
 function salaryForm(){const ao=actOpts(),l=salInfo().last;
  nform("Record salary",[{k:"date",l:"Credit date",t:"date",r:1},{k:"amount",l:"Amount (৳)",t:"number",r:1},{k:"acct",l:"Credited to",t:"select",o:ao.length?ao:[["","No account"]]}],{date:TD(),amount:l?l.amount:"",acct:ao.length?ao[0][0]:""},
- o=>{if(!(o.amount>0))throw Error("Enter the amount");const a=ND.accounts.find(x=>x.id===o.acct);return sv("income",uid(),{date:o.date,type:"Salary",amount:+o.amount,method:a&&PM[a.name]?a.name:"Others",notes:"Monthly salary",...(a?{acct:a.id}:{})})})}
-function renderCycle(){try{const t=TD(),tm=t.slice(0,7),L=loanInfo(tm),S=salInfo(),
- K=(a,b,c,cl)=>`<div class="card bkc"><span class="m">${a}</span><b class="${cl||""}">${b}</b><span class="m">${c||"&nbsp;"}</span></div>`,
- sec=(h,x)=>`<div class="card" style="margin-top:14px"><h3><span>${h}</span></h3>${x}</div>`,
- rows=[5,4,3,2,1,0].map(k=>mAdd(tm,-k)).map(m=>{const l=loanInfo(m);return`<tr><td>${m}</td><td class="ra">${fmt(l.open)}</td><td class="ra">${fmt(sum(mon(db.income,m)))}</td><td class="ra">${fmt(sum(mon(db.expenses,m)))}</td><td class="ra">${l.st?fmt(l.st):"—"}</td><td class="ra ${l.close<0?"r":"g"}">${fmt(l.close)}</td></tr>`}).join(""),
- hs=ND.settles.slice().sort((a,b)=>b.date.localeCompare(a.date));
- $("#nCyc").innerHTML=`<div class="${S.got?"card":"al "+(S.ov?"al-ov":"al-nr")}" style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${ico("cal",16)} <b>${S.st}</b>${S.last?` <span class="m">· last salary ${fmt(S.last.amount)} on ${S.last.date}</span>`:""}</span><button class="btn" data-a="salary">+ Record salary</button></div>
- <div class="bkk">${K("Carried over",fmt(L.open),"Closing balance of last month",L.open<0?"t-ov":"")}${K("Position now",fmt(L.close),"Carry-over + income − expenses",L.close<0?"t-ov":"")}${K("Safe to spend / day",fmt(Math.max(0,L.close)/S.dl),"Until "+S.end+" ("+S.dl+" days)")}
- <div class="card bkc"><span class="m">Loan / Due</span><b class="${L.debt>0?"t-ov":"g"}">${L.debt>0?fmt(L.debt):"Closed ✓"}</b><span class="m">${L.debt>0?"Auto: expenses went above income":"No outstanding loan"}</span>${L.debt>0?bt("settle","x","Settle"):""}</div></div>
- ${sec("Month-end roll-over",`<p class="m" style="margin:0 0 8px">Whatever is left (or owed) at month end becomes the opening balance of the next month. A deficit is an automatic loan until income or a manual settlement clears it.</p><div style="overflow:auto"><table><tr><th>Month</th><th class="ra">Opening</th><th class="ra">Income</th><th class="ra">Expenses</th><th class="ra">Settled</th><th class="ra">Closing</th></tr>${rows}</table></div>`)}
- ${sec("Loan settlements",`<div style="overflow:auto"><table><tr><th>Date</th><th class="ra">Amount</th><th>Note</th><th></th></tr>${hs.map(x=>`<tr><td>${x.date}</td><td class="ra">${fmt(x.amount)}</td><td>${esc(x.notes||"")}</td><td class="ra">${bt("delSet",x.id,"Remove")}</td></tr>`).join("")||'<tr><td colspan="4" class="m">No settlements yet.</td></tr>'}</table></div>`)}`}catch(e){console.error(e)}}
+ o=>{if(!(o.amount>0))throw Error("Enter the amount");const a=ND.accounts.find(x=>x.id===o.acct);loanMsg(loanInfo(o.date.slice(0,7)),+o.amount);return sv("income",uid(),{date:o.date,type:"Salary",amount:+o.amount,method:a&&PM[a.name]?a.name:"Others",notes:"Monthly salary",...(a?{acct:a.id}:{})})})}
+function renderCycle(){try{
+ const t=TD(),tm=t.slice(0,7),L=loanInfo(tm),S=salInfo();
+ const K=(a,b,c,cl)=>`<div class="card bkc"><span class="m">${a}</span><b class="${cl||""}">${b}</b><span class="m">${c||"&nbsp;"}</span></div>`,
+ sec=(h,x,s)=>`<div class="card" style="margin-top:14px"><h3><span>${h}</span>${s?`<span class="m" style="font-weight:400;font-size:11px">${s}</span>`:""}</h3>${x}</div>`;
+ const first=[...db.income,...db.expenses,...ND.settles].map(x=>x.date.slice(0,7)).sort()[0]||tm,ALL=[];
+ for(let k=first;k<=tm&&ALL.length<120;k=mAdd(k,1))ALL.push({m:k,...loanInfo(k)});
+ const H=ALL.slice(-12),tot=f=>H.reduce((a,x)=>a+x[f],0);
+ const peak=H.reduce((b,x)=>x.debt>b.debt?x:b,{debt:0,m:""}),inDebt=H.filter(x=>x.close<0).length,l3=H.slice(-3),
+ avg3=l3.length?l3.reduce((a,x)=>a+x.net,0)/l3.length:0,cover=L.exp?L.inc/L.exp:0,mos=L.debt>0&&avg3>0?Math.ceil(L.debt/avg3):0,
+ after=L.close+(S.last?S.last.amount:0);
+ let streak=0;for(let i=ALL.length-1;i>=0&&ALL[i].close<0;i--)streak++;
+ /* tiles */
+ const T=(a,b,c,cl)=>`<div><span>${a}</span><b class="${cl||""}">${b}</b><span>${c||"&nbsp;"}</span></div>`;
+ const free=mos?mAdd(tm,mos):"";
+ const tiles=T("Peak loan (12 mo)",peak.debt?fmt(peak.debt):"None",peak.debt?peak.m:"No loan in this period",peak.debt?"t-ov":"")
+  +T("Months in loan",inDebt+" of "+H.length,streak?streak+" in a row now":"Not in loan now",streak>=3?"t-ov":"")
+  +T("Auto-deducted from income",fmt(tot("auto")),"Income-first repayment")
+  +T("Settled manually",fmt(tot("st")),"From outside funds")
+  +T("Avg monthly result",fmt(avg3),(avg3>=0?"Surplus":"Deficit")+" \u00b7 last "+(l3.length||0)+" mo",avg3<0?"t-ov":"t-ok")
+  +T("Income \u00f7 expenses",L.exp?cover.toFixed(2)+"\u00d7":"\u2014",L.exp?(cover>=1?"Income covers spending":"Spending above income"):"No expenses yet",L.exp&&cover<1?"t-ov":"")
+  +T("Clear loan in",L.debt>0?(mos?mos+" month"+(mos>1?"s":""):"Not at this pace"):"No loan",L.debt>0&&mos?MN[+free.slice(5)-1]+" "+free.slice(0,4):(L.debt>0?"Needs more income":"\u2713"),L.debt>0&&!mos?"t-ov":"")
+  +T("After next salary",fmt(after),S.last?"Position + last salary "+fmt(S.last.amount):"No salary recorded",after<0?"t-ov":"");
+ /* chart: closing position per month */
+ const mxA=Math.max(1,...H.map(x=>Math.abs(x.close))),W=620,CH=150,zy=CH/2+10,sc=(CH/2-6)/mxA,bw=W/Math.max(1,H.length);
+ const kf=v=>Math.abs(v)>=1000?(Math.abs(v)/1000).toFixed(Math.abs(v)>=10000?0:1)+"K":String(Math.round(Math.abs(v)));
+ let svg=`<svg viewBox="0 0 ${W} ${CH+34}" width="100%" style="display:block;max-height:220px"><line x1="0" x2="${W}" y1="${zy}" y2="${zy}" stroke="#cbd5e1"/>`;
+ H.forEach((x,k)=>{const h=Math.abs(x.close)*sc,neg=x.close<0,y=neg?zy:zy-h,cx=k*bw+bw/2;
+  svg+=`<rect x="${k*bw+bw*.2}" y="${y}" width="${bw*.6}" height="${Math.max(h,1)}" rx="3" fill="${neg?"#e11d48":"#10b981"}"><title>${x.m}: ${fmt(x.close)}</title></rect><text x="${cx}" y="${neg?y+h+11:y-4}" font-size="9" text-anchor="middle" fill="#6b7a99">${x.close?(neg?"-":"")+kf(x.close):""}</text><text x="${cx}" y="${CH+28}" font-size="9" text-anchor="middle" fill="#6b7a99">${MS[+x.m.slice(5)-1]}</text>`});
+ svg+="</svg>";
+ /* spending drivers: this month vs 3-month average */
+ const eN=mon(db.expenses,tm),p3=[1,2,3].map(k=>mon(db.expenses,mAdd(tm,-k)));
+ const dr=Object.keys(CAT).map(c=>{const a=sum(eN.filter(x=>x.cat===c)),b=p3.reduce((s,arr)=>s+sum(arr.filter(x=>x.cat===c)),0)/3;return[c,a,b,a-b]}).filter(r=>r[1]>0).sort((x,y)=>y[3]-x[3]).slice(0,5);
+ const drRows=dr.map(([c,a,b,d])=>`<tr><td>${CAT[c].i} <b>${esc(c)}</b></td><td class="ra">${num(a)}</td><td class="ra">${b?num(b):"\u2014"}</td><td class="ra ${d>0?"r":d<0?"g":"m"}">${d>0?"+":d<0?"\u2212":""}${num(Math.abs(d))}</td></tr>`).join("");
+ /* insights */
+ const A=(cl,ic,h)=>`<div class="al ${cl}">${ico(ic,18)}<div>${h}</div></div>`,al=[];
+ if(L.auto>0)al.push(A("al-ok","check",`<b>${fmt(L.auto)}</b> of this month's income was automatically deducted to clear your loan${L.debt>0?` \u2014 <b>${fmt(L.debt)}</b> is still open`:" \u2014 the loan is now closed"}.`));
+ if(L.debt>0&&mos)al.push(A("al-nr","alert",`At your recent average surplus of <b>${fmt(avg3)}</b> per month, the loan clears in about <b>${mos} month${mos>1?"s":""}</b> (${MN[+free.slice(5)-1]} ${free.slice(0,4)}).`));
+ if(L.debt>0&&!mos)al.push(A("al-ov","alert",`Your average monthly result is <b>${fmt(avg3)}</b>, so the loan will not shrink at this pace. Cut spending or add income by about <b>${fmt(Math.abs(avg3)+1)}</b> a month to start clearing it.`));
+ if(streak>=3)al.push(A("al-ov","alert",`You have been in loan for <b>${streak} months</b> in a row.`));
+ if(L.debt>0&&S.last)al.push(A("al-nr","alert",`After the next salary (about ${fmt(S.last.amount)}) your position would be <b>${fmt(after)}</b> before any new spending.`));
+ if(L.debt>0&&dr.length&&dr[0][3]>0)al.push(A("al-nr","alert",`Biggest rise vs your 3-month average: <b>${esc(dr[0][0])}</b> (+${fmt(dr[0][3])}).`));
+ if(L.debt<=0)al.push(A("al-ok","check",`<b>No outstanding loan.</b> Closing position ${fmt(L.close)}.`));
+ /* roll-over table */
+ const rows=H.slice(-6).map(l=>`<tr><td>${l.m}</td><td class="ra">${fmt(l.open)}</td><td class="ra">${fmt(l.inc)}</td><td class="ra ${l.auto?"g":"m"}">${l.auto?"\u2212 "+fmt(l.auto):"\u2014"}</td><td class="ra">${fmt(l.exp)}</td><td class="ra">${l.st?fmt(l.st):"\u2014"}</td><td class="ra ${l.close<0?"r":"g"}">${fmt(l.close)}</td></tr>`).join("");
+ /* repayment history: manual settlements + automatic income deductions */
+ const hs=[...ND.settles.map(x=>({k:x.date,x,man:1})),...ALL.filter(x=>x.auto>0).map(x=>({k:x.m+"-99",x}))].sort((a,b)=>b.k.localeCompare(a.k));
+ const hRows=hs.map(r=>r.man?`<tr><td>${r.x.date}</td><td>${badge("Manual","#2f6fe0")}</td><td class="ra">${fmt(r.x.amount)}</td><td>${esc(r.x.notes||"")}</td><td class="ra">${bt("delSet",r.x.id,"Remove")}</td></tr>`
+  :`<tr><td>${r.x.m}</td><td>${badge("Auto","#059669")}</td><td class="ra">${fmt(r.x.auto)}</td><td class="m">Deducted from income (loan at start of month ${fmt(Math.max(0,-r.x.open))})</td><td></td></tr>`).join("")||'<tr><td colspan="5" class="m">No repayments yet.</td></tr>';
+ $("#nCyc").innerHTML=`<div class="${S.got?"card":"al "+(S.ov?"al-ov":"al-nr")}" style="margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span>${ico("cal",16)} <b>${S.st}</b>${S.last?` <span class="m">\u00b7 last salary ${fmt(S.last.amount)} on ${S.last.date}</span>`:""}</span><button class="btn" data-a="salary">+ Record salary</button></div>
+ <div class="bkk">${K("Carried over",fmt(L.open),"Closing balance of last month",L.open<0?"t-ov":"")}${K("Position now",fmt(L.close),"Carry-over + income \u2212 expenses",L.close<0?"t-ov":"")}${K("Safe to spend / day",fmt(Math.max(0,L.close)/S.dl),"Until "+S.end+" ("+S.dl+" days)")}
+ <div class="card bkc"><span class="m">Loan / Due</span><b class="${L.debt>0?"t-ov":"g"}">${L.debt>0?fmt(L.debt):"Closed \u2713"}</b><span class="m">${L.debt>0?"Auto: expenses went above income":"No outstanding loan"}</span>${L.debt>0?bt("settle","x","Settle"):""}</div></div>
+ ${sec("Loan &amp; cash-flow analysis",`<div class="dk" style="margin-bottom:0">${tiles}</div>`,"Last "+H.length+" month"+(H.length>1?"s":""))}
+ <div class="bt2"><div class="card"><h3><span>Closing position by month</span><span class="m" style="font-weight:400;font-size:11px">red = loan, green = money carried over</span></h3>${svg}</div>
+ <div class="card"><h3><span>What is driving spending</span><span class="m" style="font-weight:400;font-size:11px">this month vs 3-month average</span></h3><div class="tw"><table style="min-width:0"><tr><th>Category</th><th class="ra">This month</th><th class="ra">3-mo avg</th><th class="ra">Change</th></tr>${drRows||'<tr><td colspan="4" class="m">No expenses this month.</td></tr>'}</table></div></div></div>
+ ${sec("Insights",al.join(""))}
+ ${sec("Month-end roll-over",`<p class="m" style="margin:0 0 8px">Whatever is left (or owed) at month end becomes the opening balance of the next month. A deficit is an automatic loan. <b>Any income you add clears the loan first, automatically</b> (the "Loan auto-deducted" column).</p><div style="overflow:auto"><table><tr><th>Month</th><th class="ra">Opening</th><th class="ra">Income</th><th class="ra">Loan auto-deducted</th><th class="ra">Expenses</th><th class="ra">Settled</th><th class="ra">Closing</th></tr>${rows}</table></div>`)}
+ ${sec("Loan repayments",`<p class="m" style="margin:0 0 8px">Auto rows come from your income. Use <b>Settle</b> only for money that is not recorded as income (bonus, gift, savings kept elsewhere).</p><div style="overflow:auto"><table><tr><th>Date</th><th>Type</th><th class="ra">Amount</th><th>Note</th><th></th></tr>${hRows}</table></div>`)}`}catch(e){console.error(e)}}
+
+/* ===== Today's expense vs earlier data (dashboard) ===== */
+const dAdd=(d,k)=>new Date(Date.UTC(+d.slice(0,4),+d.slice(5,7)-1,+d.slice(8)+k)).toISOString().slice(0,10);
+function renderToday(){try{
+ const el=$("#td");if(!el)return;
+ const t=TD(),dayE=d=>db.expenses.filter(x=>x.date===d),sd=d=>sum(dayE(d));
+ const a=sd(t),n=dayE(t).length,y=sd(dAdd(t,-1)),w=sd(dAdd(t,-7));
+ const pv=db.expenses.map(x=>x.date).filter(d=>d<t).sort().pop(),lr=pv?sd(pv):0;
+ const mo=t.slice(0,7),dn=+t.slice(8),ms=sum(db.expenses.filter(x=>x.date.startsWith(mo)&&x.date<t)),avg=dn>1?ms/(dn-1):0;
+ const lb=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1];
+ const cmp=(b,lab,ok)=>{const d=a-b;let h;
+  if(!ok)h='<span class="m">No data</span>';
+  else if(!b&&!a)h='<span class="m">No spend</span>';
+  else if(!b)h='<span class="r">New spend</span>';
+  else if(d===0)h='<span class="m">Same</span>';
+  else h=`<span class="${d>0?"r":"g"}">${d>0?"\u25b2":"\u25bc"} ${Math.abs(Math.round(d/b*100))}% (${d>0?"+":"\u2212"}${num(Math.abs(d))})</span>`;
+  return`<div class="tdi"><span class="m">${lab}</span><b>${ok?fmt(b):"\u2014"}</b>${h}</div>`};
+ el.innerHTML=`<div class="tdm"><span class="m">Today \u00b7 ${lb(t)}</span><div class="kv ${a?"":"m"}">${fmt(a)}</div><span class="m">${n?n+" entr"+(n==1?"y":"ies"):"No expense yet"}</span></div>`
+  +cmp(y,"Yesterday",true)+cmp(w,"Same day last week",true)+cmp(lr,pv?"Last record \u00b7 "+lb(pv):"Last record",!!pv)+cmp(avg,"Avg / day this month",dn>1&&ms>0);
+}catch(e){console.error(e)}}
 function go(p){if(!PGS[p])p="dash";$$(".pg").forEach(x=>x.hidden=x.id!=="p-"+(AL[p]||p));$$("aside .it[data-pg]").forEach(b=>b.classList.toggle("on",b.dataset.pg===p));$("#pt").textContent=PGS[p][0];$("#ps").textContent=PGS[p][1];closeDD();window.scrollTo(0,0)}
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
 $$("aside .it[data-pg]").forEach(b=>b.onclick=()=>{location.hash=b.dataset.pg;go(b.dataset.pg)});
 go(location.hash.slice(1)||(()=>{try{return localStorage.getItem("mf_start")||""}catch(e){return""}})());
+/* ===== Auto logout after 10 minutes without activity ===== */
+const IDLE_MS=10*60*1000,IDLE_WARN=60*1000;let lastAct=Date.now();
+const idlEl=$("#idl"),idlHide=()=>{idlEl.classList.remove("on");try{if(idlEl.matches(":popover-open"))idlEl.hidePopover()}catch(e){}},
+idlShow=s=>{idlEl.textContent="Signing out in "+s+"s because of inactivity. Move the mouse or tap to stay signed in.";if(!idlEl.classList.contains("on")){idlEl.classList.add("on");try{idlEl.showPopover()}catch(e){}}};
+const actv=()=>{lastAct=Date.now();if(idlEl.classList.contains("on"))idlHide()};
+["pointerdown","pointermove","mousedown","keydown","touchstart","wheel","scroll","click"].forEach(ev=>document.addEventListener(ev,actv,{passive:true,capture:true}));
+function idleCheck(){
+ if(!user){lastAct=Date.now();idlHide();return}
+ const d=Date.now()-lastAct;
+ if(d>=IDLE_MS){idlHide();$$("dialog[open]").forEach(x=>x.close());lastAct=Date.now();
+  const le=$("#le");if(le){le.classList.remove("good");le.textContent="You were signed out after 10 minutes of inactivity. Please sign in again."}
+  if(AU)AU.signOut(auth).catch(e=>toast(e.message));return}
+ if(d>=IDLE_MS-IDLE_WARN)idlShow(Math.max(1,Math.ceil((IDLE_MS-d)/1000)));
+}
+setInterval(idleCheck,1000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)idleCheck()});
 render();boot();
 </script><script>
 (function(){
