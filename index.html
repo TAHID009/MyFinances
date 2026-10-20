@@ -493,7 +493,7 @@ const fmt=n=>"৳ "+Math.round(n).toLocaleString("en-US"),num=n=>Math.round(n).t
 const fd=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1]+" "+d.slice(0,4),fs=d=>MS[+d.slice(5,7)-1]+" "+(+d.slice(8))+", "+d.slice(0,4);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const sum=a=>a.reduce((s,x)=>s+x.amount,0),uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
-const toast=m=>{const t=$("#toast");t.textContent=m;t.style.display="block";try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}clearTimeout(t.h);t.h=setTimeout(()=>{t.style.display="none";try{if(t.matches(":popover-open"))t.hidePopover()}catch(e){}},4500)};
+const toast=m=>{const t=$("#toast");if(/insufficient permissions|permission-denied/i.test(String(m)))m="Firebase blocked this. Your Firestore rules do not allow this collection yet. Add the rule shown in the setup note, then publish it.";t.textContent=m;t.style.display="block";try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}clearTimeout(t.h);t.h=setTimeout(()=>{t.style.display="none";try{if(t.matches(":popover-open"))t.hidePopover()}catch(e){}},4500)};
 let db={income:[],expenses:[]},sel=new Date().toLocaleDateString("en-CA"),inType="Salary",lrange="month",user,F,AU,fdb,auth,un=[];
 const op=id=>{const d=$(id);if(!d.open)d.showModal()};
 const col=c=>F.collection(fdb,"users",user.uid,c),dref=(c,id)=>F.doc(fdb,"users",user.uid,c,id);
