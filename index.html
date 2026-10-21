@@ -427,6 +427,12 @@ box-shadow:0 16px 30px -12px rgba(37,99,235,.8),6px 6px 14px rgba(0,0,0,.35),-3p
 @media(max-width:860px){.lg{grid-template-columns:1fr}.lg .hero{display:none}.lg .pane{padding:18px;border-left:0}.lg .gc{padding:28px 22px 24px;border-radius:24px}}
 @media(prefers-reduced-motion:reduce){.lg *,#dL{animation:none!important;transition:none!important}}
 #dL{overflow:auto}
+.dtg{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(240px,1.3fr) minmax(280px,1.5fr);gap:18px;align-items:stretch}
+.dtt{background:#f6f8fc;border-radius:12px;padding:12px 14px;display:grid;gap:4px;align-content:center}.dtt .kv{font-size:26px;line-height:1.1}
+.dtr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}.dtr:last-child{border:0}.dtr>span:last-child{text-align:right}
+.dtb{display:flex;align-items:flex-end;gap:6px;height:120px}.dtb>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px;font-size:10px}.dtb i{display:block;width:100%;border-radius:4px 4px 0 0;min-height:3px}
+#p-dash #kfl{flex:1;min-height:0;overflow:auto}
+@media(max-width:900px){.dtg{grid-template-columns:1fr}}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#bfdbfe"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#bfdbfe"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#bfdbfe"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow · v16</small></div></div>
 <nav class="nv"><div class="sl">MAIN</div><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Income &amp; Expenses</button><button class="it" data-pg="bills"><i data-i="bell"></i>Bills &amp; Recurring</button><button class="it" data-pg="cycle"><i data-i="cal"></i>Salary &amp; Cash Flow</button><button class="it" data-pg="loans"><i data-i="bank"></i>Loans &amp; Invest</button><button class="it" data-pg="budget"><i data-i="budget"></i>Budgets &amp; Goals</button><div class="sl">ANALYTICS</div><button class="it" data-pg="daily"><i data-i="chart"></i>Daily &amp; Monthly</button><button class="it" data-pg="insights"><i data-i="insight"></i>Spending Insights</button><div class="sl">MONEY</div><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Net Worth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button></nav><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -436,9 +442,9 @@ box-shadow:0 16px 30px -12px rgba(37,99,235,.8),6px 6px 14px rgba(0,0,0,.35),-3p
 <div class="kp" id="kp"></div>
 <div class="r3"><div class="card"><h3>Expense by Category</h3><div class="row" id="cd"></div></div>
 <div class="card" id="ov"><h3>Monthly Overview<span class="m" style="font-weight:400;font-size:10.5px"><span style="color:#2e9e5b">■</span> Income &nbsp;<span style="color:#2f6fe0">■</span> Expenses &nbsp;<span style="color:#0f2a5b">●</span> Savings</span></h3><div id="mo"></div></div>
-<div class="card" id="pm"><h3>Payment Method</h3><div id="pd"></div></div></div>
+<div class="card" id="kf"><h3>Key Numbers</h3><div id="kfl"></div></div></div>
 <div class="card" id="dx"><h3><span>Daily Expenses</span><span id="dxr" class="m" style="font-weight:600;font-size:12px"></span></h3><div id="dxc" style="position:relative;padding-top:30px"><div id="dxt" class="tip" hidden></div><div id="dxs"></div></div><div class="m" style="font-size:10px;margin-top:2px">Hover or tap a bar for the amount · <span style="color:#16a34a">- - -</span> average · <span style="color:#e11d48">■</span> above average</div></div>
-<div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Quick Add by Category</span><button class="btn w" id="mc" hidden><i data-i="edit" data-s="14"></i>Manage</button></h3><div class="f" style="max-width:380px"><div class="ddw"><button type="button" class="dd ph" id="dq">Select category to add an expense</button><div class="chips dp" id="qq"></div></div></div><div class="tdw" id="td"></div></div></div>
+<div class="bt" style="grid-template-columns:1fr"><div class="card" id="qc"><h3><span>Day-to-Day Comparison</span><span id="tdh" class="m" style="font-weight:400;font-size:12px"></span></h3><div id="td"></div></div></div>
 </div><div class="col">
 <div class="card"><h3><span><i data-i="cal"></i> Select Date</span></h3><div class="row" style="justify-content:space-between;margin-bottom:6px"><button class="kb" id="pv">‹</button><b id="cm"></b><button class="kb" id="nx">›</button></div><div class="cal" id="cal"></div></div>
 <div class="card"><h3>Recent Transactions<a href="#log" style="color:var(--pri);font-size:11px;font-weight:400;text-decoration:none">View All</a></h3><div id="rt"></div></div>
@@ -472,7 +478,7 @@ box-shadow:0 16px 30px -12px rgba(37,99,235,.8),6px 6px 14px rgba(0,0,0,.35),-3p
 <div class="card"><h3><span>Highlights</span><span class="m" style="font-weight:400" id="imn"></span></h3><div class="dk" id="ik" style="margin-bottom:0"></div></div>
 <div class="bt2">
 <div class="card"><h3><span>Category change vs last month</span></h3><div class="tw"><table style="min-width:520px"><thead><tr><th>Category</th><th class="ra">This month</th><th class="ra">Last month</th><th class="ra">Change</th><th class="ra">%</th></tr></thead><tbody id="icmp"></tbody></table></div></div>
-<div class="col"><div class="card"><h3><span>Spending by weekday</span></h3><div id="iw"></div></div><div class="card"><h3><span>Top 5 expenses</span></h3><div id="itop"></div></div><div class="card"><h3><span>Spending by Category</span><button class="btn w" id="mc2" hidden><i data-i="edit" data-s="14"></i>Edit categories</button></h3><div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th>Items</th><th class="ra">This month (৳)</th><th class="ra">Share</th><th style="width:20%"></th></tr></thead><tbody id="ct"></tbody></table></div></div></div>
+<div class="col"><div class="card"><h3><span>Spending by weekday</span></h3><div id="iw"></div></div><div class="card" id="pm2"><h3><span>Payment Method</span></h3><div id="pd"></div></div><div class="card"><h3><span>Top 5 expenses</span></h3><div id="itop"></div></div><div class="card"><h3><span>Spending by Category</span><button class="btn w" id="mc2" hidden><i data-i="edit" data-s="14"></i>Edit categories</button></h3><div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th>Items</th><th class="ra">This month (৳)</th><th class="ra">Share</th><th style="width:20%"></th></tr></thead><tbody id="ct"></tbody></table></div></div></div>
 </div></section>
 
 <section class="pg" id="p-accounts" hidden><details class="gd"><summary>How to use Accounts &amp; Wallets (click to open)</summary>
@@ -571,6 +577,15 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  $("#cd").innerHTML=donut(bc,E,"Total Expenses")+legend(bc.filter(q=>q[1]>0),E);
  const bp=Object.keys(PM).map(c=>[c,sum(eN.filter(x=>x.method===c)),PM[c]]);
  $("#pd").innerHTML=`<div style="display:grid;justify-items:center;gap:12px">${donut(bp,E,"Total Expenses")}${legend(bp,E).replace('class="leg"','class="leg" style="width:100%"')}</div>`;
+ {const T=bTot(),tdy=TD(),cur=tdy.slice(0,7),dm2=new Date(y,mi+1,0).getDate(),el2=m<cur?dm2:m===cur?+tdy.slice(8):0,real=eN.filter(x=>!x.liab&&!x.prin),big=real.slice().sort((p,q)=>q.amount-p.amount)[0],top=bc.slice().sort((p,q)=>q[1]-p[1])[0],proj=m===cur&&el2?E/el2*dm2:E,bp_=T?E/T*100:0,gp=BUD.goal>0?Math.max(0,S)/BUD.goal*100:0,
+  row=(l,v,u,c)=>`<div class="dtr"><span class="m">${l}</span><b class="${c||""}">${v}</b><span class="m" style="font-size:11px;text-align:right">${u||""}</span></div>`,
+  bar=(q,c)=>`<div style="height:6px;background:#eef2f8;border-radius:4px;margin:0 0 4px"><div style="height:100%;width:${Math.min(100,q)}%;background:${c};border-radius:4px"></div></div>`;
+  $("#kfl").innerHTML=(T?row("Budget used",Math.round(bp_)+"%",fmt(E)+" of "+fmt(T),bp_>=100?"r":"")+bar(bp_,bp_>=100?"#e11d48":bp_>=80?"#f59e0b":"#16a34a"):row("Budget","Not set",'<a href="#budget" style="color:var(--pri);text-decoration:none">Set budget</a>'))
+   +(BUD.goal>0?row("Savings goal",Math.round(gp)+"%",fmt(Math.max(0,S))+" of "+fmt(BUD.goal))+bar(gp,"#2f6fe0"):"")
+   +row(m===cur?"Projected month spend":"Month spend",fmt(proj),T?"Budget "+fmt(T):"",T&&proj>T?"r":"")
+   +(el2&&E?row("Average per day",fmt(E/el2),el2+" days"):"")
+   +(top&&top[1]>0?row("Top category",esc(top[0]),fmt(top[1])+" \u00b7 "+Math.round(top[1]/E*100)+"%"):"")
+   +(big?row("Biggest expense",fmt(big.amount),esc((big.item||"").split(",")[0])+" \u00b7 "+fs(big.date)):"")}
  // monthly overview
  const D=[];for(let k=0;k<=mi;k++){const mm=y+"-"+String(k+1).padStart(2,"0"),a=sum(mon(db.income,mm)),b=sum(mon(db.expenses,mm));D.push([a,b,a-b])}
  const mx=Math.max(100000,Math.ceil(Math.max(...D.flat())/20000)*20000),Y=v=>180-v/mx*170,n=D.length,sl=330/n;let s=`<svg viewBox="0 0 380 205" width="100%">`;
@@ -582,7 +597,6 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  const rows=db.ex.filter(x=>typeof x.date==="string").filter(x=>lrange==="day"?x.date===sel:lrange==="week"?x.date>=st&&x.date<=sel:lrange==="all"?true:x.date.startsWith(m)).sort((a,b)=>b.date.localeCompare(a.date));
  $("#tb").innerHTML=rows.map(x=>{const c=CAT[x.cat]||FB;return`<tr><td>${fd(x.date)}</td><td><span class="tag" style="background:${c.bg};color:${c.fg}">${c.i} ${x.cat}</span></td><td>${esc(x.item)}${x.liab||x.prin?' <span class="m">(principal, not in expense totals)</span>':""}</td><td class="ra">${num(x.amount)}</td><td><span class="mt" style="background:${(PM[x.method]||"#64748b")+"22"};color:color-mix(in srgb,${PM[x.method]||"#64748b"} 65%,#000)">${x.method}</span></td><td>${esc(x.notes||"-")}</td><td><button class="kb" data-edit="${x.id}" title="Edit">${ico("edit",16)}</button><button class="kb" data-del="${x.id}" title="Delete">${ico("trash",16)}</button></td></tr>`}).join("")||`<tr><td colspan="7" class="m">No expenses for this period. Click Add Expense to get started.</td></tr>`;
  $("#tt").textContent="৳ "+num(sum(rows.filter(x=>!x.liab&&!x.prin)));
- $("#qq").innerHTML=Object.keys(CAT).map(c=>`<button type="button" class="chip" data-q="${esc(c)}" style="border:0;border-bottom:1px solid var(--line);border-radius:0">${CAT[c].i} ${esc(c)}</button>`).join("");
  $("#rt").innerHTML=[...db.expenses].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(x=>{const c=CAT[x.cat]||FB;return`<div class="tx"><div class="ic" style="background:${c.bg}">${c.i}</div><div><b>${esc(x.item.split(",")[0])}</b> <span class="m">(${x.cat})</span><br><span class="m" style="font-size:11px">${fs(x.date)} • ${x.method}</span></div><b>৳ ${num(x.amount)}</b></div>`}).join("")||'<span class="m">No transactions yet.</span>';
  // calendar
  $("#cm").textContent=MN[mi]+" "+y;const f=new Date(y,mi,1).getDay(),dm=new Date(y,mi+1,0).getDate();
@@ -595,7 +609,7 @@ $("#pv").onclick=()=>shift(-1);$("#nx").onclick=()=>shift(1);
 $("#cal").onclick=e=>{if(e.target.dataset.d)setSel(sel.slice(0,8)+String(e.target.dataset.d).padStart(2,"0"))};
 $("#mon").onchange=e=>{if(e.target.value)setSel(e.target.value+"-"+String(Math.min(+sel.slice(8),new Date(+e.target.value.slice(0,4),+e.target.value.slice(5),0).getDate())).padStart(2,"0"))};
 $("#sd").onchange=e=>e.target.value&&setSel(e.target.value);
-$("#add").onclick=()=>openE();$("#qq").onclick=e=>{const b=e.target.closest("[data-q]");if(b){closeDD();openE(b.dataset.q)}};
+$("#add").onclick=()=>openE();
 $$("[data-x]").forEach(b=>b.onclick=()=>b.closest("dialog").close());
 $("#tabs").onclick=e=>{if(e.target.tagName!=="BUTTON")return;$$("#tabs button").forEach(b=>b.classList.remove("on"));e.target.classList.add("on");inType=e.target.textContent};
 // ---- login / config
@@ -671,7 +685,7 @@ $("#fe").addEventListener("click",e=>{if(!e.target.closest(".ddw"))closeDD()});$
 ["#dE","#dS","#dK"].forEach(id=>{const d=$(id);d.addEventListener("mousedown",e=>{d._o=e.target===d});d.addEventListener("click",e=>{if(e.target===d&&d._o)d.close()})});
 const kRows=L=>{$("#kl").innerHTML=L.map(x=>`<div class="kr" data-o="${esc(x.o??x.n)}" data-c="${x.c}"><div class="row" style="flex-wrap:nowrap"><input class="ki" value="${esc(x.i)}" style="width:52px;text-align:center"><input class="kn" value="${esc(x.n)}" placeholder="Category name" style="flex:1"><button type="button" class="kb" data-kt title="Show / hide items">${ico("chev",18)}</button><button type="button" class="kb" data-kd title="Remove">${ico("trash",16)}</button></div><div class="kx"><input class="kt2" value="${esc(x.items.join(", "))}" placeholder="Items, comma separated" style="width:100%;margin:6px 0 4px"></div></div>`).join("")};
 const readK=()=>[...$$("#kl .kr")].map(r=>({o:r.dataset.o,c:r.dataset.c,i:r.querySelector(".ki").value.trim()||"🏷️",n:r.querySelector(".kn").value.trim(),items:r.querySelector(".kt2").value.split(",").map(s=>s.trim()).filter(Boolean)}));
-$("#mc").onclick=$("#mc2").onclick=()=>{if(!user)return toast("Sign in first");kRows(CATS.map(x=>({...x,o:x.n})));$("#dK").showModal()};
+$("#mc2").onclick=()=>{if(!user)return toast("Sign in first");kRows(CATS.map(x=>({...x,o:x.n})));$("#dK").showModal()};
 $("#ka").onclick=()=>{const L=readK();L.push({n:"",i:"🏷️",c:PAL[L.length%PAL.length],items:[],o:""});kRows(L);const l=$("#kl");l.scrollTop=l.scrollHeight;l.lastElementChild.classList.add("open");l.lastElementChild.querySelector(".kn").focus()};
 $("#kr").onclick=()=>{if(confirm("Reset to the default category list?"))kRows(defCats().map(x=>({...x,o:x.n})))};
 $("#kl").onclick=e=>{const t=e.target.closest("[data-kt]");if(t)t.closest(".kr").classList.toggle("open");const r=e.target.closest("[data-kd]");if(r&&confirm("Remove this category? Past expenses keep their data and show as 'Other / removed'."))r.closest(".kr").remove()};
@@ -693,7 +707,7 @@ function renderDaily(m,eN,I,E){
  $("#dt").innerHTML=per.map((o,k)=>[o,k+1]).filter(r=>r[0].t>0).reverse().map(([o,dd])=>{const top=Object.entries(o.c).sort((a,b)=>b[1]-a[1])[0],c=CAT[top[0]]||FB;return`<tr data-d="${dd}"${dd===sdn?' style="background:#ecfdf5"':""}><td>${fd(m+"-"+pad(dd))}</td><td>${o.n}</td><td><span class="tag" style="background:${c.bg};color:${c.fg}">${c.i} ${esc(top[0])}</span></td><td class="ra">${num(o.t)}</td><td><div style="background:#eef2f8;border-radius:4px;height:8px"><div style="width:${Math.min(100,o.t/mx*100)}%;height:8px;border-radius:4px;background:${avg&&o.t>avg?"#e11d48":"#2f6fe0"}"></div></div></td></tr>`}).join("")||'<tr><td colspan="5" class="m">No spending recorded this month.</td></tr>'}
 $("#da").onclick=e=>{const t=e.target.closest("[data-d]");if(t)setSel(sel.slice(0,8)+String(t.dataset.d).padStart(2,"0"))};
 $("#lr").onclick=e=>{const b=e.target.closest("button");if(!b)return;lrange=b.dataset.r;$$("#lr button").forEach(x=>x.classList.toggle("on",x===b));render()};
-$("#dq").onclick=()=>{const o=$("#qq").classList.contains("open");closeDD();if(!o)$("#qq").classList.add("open")};
+
 document.addEventListener("click",e=>{if(!e.target.closest(".ddw"))closeDD()});
 /* ===== v15: Accounts, Goals, Bills, Net Worth ===== */
 Object.assign(IC,{repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/>',layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',sliders:'<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',archive:'<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11h14V8M10 12h4"/>'});
@@ -915,20 +929,18 @@ function renderCycle(){try{
 const dAdd=(d,k)=>new Date(Date.UTC(+d.slice(0,4),+d.slice(5,7)-1,+d.slice(8)+k)).toISOString().slice(0,10);
 function renderToday(){try{
  const el=$("#td");if(!el)return;
- const t=TD(),dayE=d=>db.expenses.filter(x=>x.date===d),sd=d=>sum(dayE(d));
- const a=sd(t),n=dayE(t).length,y=sd(dAdd(t,-1)),w=sd(dAdd(t,-7));
- const pv=db.expenses.map(x=>x.date).filter(d=>d<t).sort().pop(),lr=pv?sd(pv):0;
- const mo=t.slice(0,7),dn=+t.slice(8),ms=sum(db.expenses.filter(x=>x.date.startsWith(mo)&&x.date<t)),avg=dn>1?ms/(dn-1):0;
- const lb=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1];
- const cmp=(b,lab,ok)=>{const d=a-b;let h;
-  if(!ok)h='<span class="m">No data</span>';
-  else if(!b&&!a)h='<span class="m">No spend</span>';
-  else if(!b)h='<span class="r">New spend</span>';
-  else if(d===0)h='<span class="m">Same</span>';
-  else h=`<span class="${d>0?"r":"g"}">${d>0?"\u25b2":"\u25bc"} ${Math.abs(Math.round(d/b*100))}% (${d>0?"+":"\u2212"}${num(Math.abs(d))})</span>`;
-  return`<div class="tdi"><span class="m">${lab}</span><b>${ok?fmt(b):"\u2014"}</b>${h}</div>`};
- el.innerHTML=`<div class="tdm"><span class="m">Today \u00b7 ${lb(t)}</span><div class="kv ${a?"":"m"}">${fmt(a)}</div><span class="m">${n?n+" entr"+(n==1?"y":"ies"):"No expense yet"}</span></div>`
-  +cmp(y,"Yesterday",true)+cmp(w,"Same day last week",true)+cmp(lr,pv?"Last record \u00b7 "+lb(pv):"Last record",!!pv)+cmp(avg,"Avg / day this month",dn>1&&ms>0);
+ const t=TD(),sd=d=>sum(db.expenses.filter(x=>x.date===d&&!x.liab&&!x.prin)),n=db.expenses.filter(x=>x.date===t&&!x.liab&&!x.prin).length;
+ const a=sd(t),y=sd(dAdd(t,-1)),w=sd(dAdd(t,-7)),pv=db.expenses.map(x=>x.date).filter(d=>d<t).sort().pop(),lr=pv?sd(pv):0;
+ const mo=t.slice(0,7),dn=+t.slice(8),ms=sum(db.expenses.filter(x=>x.date.startsWith(mo)&&x.date<t&&!x.liab&&!x.prin)),avg=dn>1?ms/(dn-1):0;
+ const lb=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1],WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+ const chg=(b,ok)=>{const d=a-b;if(!ok)return'<span class="m">No data</span>';if(!b&&!a)return'<span class="m">No spend</span>';if(!b)return'<span class="r">\u25b2 New spend</span>';if(d===0)return'<span class="m">Same</span>';return`<span class="${d>0?"r":"g"}">${d>0?"\u25b2 +":"\u25bc \u2212"}${num(Math.abs(d))} (${Math.round(Math.abs(d)/b*100)}%)</span>`};
+ const row=(l,b,ok)=>`<div class="dtr"><span class="m">${l}</span><b>${ok?fmt(b):"\u2014"}</b>${chg(b,ok)}</div>`;
+ const df=a-y,head=!a&&!y?"No spending today or yesterday":df>0?`<span class="r">${fmt(df)} more than yesterday</span>`:df<0?`<span class="g">${fmt(-df)} less than yesterday</span>`:"Same as yesterday";
+ const days=[6,5,4,3,2,1,0].map(k=>{const d=dAdd(t,-k);return{d,v:sd(d),p:sd(dAdd(d,-1))}}),mx=Math.max(1,...days.map(o=>o.v));
+ $("#tdh").textContent="Today \u00b7 "+lb(t);
+ el.innerHTML=`<div class="dtg"><div class="dtt"><span class="m">Spent today</span><div class="kv ${a?"":"m"}">${fmt(a)}</div><span class="m">${n?n+" entr"+(n==1?"y":"ies"):"No expense yet"}</span><b style="font-size:13px">${head}</b></div>
+ <div>${row("Yesterday",y,true)}${row("Same day last week",w,true)}${row(pv?"Last record \u00b7 "+lb(pv):"Last record",lr,!!pv)}${row("Avg / day this month",avg,dn>1&&ms>0)}</div>
+ <div><div class="m" style="font-size:11px;margin-bottom:4px">Last 7 days \u00b7 day to day</div><div class="dtb">${days.map((o,i)=>`<div><span class="m">${o.v?num(o.v):""}</span><i style="height:${o.v?Math.max(o.v/mx*70,4):3}%;background:${i===6?"#0f2a5b":o.v>o.p&&o.p?"#e11d48":o.v?"#2f6fe0":"#dbe3f0"}"></i><span class="${i===6?"":"m"}"><b>${WD[new Date(o.d+"T00:00:00Z").getUTCDay()]}</b></span><span class="m" style="font-size:9px">${+o.d.slice(8)}</span></div>`).join("")}</div></div></div>`;
 }catch(e){console.error(e)}}
 function go(p){if(!PGS[p])p="dash";$$(".pg").forEach(x=>x.hidden=x.id!=="p-"+(AL[p]||p));$$("aside .it[data-pg]").forEach(b=>b.classList.toggle("on",b.dataset.pg===p));$("#pt").textContent=PGS[p][0];$("#ps").textContent=PGS[p][1];closeDD();window.scrollTo(0,0)}
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
