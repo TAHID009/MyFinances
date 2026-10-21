@@ -427,11 +427,16 @@ box-shadow:0 16px 30px -12px rgba(37,99,235,.8),6px 6px 14px rgba(0,0,0,.35),-3p
 @media(max-width:860px){.lg{grid-template-columns:1fr}.lg .hero{display:none}.lg .pane{padding:18px;border-left:0}.lg .gc{padding:28px 22px 24px;border-radius:24px}}
 @media(prefers-reduced-motion:reduce){.lg *,#dL{animation:none!important;transition:none!important}}
 #dL{overflow:auto}
-.dtg{display:grid;grid-template-columns:minmax(170px,.8fr) minmax(240px,1.3fr) minmax(280px,1.5fr);gap:18px;align-items:stretch}
-.dtt{background:#f6f8fc;border-radius:12px;padding:12px 14px;display:grid;gap:4px;align-content:center}.dtt .kv{font-size:26px;line-height:1.1}
-.dtr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}.dtr:last-child{border:0}.dtr>span:last-child{text-align:right}
-.dtb{display:flex;align-items:flex-end;gap:6px;height:120px}.dtb>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px;font-size:10px}.dtb i{display:block;width:100%;border-radius:4px 4px 0 0;min-height:3px}
-#p-dash #kfl{flex:1;min-height:0;overflow:auto}
+@media(min-width:1201px){#p-dash{overflow-y:auto;overflow-x:hidden}#p-dash .layout{height:auto;min-height:100%}#p-dash .col:first-child{grid-template-rows:auto minmax(215px,1.4fr) minmax(185px,1fr) auto}}
+.dxm{position:absolute;right:0;top:0;font-size:9.5px;color:#6b7a99;background:rgba(255,255,255,.85);padding:0 3px;border-radius:3px;pointer-events:none;z-index:2}#p-dash .dxb{min-height:96px;border-bottom:1px solid var(--line);background:linear-gradient(to top,#eef2f8 1px,transparent 1px) 0 0/100% 25%}
+#p-dash #qc{display:block;padding:8px 14px}#p-dash #qc h3{margin:0 0 6px}
+.dtg{display:grid;grid-template-columns:170px minmax(0,1fr);gap:14px;align-items:center}
+.dtt{background:#f6f8fc;border-radius:12px;padding:8px 12px;display:grid;gap:2px}.dtt .kv{font-size:22px;line-height:1.1}
+.dtq{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}@media(max-width:900px){.dtq{grid-template-columns:1fr 1fr}}
+.dtc{display:grid;gap:1px;background:#f6f8fc;border-radius:10px;padding:6px 10px;font-size:11.5px}.dtc b{font-size:14px}
+.dtb{display:flex;align-items:flex-end;gap:5px;height:92px}.dtb>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:1px;font-size:10px}.dtb i{display:block;width:100%;border-radius:4px 4px 0 0;min-height:3px}
+.kfi{display:grid;gap:1px;background:#f6f8fc;border-radius:10px;padding:6px 10px;min-width:0;align-content:start}.kfi b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.kfi .m{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#p-dash #kfl{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-content:start;flex:1;min-height:0;overflow:auto}
 @media(max-width:900px){.dtg{grid-template-columns:1fr}}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><rect x="18" y="58" width="14" height="24" rx="3" fill="#bfdbfe"/><rect x="43" y="46" width="14" height="36" rx="3" fill="#bfdbfe"/><rect x="68" y="32" width="14" height="50" rx="3" fill="#bfdbfe"/><polyline points="16,42 40,28 56,34 84,14" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>My Finance</b><small>Track • Plan • Grow · v16</small></div></div>
@@ -578,10 +583,10 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  const bp=Object.keys(PM).map(c=>[c,sum(eN.filter(x=>x.method===c)),PM[c]]);
  $("#pd").innerHTML=`<div style="display:grid;justify-items:center;gap:12px">${donut(bp,E,"Total Expenses")}${legend(bp,E).replace('class="leg"','class="leg" style="width:100%"')}</div>`;
  {const T=bTot(),tdy=TD(),cur=tdy.slice(0,7),dm2=new Date(y,mi+1,0).getDate(),el2=m<cur?dm2:m===cur?+tdy.slice(8):0,real=eN.filter(x=>!x.liab&&!x.prin),big=real.slice().sort((p,q)=>q.amount-p.amount)[0],top=bc.slice().sort((p,q)=>q[1]-p[1])[0],proj=m===cur&&el2?E/el2*dm2:E,bp_=T?E/T*100:0,gp=BUD.goal>0?Math.max(0,S)/BUD.goal*100:0,
-  row=(l,v,u,c)=>`<div class="dtr"><span class="m">${l}</span><b class="${c||""}">${v}</b><span class="m" style="font-size:11px;text-align:right">${u||""}</span></div>`,
-  bar=(q,c)=>`<div style="height:6px;background:#eef2f8;border-radius:4px;margin:0 0 4px"><div style="height:100%;width:${Math.min(100,q)}%;background:${c};border-radius:4px"></div></div>`;
-  $("#kfl").innerHTML=(T?row("Budget used",Math.round(bp_)+"%",fmt(E)+" of "+fmt(T),bp_>=100?"r":"")+bar(bp_,bp_>=100?"#e11d48":bp_>=80?"#f59e0b":"#16a34a"):row("Budget","Not set",'<a href="#budget" style="color:var(--pri);text-decoration:none">Set budget</a>'))
-   +(BUD.goal>0?row("Savings goal",Math.round(gp)+"%",fmt(Math.max(0,S))+" of "+fmt(BUD.goal))+bar(gp,"#2f6fe0"):"")
+  row=(l,v,u,c,b)=>`<div class="kfi"><span class="m">${l}</span><b class="${c||""}">${v}</b><span class="m">${u||""}</span>${b||""}</div>`,
+  bar=(q,c)=>`<div style="height:6px;background:#eef2f8;border-radius:4px;margin:3px 0 0"><div style="height:100%;width:${Math.min(100,q)}%;background:${c};border-radius:4px"></div></div>`;
+  $("#kfl").innerHTML=(T?row("Budget used",Math.round(bp_)+"%",fmt(E)+" of "+fmt(T),bp_>=100?"r":"",bar(bp_,bp_>=100?"#e11d48":bp_>=80?"#f59e0b":"#16a34a")):row("Budget","Not set",'<a href="#budget" style="color:var(--pri);text-decoration:none">Set budget</a>'))
+   +(BUD.goal>0?row("Savings goal",Math.round(gp)+"%",fmt(Math.max(0,S))+" of "+fmt(BUD.goal),"",bar(gp,"#2f6fe0")):"")
    +row(m===cur?"Projected month spend":"Month spend",fmt(proj),T?"Budget "+fmt(T):"",T&&proj>T?"r":"")
    +(el2&&E?row("Average per day",fmt(E/el2),el2+" days"):"")
    +(top&&top[1]>0?row("Top category",esc(top[0]),fmt(top[1])+" \u00b7 "+Math.round(top[1]/E*100)+"%"):"")
@@ -810,7 +815,7 @@ $("#ct").onclick=e=>{const t=e.target.closest("[data-q]");if(t)openE(t.dataset.q
 function renderDx(m,eN,E){const dm=new Date(+m.slice(0,4),+m.slice(5),0).getDate(),pad=n=>String(n).padStart(2,"0"),t=new Date().toLocaleDateString("en-CA"),cur=t.slice(0,7),td=+t.slice(8),per=Array.from({length:dm},()=>({t:0,n:0}));
  eN.forEach(x=>{const o=per[+x.date.slice(8)-1];if(o){o.t+=x.amount;o.n++}});
  const el=m<cur?dm:m===cur?td:0,avg=el?E/el:0,mx=Math.max(1,avg,...per.map(o=>o.t)),sdn=+sel.slice(8);
- $("#dxs").innerHTML=`<div class="dxb">${avg?`<div class="dxa" style="bottom:${avg/mx*100}%"></div>`:""}${per.map((o,k)=>{const d=k+1;return`<div class="dxd" data-l="${fd(m+"-"+pad(d))}" data-a="${o.t}" data-n="${o.n}" data-y="${1-o.t/mx}"><i style="height:${o.t?Math.max(o.t/mx*100,4):2}%;background:${d===sdn?"#0f2a5b":avg&&o.t>avg?"#e11d48":o.t?"#2f6fe0":"#dbe3f0"}"></i></div>`}).join("")}</div><div class="dxl">${per.map((_,k)=>`<span>${(k+1)%5===0||k===0?k+1:""}</span>`).join("")}</div>`;
+ $("#dxs").innerHTML=`<div class="dxb"><span class="dxm">${fmt(mx)}</span>${avg?`<div class="dxa" style="bottom:${avg/mx*100}%"></div><span class="dxm" style="top:auto;bottom:${avg/mx*100}%;color:#16a34a">avg ${fmt(avg)}</span>`:""}${per.map((o,k)=>{const d=k+1;return`<div class="dxd" data-l="${fd(m+"-"+pad(d))}" data-a="${o.t}" data-n="${o.n}" data-y="${1-o.t/mx}"><i style="height:${o.t?Math.max(o.t/mx*100,4):2}%;background:${d===sdn?"#0f2a5b":avg&&o.t>avg?"#e11d48":o.t?"#2f6fe0":"#dbe3f0"}"></i></div>`}).join("")}</div><div class="dxl">${per.map((_,k)=>`<span>${(k+1)%5===0||k===0?k+1:""}</span>`).join("")}</div>`;
  $("#dxt").hidden=true;$("#dxr").textContent=E?"Total "+fmt(E)+" · avg "+fmt(avg)+"/day":"No expenses this month"}
 const dxShow=e=>{const b=e.target.closest&&e.target.closest("[data-l]"),tp=$("#dxt");if(!b){tp.hidden=true;return}const c=$("#dxc").getBoundingClientRect(),r=b.getBoundingClientRect(),n=+b.dataset.n;
  tp.innerHTML=`<b>${b.dataset.l}</b><br>${fmt(+b.dataset.a)}${n?" · "+n+" entr"+(n==1?"y":"ies"):""}`;tp.hidden=false;tp.style.left=Math.min(Math.max(r.left-c.left+r.width/2,55),Math.max(c.width-55,55))+"px";tp.style.top=(r.top-c.top+r.height*(+b.dataset.y))+"px";$("#dxr").textContent=b.dataset.l+" · "+fmt(+b.dataset.a)};
@@ -932,15 +937,15 @@ function renderToday(){try{
  const t=TD(),sd=d=>sum(db.expenses.filter(x=>x.date===d&&!x.liab&&!x.prin)),n=db.expenses.filter(x=>x.date===t&&!x.liab&&!x.prin).length;
  const a=sd(t),y=sd(dAdd(t,-1)),w=sd(dAdd(t,-7)),pv=db.expenses.map(x=>x.date).filter(d=>d<t).sort().pop(),lr=pv?sd(pv):0;
  const mo=t.slice(0,7),dn=+t.slice(8),ms=sum(db.expenses.filter(x=>x.date.startsWith(mo)&&x.date<t&&!x.liab&&!x.prin)),avg=dn>1?ms/(dn-1):0;
+ const byD={};db.expenses.forEach(x=>{if(x.date.startsWith(mo)&&x.date<t&&!x.liab&&!x.prin)byD[x.date]=(byD[x.date]||0)+x.amount});const hd=Object.keys(byD).sort((p,q)=>byD[q]-byD[p])[0];
  const lb=d=>+d.slice(8)+" "+MS[+d.slice(5,7)-1],WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
  const chg=(b,ok)=>{const d=a-b;if(!ok)return'<span class="m">No data</span>';if(!b&&!a)return'<span class="m">No spend</span>';if(!b)return'<span class="r">\u25b2 New spend</span>';if(d===0)return'<span class="m">Same</span>';return`<span class="${d>0?"r":"g"}">${d>0?"\u25b2 +":"\u25bc \u2212"}${num(Math.abs(d))} (${Math.round(Math.abs(d)/b*100)}%)</span>`};
- const row=(l,b,ok)=>`<div class="dtr"><span class="m">${l}</span><b>${ok?fmt(b):"\u2014"}</b>${chg(b,ok)}</div>`;
+ const row=(l,b,ok)=>`<div class="dtc"><span class="m">${l}</span><b>${ok?fmt(b):"\u2014"}</b>${chg(b,ok)}</div>`;
  const df=a-y,head=!a&&!y?"No spending today or yesterday":df>0?`<span class="r">${fmt(df)} more than yesterday</span>`:df<0?`<span class="g">${fmt(-df)} less than yesterday</span>`:"Same as yesterday";
  const days=[6,5,4,3,2,1,0].map(k=>{const d=dAdd(t,-k);return{d,v:sd(d),p:sd(dAdd(d,-1))}}),mx=Math.max(1,...days.map(o=>o.v));
  $("#tdh").textContent="Today \u00b7 "+lb(t);
  el.innerHTML=`<div class="dtg"><div class="dtt"><span class="m">Spent today</span><div class="kv ${a?"":"m"}">${fmt(a)}</div><span class="m">${n?n+" entr"+(n==1?"y":"ies"):"No expense yet"}</span><b style="font-size:13px">${head}</b></div>
- <div>${row("Yesterday",y,true)}${row("Same day last week",w,true)}${row(pv?"Last record \u00b7 "+lb(pv):"Last record",lr,!!pv)}${row("Avg / day this month",avg,dn>1&&ms>0)}</div>
- <div><div class="m" style="font-size:11px;margin-bottom:4px">Last 7 days \u00b7 day to day</div><div class="dtb">${days.map((o,i)=>`<div><span class="m">${o.v?num(o.v):""}</span><i style="height:${o.v?Math.max(o.v/mx*70,4):3}%;background:${i===6?"#0f2a5b":o.v>o.p&&o.p?"#e11d48":o.v?"#2f6fe0":"#dbe3f0"}"></i><span class="${i===6?"":"m"}"><b>${WD[new Date(o.d+"T00:00:00Z").getUTCDay()]}</b></span><span class="m" style="font-size:9px">${+o.d.slice(8)}</span></div>`).join("")}</div></div></div>`;
+ <div class="dtq">${row("Yesterday",y,true)}${row("Same day last week",w,true)}${pv&&pv<dAdd(t,-1)?row("Last record \u00b7 "+lb(pv),lr,true):row(hd?"Highest day \u00b7 "+lb(hd):"Highest day this month",hd?byD[hd]:0,!!hd)}${row("Avg / day this month",avg,dn>1&&ms>0)}</div></div>`;
 }catch(e){console.error(e)}}
 function go(p){if(!PGS[p])p="dash";$$(".pg").forEach(x=>x.hidden=x.id!=="p-"+(AL[p]||p));$$("aside .it[data-pg]").forEach(b=>b.classList.toggle("on",b.dataset.pg===p));$("#pt").textContent=PGS[p][0];$("#ps").textContent=PGS[p][1];closeDD();window.scrollTo(0,0)}
 window.addEventListener("hashchange",()=>go(location.hash.slice(1)));
