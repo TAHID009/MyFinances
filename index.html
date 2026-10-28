@@ -268,7 +268,8 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
   let editId = null;
   const $ = id => document.getElementById(id);
   function clone(o){ return JSON.parse(JSON.stringify(o)); }
-  function loadState(){ try { const raw=localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : clone(demo); } catch(e){return clone(demo);} }
+  function emptyState(){return {mode:'custom',openingCash:0,records:[],loans:[],receivables:[],investments:[]};}
+  function loadState(){ try { const raw=localStorage.getItem(STORAGE_KEY); const st=raw?JSON.parse(raw):null; return st&&st.mode!=='demo'?st:emptyState(); } catch(e){return emptyState();} }
   function save(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) { /* Keep the current session usable when embedded previews block storage. */ } }
   function n(v){return Number(v||0)}
   function fmt(v){ const x=Math.round(n(v)); return (x<0?'−':'')+'৳'+new Intl.NumberFormat('bn-BD',{maximumFractionDigits:0}).format(Math.abs(x)); }
@@ -896,6 +897,7 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
 
   // Expose a lightweight calculation snapshot for transparent manual inspection in developer tools.
   window.KherolipiAudit = () => {const c=calc();return {cash:c.cash,income:c.income,expense:c.expense,cycleIncome:c.cycleIncome,cycleExpense:c.cycleExpense,shortLiability:c.liabilityShort,longLiability:c.liabilityLong,receivable:c.receivable,investments:c.investmentValue,netWorth:c.netWorth,checks:runChecks(c)};};
+  window.AHImport=recs=>{state={mode:'custom',openingCash:0,records:recs,loans:[],receivables:[],investments:[]};save();render();};
   save();render();
 })();
 </script>
@@ -926,10 +928,40 @@ svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-l
     const o=document.getElementById('ahOut');if(o)o.textContent='⎋ '+t.out;
   }
   const err=m=>{const e=$('ahErr');e.textContent=m||'';e.classList.toggle('on',!!m)};
+
+  const FBC={apiKey:"AIzaSyAjIAo6I1TC4RgRLxXpS702iFzMzMXyCFs",authDomain:"myfinances-80b54.firebaseapp.com",projectId:"myfinances-80b54",storageBucket:"myfinances-80b54.firebasestorage.app",messagingSenderId:"1001054226842",appId:"1:1001054226842:web:2a1ea08a0614274aff9223"};
+  function mkImp(sb){
+    if(document.getElementById('ahImp'))return;
+    const b=document.createElement('button');b.id='ahImp';b.className='ahl-out';b.textContent='⬇ পুরনো সিস্টেমের ডেটা আনুন';sb.appendChild(b);
+    const dlg=document.createElement('dialog');dlg.style.cssText='border:0;border-radius:16px;padding:24px;max-width:380px;width:92%;box-shadow:0 20px 60px rgba(0,0,0,.3);font-family:inherit';
+    dlg.innerHTML='<h3 style="margin:0 0 6px">পুরনো MyFinances থেকে ডেটা আনুন</h3><p style="margin:0 0 14px;font-size:13px;color:#68736e">আগের সাইটে যে ইমেইল/পাসওয়ার্ড দিয়ে লগইন করতেন সেটি দিন। আয় ও খরচের রেকর্ড এখানে আসবে এবং বর্তমান খাতা প্রতিস্থাপিত হবে।</p><input id="ahIE" type="email" placeholder="Email" style="width:100%;padding:10px;margin-bottom:8px;border:1px solid #ccd;border-radius:8px"><input id="ahIP" type="password" placeholder="Password" style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ccd;border-radius:8px"><div id="ahIS" style="font-size:13px;min-height:20px;margin-bottom:10px"></div><div style="display:flex;gap:8px;justify-content:flex-end"><button id="ahIC" type="button" class="btn small secondary">বন্ধ</button><button id="ahIG" type="button" class="btn small">ডেটা আনুন</button></div>';
+    document.body.appendChild(dlg);
+    const st=m=>dlg.querySelector('#ahIS').textContent=m;
+    b.onclick=()=>dlg.showModal();dlg.querySelector('#ahIC').onclick=()=>dlg.close();
+    dlg.querySelector('#ahIG').onclick=async()=>{
+      const em=dlg.querySelector('#ahIE').value.trim(),pw=dlg.querySelector('#ahIP').value;if(!em||!pw)return st('ইমেইল ও পাসওয়ার্ড দিন।');
+      try{
+        st('সংযোগ হচ্ছে…');const V='https://www.gstatic.com/firebasejs/10.12.2/';
+        const [A,AU,F]=await Promise.all([import(V+'firebase-app.js'),import(V+'firebase-auth.js'),import(V+'firebase-firestore.js')]);
+        const app=A.getApps().length?A.getApp():A.initializeApp(FBC),auth=AU.getAuth(app),db=F.getFirestore(app);
+        st('লগইন হচ্ছে…');const cr=await AU.signInWithEmailAndPassword(auth,em,pw),uid=cr.user.uid;
+        st('ডেটা পড়া হচ্ছে…');
+        const [ci,ce]=await Promise.all([F.getDocs(F.collection(db,'users',uid,'income')),F.getDocs(F.collection(db,'users',uid,'expenses'))]);
+        const recs=[];let skip=0;const ok=d=>typeof d.date==='string'&&d.date.length>=10&&+d.amount>0;
+        ci.forEach(x=>{const d=x.data();if(!ok(d)||d.bor){skip++;return}recs.push({id:'O-I-'+x.id,date:d.date.slice(0,10),type:'income',amount:+d.amount,category:d.cat||d.source||d.src||'আয়',note:d.note||d.desc||d.name||d.item||''})});
+        ce.forEach(x=>{const d=x.data();if(!ok(d)||d.liab||d.prin){skip++;return}recs.push({id:'O-E-'+x.id,date:d.date.slice(0,10),type:'expense',amount:+d.amount,category:d.cat||'অন্যান্য',note:d.item||d.note||d.desc||d.name||''})});
+        await AU.signOut(auth);
+        if(!recs.length){st('কোনো আয়/খরচ রেকর্ড পাওয়া যায়নি।');return}
+        if(!confirm(recs.length+' টি রেকর্ড পাওয়া গেছে। বর্তমান খাতা প্রতিস্থাপন করবেন?'))return st('বাতিল করা হয়েছে।');
+        window.AHImport(recs);st('সম্পন্ন: '+ci.size+' আয় ও '+ce.size+' খরচের মধ্যে '+recs.length+' টি আনা হয়েছে'+(skip?'; '+skip+' টি ঋণ-সংক্রান্ত/অসম্পূর্ণ এন্ট্রি বাদ গেছে।':'।'));
+      }catch(e){st('ব্যর্থ: '+(/invalid-credential|wrong-password|user-not-found/.test(e.code||e.message)?'ইমেইল বা পাসওয়ার্ড ভুল।':(e.code||e.message)))}
+    };
+  }
   function enter(name){
     root.classList.add('hide');
     const sb=document.querySelector('.sb-foot')||document.querySelector('.sidebar-bottom')||$('sidebar');
     if(sb&&!document.getElementById('ahOut')){const b=document.createElement('button');b.id='ahOut';b.className='ahl-out';b.onclick=()=>{try{sessionStorage.removeItem(SK);localStorage.removeItem(SK)}catch(e){}$('ahPass').value='';root.classList.remove('hide');paint()};sb.appendChild(b)}
+    if(sb)mkImp(sb);
     paint();
   }
   async function submit(){
