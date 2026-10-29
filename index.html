@@ -858,11 +858,13 @@ const TD=()=>new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Dhaka"});
 const norm=s=>String(s||"").trim().toLowerCase(),AT=["Cash","Bank Account","Mobile Financial Service","Other"];
 function newSnaps(){NC.forEach(k=>{ND[k]=[];un.push(F.onSnapshot(col(k),s=>{ND[k]=s.docs.map(d=>({id:d.id,...d.data()}));renderNew();if(k==="settles")render();else drawOv()},e=>toast(e.message)))})}
 /* Balance is derived from the ledger (never stored), so edits/retries can never double-apply. */
+/* A record with no linked account matches an account by name; method "Cash" falls back to the first active Cash-type account when none is literally named "Cash". */
+function methMatch(x,a){const m=norm(x.method);if(m===norm(a.name))return true;if(m!=="cash"||a.type!=="Cash")return false;const live=ND.accounts.filter(z=>z.status!=="Inactive");if(live.some(z=>norm(z.name)==="cash"))return false;const f=live.find(z=>z.type==="Cash");return !!f&&f.id===a.id}
 function accBal(a,upto){const up=upto||"9999",s=a.asof||"0000";if(s>up)return 0;let b=+a.open||0;
- const mine=x=>x.acct?x.acct===a.id:norm(x.method)===norm(a.name),ok=x=>x.date>=s&&x.date<=up;
+ const mine=x=>x.acct?x.acct===a.id:methMatch(x,a),ok=x=>x.date>=s&&x.date<=up;
  db.inc.forEach(x=>{if(mine(x)&&ok(x))b+=x.amount});db.ex.forEach(x=>{if(mine(x)&&ok(x))b-=x.amount});
  ND.transfers.forEach(t=>{if(t.status==="void"||!ok(t))return;if(t.from===a.id)b-=t.amount;if(t.to===a.id)b+=t.amount});return b}
-const accUnv=a=>{const s0=a.asof||"0000";let n=0;[...db.inc,...db.ex].forEach(x=>{if(!x.acct&&x.date>=s0&&norm(x.method)===norm(a.name))n++});return n};
+const accUnv=a=>{const s0=a.asof||"0000";let n=0;[...db.inc,...db.ex].forEach(x=>{if(!x.acct&&x.date>=s0&&methMatch(x,a))n++});return n};
 const aName=id=>(ND.accounts.find(a=>a.id===id)||{name:"Deleted account"}).name;
 const actOpts=()=>ND.accounts.filter(a=>a.status!=="Inactive").map(a=>[a.id,a.name]);
 function nform(title,fields,vals,save){let d=document.getElementById("dN");if(d)d.remove();d=document.createElement("dialog");d.id="dN";
@@ -880,7 +882,7 @@ const bt=(a,id,t,cls)=>`<button class="btn w" style="padding:4px 10px;font-size:
 function accForm(a){a=a||{};nform(a.id?"Edit account":"Add account",[{k:"name",l:"Account name",r:1},{k:"type",l:"Account type",t:"select",o:AT.map(x=>[x,x])},{k:"open",l:"Opening balance (৳)",t:"number"},{k:"asof",l:"Opening balance as of",t:"date"},{k:"status",l:"Status",t:"select",o:[["Active","Active"],["Inactive","Inactive"]]},{k:"notes",l:"Notes",t:"textarea"}],{asof:TD(),status:"Active",type:"Cash",...a},o=>sv("accounts",a.id||uid(),{...o,open:+o.open||0,asof:o.asof||TD()}))}
 function trfForm(t){t=t||{};const ao=actOpts();if(ao.length<2)return toast("Add at least two active accounts first");const id=t.id||uid();
  nform(t.id?"Edit transfer":"Transfer between accounts",[{k:"from",l:"From",t:"select",o:ao},{k:"to",l:"To",t:"select",o:ao},{k:"amount",l:"Amount (৳)",t:"number",r:1},{k:"date",l:"Date",t:"date",r:1},{k:"notes",l:"Note"}],{date:TD(),to:ao[1][0],...t},async o=>{if(o.from===o.to)throw Error("Source and destination must differ");if(!(o.amount>0))throw Error("Amount must be above zero");if(o.date>TD()&&!confirm("Date is in the future. Continue?"))throw Error("Cancelled");await sv("transfers",id,{...o,status:"ok"})})}
-function histDlg(a){const r=[];const mine=x=>x.acct?x.acct===a.id:norm(x.method)===norm(a.name);
+function histDlg(a){const r=[];const mine=x=>x.acct?x.acct===a.id:methMatch(x,a);
  db.inc.forEach(x=>mine(x)&&x.date>=(a.asof||"")&&r.push([x.date,"Income · "+(x.type||""),x.amount]));db.ex.forEach(x=>mine(x)&&x.date>=(a.asof||"")&&r.push([x.date,"Expense · "+(x.item||x.cat),-x.amount]));
  ND.transfers.forEach(t=>{if(t.status==="void"||t.date<(a.asof||""))return;if(t.from===a.id)r.push([t.date,"Transfer to "+aName(t.to),-t.amount]);if(t.to===a.id)r.push([t.date,"Transfer from "+aName(t.from),t.amount])});
  r.sort((x,y)=>y[0].localeCompare(x[0]));let d=document.getElementById("dN");if(d)d.remove();d=document.createElement("dialog");d.id="dN";d.style.width="min(520px,94vw)";
@@ -1103,7 +1105,7 @@ function lInfo(l){
  if(lt&&rem>0.5&&l.emi>0)next=addMo(l.start,ps.length+1,+l.day||0);else if(!lt&&rem>0.5)next=l.due||null;
  return{paid,total:amt,rem,pct:amt?Math.min(100,(amt-rem)/amt*100):0,next,end:lt?addMo(l.start,+l.term,+l.day||0):(l.due||""),left:lt?(l.term>0?Math.max(0,l.term-ps.length):(l.emi>0?Math.ceil(rem/l.emi-1e-9):0)):0}}
 /*UNL*/
-const unlRows=()=>{const o=[];ND.accounts.filter(a=>a.status!=="Inactive").forEach(a=>{const s0=a.asof||"0000";[["Income",db.inc],["Expense",db.ex]].forEach(([k,arr])=>arr.forEach(x=>{if(!x.acct&&x.date>=s0&&norm(x.method)===norm(a.name))o.push({k,x,a})}))});return o};
+const unlRows=()=>{const o=[];ND.accounts.filter(a=>a.status!=="Inactive").forEach(a=>{const s0=a.asof||"0000";[["Income",db.inc],["Expense",db.ex]].forEach(([k,arr])=>arr.forEach(x=>{if(!x.acct&&x.date>=s0&&methMatch(x,a))o.push({k,x,a})}))});return o};
 const ambig=()=>{const w=[],ids=new Set(ND.accounts.map(a=>a.id));ND.transfers.filter(x=>x.status!=="void"&&(!ids.has(x.from)||!ids.has(x.to))).forEach(x=>w.push("Transfer on "+x.date+" of "+fmt(+x.amount||0)+" refers to an account that no longer exists."));
  if(ND.liabilities.some(x=>x.kind==="Liability"&&(+x.amount||0)>0)&&ND.loans.some(l=>l.kind!==LK.inv&&l.status!=="Closed"))w.push("Manual liabilities and loan records both exist. If any is the same debt, it is counted twice.");
  ND.loans.filter(l=>l.kind===LK.lt&&!l.start).forEach(l=>w.push("Long-term loan \""+l.name+"\" has no start date, so its schedule can't be calculated."));return w};
