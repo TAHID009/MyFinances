@@ -1297,7 +1297,10 @@ function bl(s){if(!/[\u0980-\u09FF]/.test(s))return s;s=s.replace(/\u09A1\u09BC/
   if(BLS[ch]!==undefined){o+=BLS[ch];continue}if(BLV[ch]!==undefined){o+=BLV[ch];continue}if(BLM[ch]!==undefined){o+=BLM[ch];continue}
   if(ch>="\u09E6"&&ch<="\u09EF"){o+=ch.charCodeAt(0)-0x09E6;continue}if(ch==="\u09CD"||ch==="\u09BC")continue;o+=ch}
  return o.replace(/(^|[\s(·\/-])([a-z])/g,(m,a,b)=>a+b.toUpperCase())}
-function tr(t){let r=tr0(t);if(r===t){const m=t.match(/^(\s*[^\w\u0980-\u09FF]+\s*)([A-Za-z].*?)(\s*)$/);if(m){const q=tr0(m[2]);if(q!==m[2])r=m[1]+q+m[3]}}return LANG==="bl"?bl(r):r}
+const PT=[[/^Over budget by (৳.+)$/,"বাজেট ছাড়িয়েছে $1"],[/^(\W*)(\d+) to review$/,"$1$2টি যাচাই করুন"],[/^Estimated · inspect (\d+) unlinked record\(s\)$/,"আনুমানিক · $1টি অসংযুক্ত রেকর্ড দেখুন"],[/^\((saved total limit)\)$/,"(সংরক্ষিত মোট সীমা)"],[/^\(sum of saved category limits\)$/,"(সংরক্ষিত ক্যাটাগরি সীমার যোগফল)"],[/^(৳ ?[\d,]+) left(?: · (৳ ?[\d,]+)\/day)?$/,(m,a,b)=>a+" বাকি"+(b?" · "+b+"/দিন":"")],[/^estimate, not actual · actual so far (৳ ?[\d,]+) \+ (৳ ?[\d,]+) projected for (\d+) day\(s\)(.*)$/,(m,a,b,c,d)=>"আনুমানিক, প্রকৃত নয় · এ পর্যন্ত "+a+" + "+b+" অনুমিত, "+c+" দিনের জন্য"+d.replace("Budget","বাজেট")]];
+function trSeg(t){if(!/[A-Za-z]/.test(t))return t;const k=t.trim();for(const[re,to]of PT)if(re.test(k))return t.replace(k,k.replace(re,to));
+ if(/[•·()]/.test(t)){const o=t.replace(/([^•·()]+)/g,x=>{const y=x.trim();if(!y||!/[A-Za-z]/.test(y))return x;const q=tr0(y);return q===y?x:x.replace(y,q)});if(o!==t)return o}return t}
+function tr(t){let r=tr0(t);if(r===t)r=trSeg(t);if(r===t){const m=t.match(/^(\s*[^\w\u0980-\u09FF]+\s*)([A-Za-z].*?)(\s*)$/);if(m){const q=tr0(m[2]);if(q!==m[2])r=m[1]+q+m[3]}}return LANG==="bl"?bl(r):r}
 document.addEventListener("change",e=>{if(e.target.id==="prefLang"){try{localStorage.setItem("mf_lang",e.target.value)}catch(x){}location.reload()}});
 /* ===== Search bar: language-aware label, live filter, clear button, empty state ===== */
 {const T={bn:{ph:"লেনদেন ও ক্যাটাগরি খুঁজুন...",none:"কোনো লেনদেন মেলেনি।",clr:"মুছুন"},en:{ph:"Search transactions and categories...",none:"No transactions match your search.",clr:"Clear search"},bl:{ph:"Transaction o category khujun...",none:"Kono transaction mile ni.",clr:"Muchun"}}[LANG]||{},g=document.getElementById("gs");
