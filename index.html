@@ -852,6 +852,7 @@ $("#lr").onclick=e=>{const b=e.target.closest("button");if(!b)return;lrange=b.da
 document.addEventListener("click",e=>{if(!e.target.closest(".ddw"))closeDD()});
 /* ===== v15: Accounts, Goals, Bills, Net Worth ===== */
 Object.assign(IC,{repeat:'<path d="M17 2l4 4-4 4"/><path d="M3 11V9a3 3 0 0 1 3-3h15"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a3 3 0 0 1-3 3H3"/>',bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21h4"/>',layers:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',sliders:'<path d="M4 6h8M18 6h2M4 12h2M12 12h8M4 18h10M20 18h0"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',archive:'<rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11h14V8M10 12h4"/>'});
+function getLang(){try{return localStorage.getItem("mf_lang")||"bn"}catch(e){return"bn"}}
 let SETTAB="acc";const AL={income:"log",cats:"insights",goals:"budget",networth:"accounts",transfers:"accounts",recurring:"bills",monthly:"daily",setf:"setp",setb:"setp"};
 const NC=["accounts","transfers","goals","bills","liabilities","settles","loans"],ND={};NC.forEach(k=>ND[k]=[]);
 const TD=()=>new Date().toLocaleDateString("en-CA",{timeZone:"Asia/Dhaka"});
@@ -930,7 +931,7 @@ function renderNew(){try{
  let sp="dash";try{sp=localStorage.getItem("mf_start")||"dash"}catch(e){}
  const em=esc($("#un").textContent),pn={
  acc:`<h2>Account</h2><p class="m">Your sign-in and security.</p><div class="sacc"><div class="av">${esc($("#av").textContent)}</div><div><b>${em}</b><span class="m" style="display:block;font-size:12px">Signed in · cloud sync on</span></div></div>${row("Password","Send a link to your email to set a new password.",'<button class="btn w" data-a="reset">Send reset email</button>')}${row("Privacy","Your records are private to this account and protected by database rules.",'<span class="m">Protected</span>')}${row("Sign out","End this session on this device.",'<button class="btn w" data-a="out">Sign out</button>')}`,
- pref:`<h2>Preferences</h2><p class="m">How the app looks and starts.</p>${row("Currency","Used for every amount.","<b>BDT (৳)</b>")}${row("Time zone","Used for dates, due bills and reminders.","<b>Asia/Dhaka</b>")}${row("Start page","The page that opens when you launch the app. Saved on this device.",`<select id="prefStart">${[["dash","Dashboard"],["log","Income & Expenses"],["bills","Bills & Recurring"],["budget","Budgets & Goals"],["accounts","Accounts & Net Worth"],["insights","Spending Insights"]].map(o=>`<option value="${o[0]}"${o[0]===sp?" selected":""}>${o[1]}</option>`).join("")}</select>`)}`,
+ pref:`<h2>Preferences</h2><p class="m">How the app looks and starts.</p>${row("Currency","Used for every amount.","<b>BDT (৳)</b>")}${row("Time zone","Used for dates, due bills and reminders.","<b>Asia/Dhaka</b>")}${row("Language","Applies to the whole app. Saved on this device.",`<select id="prefLang">${[["bn","বাংলা"],["en","English"],["bl","Banglish"]].map(o=>`<option value="${o[0]}"${o[0]===getLang()?" selected":""}>${o[1]}</option>`).join("")}</select>`)}${row("Start page","The page that opens when you launch the app. Saved on this device.",`<select id="prefStart">${[["dash","Dashboard"],["log","Income & Expenses"],["bills","Bills & Recurring"],["budget","Budgets & Goals"],["accounts","Accounts & Net Worth"],["insights","Spending Insights"]].map(o=>`<option value="${o[0]}"${o[0]===sp?" selected":""}>${o[1]}</option>`).join("")}</select>`)}`,
  cat:`<h2>Categories</h2><p class="m">${CATS.length} categories used for expenses and budgets.</p><div class="chp" style="margin-bottom:14px">${CATS.map(c=>`<span>${esc(c.i)} ${esc(c.n)}</span>`).join("")}</div>${row("Edit categories","Rename, change icons and example items, add or remove.",'<button class="btn" data-a="cats">Manage categories</button>')}`,
  data:`<h2>Data & Backup</h2><p class="m">Move data in and out, and keep a safe copy.</p><div class="stat" style="margin-bottom:6px">${[["Income",db.income.length],["Expenses",db.expenses.length],["Accounts",ND.accounts.length],["Transfers",ND.transfers.length],["Goals",ND.goals.length],["Bills",ND.bills.length],["Manual items",ND.liabilities.length],["Loans & invest",ND.loans.length],["Settlements",ND.settles.length]].map(x=>`<div><b>${x[1]}</b><span class="m">${x[0]}</span></div>`).join("")}</div>${row("Import / Export","Bring in transactions from CSV or JSON, or export them.",'<button class="btn w" data-a="imp">Import / Export</button>')}${row("Full backup","Download income, expenses, accounts, transfers, goals, bills, liabilities, settlements, loans, budgets and categories as one JSON file. Importing it restores income and expenses only; a full restore needs your approval first.",'<button class="btn" data-a="bak">Download backup</button>')}`};
  $("#nSet").innerHTML=`<div class="sg"><nav class="sn">${T.map(x=>`<button data-a="stab" data-id="${x[0]}" class="${x[0]===cur?"on":""}">${ico(x[1],18)}${x[2]}</button>`).join("")}</nav><div class="sp">${pn[cur]}</div></div>`}
@@ -1269,7 +1270,7 @@ document.addEventListener("change",e=>{if(e.target.id==="cySel"){CY.sel=+e.targe
 FM={January:"জানুয়ারি",February:"ফেব্রুয়ারি",March:"মার্চ",April:"এপ্রিল",May:"মে",June:"জুন",July:"জুলাই",August:"আগস্ট",September:"সেপ্টেম্বর",October:"অক্টোবর",November:"নভেম্বর",December:"ডিসেম্বর"},
 GR={morning:"শুভ সকাল",afternoon:"শুভ অপরাহ্ন",evening:"শুভ সন্ধ্যা",night:"শুভ রাত্রি"},MT=/\b(January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/;
 const mg=new RegExp(MT.source,"g"),mm=x=>FM[x]||MO[x]||x;
-function tr(t){const k=t.trim();if(!k||!/[A-Za-z]/.test(k))return t;let r=D[k],m;
+function tr0(t){const k=t.trim();if(!k||!/[A-Za-z]/.test(k))return t;let r=D[k],m;
  if(r===undefined){
   if(m=k.match(/^Good (morning|afternoon|evening|night), (.+)$/))r=GR[m[1]]+", "+m[2];
   else if(m=k.match(/^Here’s your financial overview for (.+)\.$/))r=m[1]+" মাসের আপনার আর্থিক সারসংক্ষেপ।";
@@ -1281,12 +1282,36 @@ function tr(t){const k=t.trim();if(!k||!/[A-Za-z]/.test(k))return t;let r=D[k],m
   else if(/\d/.test(k)&&MT.test(k))r=k;else return t}
  if(/\d|January|February|March|April|May|June|July|August|September|October|November|December/.test(r))r=r.replace(mg,mm);
  return t.replace(k,r)}
+/* ===== Language (বাংলা / English / Banglish): central dictionary + preference ===== */
+const LANG=getLang();
+const EX={"Bank Balance":"ব্যাংক ব্যালান্স","Cash / Wallet":"নগদ / ওয়ালেট","Short-term Loans":"স্বল্পমেয়াদি ঋণ","Long-term Loans":"দীর্ঘমেয়াদি ঋণ","Investments":"বিনিয়োগ","Net Worth":"নিট সম্পদ","Financial Situation":"আর্থিক অবস্থা","Language":"ভাষা","Applies to the whole app. Saved on this device.":"পুরো অ্যাপে প্রযোজ্য। এই ডিভাইসে সংরক্ষিত।","Records to review":"যাচাইয়ের রেকর্ড","Preferences":"পছন্দসমূহ","Settings":"সেটিংস"};
+for(const k in EX)if(D[k]===undefined)D[k]=EX[k];
+const BLO={"আয়":"Ay","খরচ":"Khoroch","ব্যাংক ব্যালান্স":"Bank Balance","স্বল্পমেয়াদি ঋণ":"Short-term Loan","দীর্ঘমেয়াদি ঋণ":"Long-term Loan","বিনিয়োগ":"Investment","সেটিংস":"Settings","নগদ / ওয়ালেট":"Cash / Wallet","নিট সম্পদ":"Net Worth","ভাষা":"Bhasha"};
+{const nz=x=>x.replace(/\u09A1\u09BC/g,"\u09DC").replace(/\u09A2\u09BC/g,"\u09DD").replace(/\u09AF\u09BC/g,"\u09DF"),o={};for(const k in BLO)o[nz(k)]=BLO[k];for(const k in o)BLO[k]=o[k]}
+const BLV={"অ":"o","আ":"a","ই":"i","ঈ":"i","উ":"u","ঊ":"u","ঋ":"ri","এ":"e","ঐ":"oi","ও":"o","ঔ":"ou"},BLS={"া":"a","ি":"i","ী":"i","ু":"u","ূ":"u","ৃ":"ri","ে":"e","ৈ":"oi","ো":"o","ৌ":"ou"},BLM={"ং":"ng","ঃ":"h","ঁ":"n"},
+BLC={"ক":"k","খ":"kh","গ":"g","ঘ":"gh","ঙ":"ng","চ":"ch","ছ":"chh","জ":"j","ঝ":"jh","ঞ":"n","ট":"t","ঠ":"th","ড":"d","ঢ":"dh","ণ":"n","ত":"t","থ":"th","দ":"d","ধ":"dh","ন":"n","প":"p","ফ":"f","ব":"b","ভ":"bh","ম":"m","য":"j","র":"r","ল":"l","শ":"sh","ষ":"sh","স":"s","হ":"h","ৎ":"t","\u09DC":"r","\u09DD":"rh","\u09DF":"y"};
+function bl(s){if(!/[\u0980-\u09FF]/.test(s))return s;s=s.replace(/\u09A1\u09BC/g,"\u09DC").replace(/\u09A2\u09BC/g,"\u09DD").replace(/\u09AF\u09BC/g,"\u09DF");
+ const t=s.trim();if(BLO[t])return s.replace(t,BLO[t]);const c=[...s];let o="";
+ for(let i=0;i<c.length;i++){const ch=c[i];
+  if(BLC[ch]!==undefined){o+=(c[i-1]==="\u09CD"&&ch==="\u09AF")?"y":BLC[ch];const n=c[i+1];if(n==="\u09CD"){i++;continue}if(BLS[n]!==undefined)continue;if(n&&/[\u0980-\u09FF]/.test(n)&&!/[\u09E6-\u09EF]/.test(n))o+="o";continue}
+  if(BLS[ch]!==undefined){o+=BLS[ch];continue}if(BLV[ch]!==undefined){o+=BLV[ch];continue}if(BLM[ch]!==undefined){o+=BLM[ch];continue}
+  if(ch>="\u09E6"&&ch<="\u09EF"){o+=ch.charCodeAt(0)-0x09E6;continue}if(ch==="\u09CD"||ch==="\u09BC")continue;o+=ch}
+ return o.replace(/(^|[\s(·\/-])([a-z])/g,(m,a,b)=>a+b.toUpperCase())}
+function tr(t){let r=tr0(t);if(r===t){const m=t.match(/^(\s*[^\w\u0980-\u09FF]+\s*)([A-Za-z].*?)(\s*)$/);if(m){const q=tr0(m[2]);if(q!==m[2])r=m[1]+q+m[3]}}return LANG==="bl"?bl(r):r}
+document.addEventListener("change",e=>{if(e.target.id==="prefLang"){try{localStorage.setItem("mf_lang",e.target.value)}catch(x){}location.reload()}});
+/* ===== Search bar: language-aware label, live filter, clear button, empty state ===== */
+{const T={bn:{ph:"লেনদেন ও ক্যাটাগরি খুঁজুন...",none:"কোনো লেনদেন মেলেনি।",clr:"মুছুন"},en:{ph:"Search transactions and categories...",none:"No transactions match your search.",clr:"Clear search"},bl:{ph:"Transaction o category khujun...",none:"Kono transaction mile ni.",clr:"Muchun"}}[LANG]||{},g=document.getElementById("gs");
+ if(g&&T.ph){g.placeholder=T.ph;g.setAttribute("aria-label",T.ph);const x=document.createElement("button");x.type="button";x.id="gsx";x.hidden=true;x.textContent="×";x.title=x.ariaLabel=T.clr;g.parentNode.appendChild(x);
+  const st=document.createElement("style");st.textContent="#gsx{border:0;background:none;cursor:pointer;font-size:18px;line-height:1;padding:0 2px;color:inherit;opacity:.6}#gsx:hover{opacity:1}#gsNone{padding:14px;text-align:center;opacity:.7}";document.head.appendChild(st);
+  const ap=()=>{const q=g.value.trim().toLowerCase(),rows=[...document.querySelectorAll("#tb tr")];let n=0;rows.forEach(r=>{r.hidden=!!q&&!r.textContent.toLowerCase().includes(q);if(!r.hidden)n++});x.hidden=!g.value;let e=document.getElementById("gsNone");
+   if(rows.length&&q&&!n){if(!e){e=document.createElement("div");e.id="gsNone";const tb=document.getElementById("tb"),tbl=tb&&tb.closest("table");tbl&&tbl.parentNode.insertBefore(e,tbl.nextSibling)}if(e)e.textContent=T.none}else if(e)e.remove()};
+  g.addEventListener("input",()=>{x.hidden=!g.value;if(document.getElementById("tb"))ap()});g.addEventListener("keydown",e=>{if(e.key==="Enter")setTimeout(ap,200)});x.onclick=()=>{g.value="";ap();g.focus()}}}
 function run(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;
  while(n=w.nextNode()){const e=n.parentElement;if(!e||/^(SCRIPT|STYLE|OPTION|TEXTAREA)$/.test(e.tagName)||e.closest("#cyc"))continue;L.push(n)}
  L.forEach(n=>{const v=tr(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v});
  document.querySelectorAll("[placeholder],[title],[aria-label]").forEach(e=>{if(e.tagName==="OPTION")return;["placeholder","title","aria-label"].forEach(a=>{const v=e.getAttribute(a);if(v){const x=tr(v);if(x!==v)e.setAttribute(a,x)}})})}
 let q=0;const mo=new MutationObserver(()=>{if(q)return;q=1;requestAnimationFrame(()=>{q=0;mo.disconnect();try{run()}catch(x){console.error(x)}mo.observe(document.body,{childList:true,subtree:true,characterData:true})})});
-document.documentElement.lang="bn";try{run()}catch(x){}mo.observe(document.body,{childList:true,subtree:true,characterData:true})}
+document.documentElement.lang=LANG==="en"?"en":LANG==="bl"?"bn-Latn":"bn";if(LANG!=="en"){try{run()}catch(x){}mo.observe(document.body,{childList:true,subtree:true,characterData:true})}}
 render();boot();
 </script><script>
 (function(){
