@@ -681,6 +681,12 @@ Object.assign(IC,{budget:'<circle cx="12" cy="12" r="9"/><path d="M14.5 9.2c-.5-
 const pmo=m=>{let[y,o]=m.split("-").map(Number);o--;if(!o){o=12;y--}return y+"-"+String(o).padStart(2,"0")};
 const tr=(a,b,inv)=>{const p=b?Math.round((a-b)/b*100):0,up=p>=0;return`<span class="${up!==!!inv?"g":"r"}">${up?"↑":"↓"} ${Math.abs(p)}%</span> <span class="m">vs. same period last month</span>`};
 const mon=(arr,m)=>arr.filter(x=>x.date.startsWith(m));
+/*PROJ*/
+const projMonth=(eN,m,today)=>{const tot=a=>a.reduce((s,x)=>s+(+x.amount||0),0),cur=today.slice(0,7),dm=new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();
+ if(m!==cur){const r=tot(eN);return{live:false,dm,elapsed:m<cur?dm:0,remaining:0,toDate:r,scheduled:0,avg:0,projected:r}}
+ const td=+today.slice(8,10),toDate=tot(eN.filter(x=>x.date<=today)),scheduled=tot(eN.filter(x=>x.date>today)),avg=td?toDate/td:0,remaining=Math.max(0,dm-td);
+ return{live:true,dm,elapsed:td,remaining,toDate,scheduled,avg,projected:toDate+scheduled+avg*remaining}};
+/*ENDPROJ*/
 const eqp=(arr,pm,m)=>{const d=new Date().toLocaleDateString("en-CA");return m===d.slice(0,7)?arr.filter(x=>x.date.startsWith(pm)&&+x.date.slice(8,10)<=+d.slice(8,10)):mon(arr,pm)};
 function donut(parts,total,lab){let a=0;const st=parts.filter(p=>p[1]>0).map(p=>{const s=a;a+=p[1]/total*100;return`${p[2]} ${s}% ${a}%`});return`<div class="dn" style="background:${total?`conic-gradient(${st.join(",")})`:"#e6ebf3"}"><b><span>${fmt(total)}<br><small>${lab}</small></span></b></div>`}
 function legend(parts,total){return`<div class="leg">`+parts.map(p=>`<div><span><span class="d" style="background:${p[2]}"></span>${p[0]}</span><span>${fmt(p[1])} &nbsp; ${total?Math.round(p[1]/total*100):0}%</span></div>`).join("")+`</div>`}
@@ -697,11 +703,11 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  $("#cd").innerHTML=donut(bc,E,"Total Expenses")+legend(bc.filter(q=>q[1]>0),E);
  const bp=Object.keys(PM).map(c=>[c,sum(eN.filter(x=>x.method===c)),PM[c]]);
  $("#pd").innerHTML=`<div style="display:grid;justify-items:center;gap:12px">${donut(bp,E,"Total Expenses")}${legend(bp,E).replace('class="leg"','class="leg" style="width:100%"')}</div>`;
- {const T=bTot(),tdy=TD(),cur=tdy.slice(0,7),dm2=new Date(y,mi+1,0).getDate(),el2=m<cur?dm2:m===cur?+tdy.slice(8):0,real=eN.filter(x=>!x.liab&&!x.prin),big=real.slice().sort((p,q)=>q.amount-p.amount)[0],top=bc.slice().sort((p,q)=>q[1]-p[1])[0],proj=m===cur&&el2?E/el2*dm2:E,bp_=T?E/T*100:0,gp=BUD.goal>0?Math.max(0,S)/BUD.goal*100:0,
-  row=(l,v,u,c,b)=>`<div class="kfi"><span class="kfic">${ico({"Budget used":"target","Budget":"target","Projected month spend":"chart","Month spend":"chart","Average per day":"cal"}[l]||"tag",16)}</span><span class="m">${l}</span><b class="${c||""}">${v}</b><span class="m">${u||""}</span>${b||""}</div>`,
+ {const T=bTot(),tdy=TD(),cur=tdy.slice(0,7),dm2=new Date(y,mi+1,0).getDate(),el2=m<cur?dm2:m===cur?+tdy.slice(8):0,real=eN.filter(x=>!x.liab&&!x.prin),big=real.slice().sort((p,q)=>q.amount-p.amount)[0],top=bc.slice().sort((p,q)=>q[1]-p[1])[0],pj=projMonth(eN,m,tdy),proj=pj.projected,bp_=T?E/T*100:0,gp=BUD.goal>0?Math.max(0,S)/BUD.goal*100:0,
+  row=(l,v,u,c,b)=>`<div class="kfi"><span class="kfic">${ico({"Budget used":"target","Budget":"target","Projected month spend":"chart","Estimated month-end spend":"chart","No budget set":"target","Month spend":"chart","Average per day":"cal"}[l]||"tag",16)}</span><span class="m">${l}</span><b class="${c||""}">${v}</b><span class="m">${u||""}</span>${b||""}</div>`,
   bar=(q,c)=>`<div style="height:6px;background:#eef2f8;border-radius:4px;margin:3px 0 0"><div style="height:100%;width:${Math.min(100,q)}%;background:${c};border-radius:4px"></div></div>`;
-  $("#kfl").innerHTML=(T?row("Budget used",Math.round(bp_)+"%",fmt(E)+" of "+fmt(T),bp_>=100?"r":"",bar(bp_,bp_>=100?"#a95043":bp_>=80?"#f59e0b":"#16a34a")):row("Budget","Not set",'<a href="#budget" style="color:var(--pri);text-decoration:none">Set budget</a>'))
-   +row(m===cur?"Projected month spend":"Month spend",fmt(proj),T?"Budget "+fmt(T):"",T&&proj>T?"r":"")
+  $("#kfl").innerHTML=(T?row("Budget used",Math.round(bp_)+"%",fmt(E)+" of "+fmt(T),bp_>=100?"r":"",bar(bp_,bp_>=100?"#a95043":bp_>=80?"#f59e0b":"#16a34a")):row("No budget set","–",'<a href="#budget" style="color:var(--pri);text-decoration:none">Set Budget</a>'))
+   +row(m===cur?"Estimated month-end spend":"Month spend",fmt(proj),m===cur?"estimate, not actual · actual so far "+fmt(E)+" + "+fmt(proj-E)+" projected for "+pj.remaining+" day(s)"+(T?" · Budget "+fmt(T):""):(T?"Budget "+fmt(T):""),T&&proj>T?"r":"")
    +(el2&&E?row("Average per day",fmt(E/el2),el2+" days"):"")
    +(top&&top[1]>0?row("Top category",esc(top[0]),fmt(top[1])+" \u00b7 "+Math.round(top[1]/E*100)+"%"):"")}
  // monthly overview
@@ -948,20 +954,20 @@ const bCls=p=>p>=100?"ov":p>=80?"nr":"ok",bTxt=p=>p>=100?"Over budget":p>=80?"Ne
 const dim=m=>new Date(+m.slice(0,4),+m.slice(5),0).getDate();
 const dleft=m=>{const dm=dim(m),t=new Date().toLocaleDateString("en-CA"),cur=t.slice(0,7);return m<cur?0:m===cur?dm-(+t.slice(8))+1:dm};
 const WN=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-function bMini(E,m){const T=bTot();if(!T)return`<button type="button" class="bset" data-go="budget">${ico("budget",15)} Set a monthly budget</button>`;
+function bMini(E,m){const T=bTot();if(!T)return`<button type="button" class="bset" data-go="budget">${ico("budget",15)} No budget set · Set Budget</button>`;
  const p=E/T*100,L=dleft(m),rem=T-E;
- return`<div class="bm"><div class="bmt"><span>Budget ${fmt(T)}</span><b class="t-${bCls(p)}">${Math.round(p)}%</b></div><div class="pb"><i class="pb-${bCls(p)}" style="width:${Math.min(p,100)}%"></i></div><div class="m bms">${rem>=0?fmt(rem)+" left"+(L&&rem>0?" · "+fmt(rem/L)+"/day":""):"Over by "+fmt(-rem)}</div></div>`}
+ return`<div class="bm"><div class="bmt"><span>Budget ${fmt(T)} <span class="m" style="font-weight:400;font-size:10.5px">(${BUD.total>0?"saved total limit":"sum of saved category limits"})</span></span><b class="t-${bCls(p)}">${Math.round(p)}%</b></div><div class="pb"><i class="pb-${bCls(p)}" style="width:${Math.min(p,100)}%"></i></div><div class="m bms">${rem>=0?fmt(rem)+" left"+(L&&rem>0?" · "+fmt(rem/L)+"/day":""):"Over budget by "+fmt(-rem)}</div></div>`}
 function gMini(S){const G=BUD.goal;if(!G)return"";const p=Math.max(0,S/G*100);
  return`<div class="bm" style="margin-top:6px"><div class="bmt"><span>Goal ${fmt(G)}</span><b class="${p>=100?"t-ok":"m"}">${Math.round(Math.min(p,999))}%</b></div><div class="pb"><i class="pb-${p>=100?"ok":"gl"}" style="width:${Math.min(p,100)}%"></i></div></div>`}
 $("#kp").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b){location.hash=b.dataset.go;go(b.dataset.go)}});
 function renderBudget(m,eN,I,E){
  const T=bTot(),dm=dim(m),L=dleft(m),t=new Date().toLocaleDateString("en-CA"),cur=t.slice(0,7),td=+t.slice(8);
- const rem=T-E,p=T?E/T*100:0,el=m<cur?dm:m===cur?td:0,avg=el?E/el:0,proj=m===cur?avg*dm:E,S=I-E,G=BUD.goal;
+ const rem=T-E,p=T?E/T*100:0,el=m<cur?dm:m===cur?td:0,avg=el?E/el:0,pj=projMonth(eN,m,t),proj=pj.projected,S=I-E,G=BUD.goal;
  const K=(a,b,c,cl)=>`<div class="card bkc"><span class="m">${a}</span><b class="${cl||""}">${b}</b><span class="m">${c||"&nbsp;"}</span></div>`;
- $("#bk").innerHTML=K("Monthly budget",T?fmt(T):"Not set",T?(BUD.total>0?"Total limit":"Sum of category budgets"):"Set it in Monthly plan")
+ $("#bk").innerHTML=K("Monthly budget",T?fmt(T):"No budget set",T?(BUD.total>0?"Total limit":"Sum of category budgets")+(BUD.savedAt?" · saved "+BUD.savedAt.slice(0,10):" · saved date not recorded"):"Enter limits below, then Save")
   +K("Spent so far",fmt(E),T?Math.round(p)+"% of budget":"",T?"t-"+bCls(p):"")
   +K(rem>=0||!T?"Remaining":"Over budget by",T?fmt(Math.abs(rem)):"–",T&&L&&rem>0?L+" days left · "+fmt(rem/L)+" per day":"",T&&rem<0?"t-ov":"")
-  +K("Projected month-end",m===cur?fmt(proj):fmt(E),T&&m===cur?(proj>T?fmt(proj-T)+" over budget":"Within budget"):(m===cur?"":"Final total"),T&&m===cur&&proj>T?"t-ov":"");
+  +K("Estimated month-end",m===cur?fmt(proj):fmt(E),(m===cur?"Estimate, not actual · ":"")+(T&&m===cur?(proj>T?fmt(proj-T)+" over budget":"Within budget"):(m===cur?"":"Final total")),T&&m===cur&&proj>T?"t-ov":"");
  const af=document.activeElement,fc=af&&af.dataset?af.dataset.bc:undefined,ss=af?af.selectionStart:null;
  const names=Object.keys(CAT);
  $("#bb").innerHTML=names.map(c=>{const sp=sum(eN.filter(x=>x.cat===c)),b=+(c in bdraft?bdraft[c]:BUD.cats[c])||0,pc=b?sp/b*100:0;
@@ -972,7 +978,7 @@ function renderBudget(m,eN,I,E){
  const A=(cl,ic,h)=>`<div class="al ${cl}">${ico(ic,18)}<div>${h}</div></div>`;
  let ah=al.map(([pc,c,sp,b])=>A(pc>=100?"al-ov":"al-nr","alert",`<b>${esc(c)}</b> ${pc>=100?"is over budget by "+fmt(sp-b):"has used "+Math.round(pc)+"% of its limit"}<br><span class="m">${fmt(sp)} of ${fmt(b)}</span>`)).join("");
  if(T&&E>T)ah=A("al-ov","alert",`<b>Monthly budget exceeded</b> by ${fmt(E-T)}`)+ah;
- else if(T&&m===cur&&proj>T)ah=A("al-nr","alert",`<b>On pace to overspend</b><br><span class="m">Projected ${fmt(proj)} against ${fmt(T)}</span>`)+ah;
+ else if(T&&m===cur&&proj>T)ah=A("al-nr","alert",`<b>On pace to overspend</b><br><span class="m">Estimated month-end ${fmt(proj)} against ${fmt(T)}</span>`)+ah;
  $("#bal").innerHTML=ah||(T?A("al-ok","check","<b>All good.</b> Spending is within your budget."):'<span class="m">Set budgets to get alerts when you get close to a limit.</span>');
  $("#bgp").innerHTML=G?`<div class="bmt"><span>${fmt(Math.max(S,0))} saved of ${fmt(G)}</span><b class="${S>=G?"t-ok":"m"}">${Math.round(Math.max(0,S)/G*100)}%</b></div><div class="pb"><i class="pb-${S>=G?"ok":"gl"}" style="width:${Math.min(100,Math.max(0,S)/G*100)}%"></i></div><div class="m" style="margin-top:6px;font-size:11.5px">${S>=G?"Goal reached this month.":"Save "+fmt(G-Math.max(S,0))+" more to reach your goal."}</div>`:'<span class="m" style="font-size:11.5px">Add a monthly savings goal to track your progress.</span>';
  renderIns(m,eN,E,el);
@@ -1002,7 +1008,7 @@ $("#p-budget").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.tagNa
 $("#bsave").onclick=async()=>{if(!user)return toast("Sign in first");const cats={...BUD.cats};
  Object.entries(bdraft).forEach(([c,v])=>{const n=Math.round(+v)||0;if(n>0)cats[c]=n;else delete cats[c]});
  const rd=v=>Math.round(+String(v).replace(/[^\d.]/g,""))||0,total=rd($("#btot").value),goal=rd($("#bgoal").value);
- try{await F.setDoc(dref("settings","budgets"),{total,goal,cats});bdraft={};toast("Budgets saved")}catch(e){toast(e.message)}};
+ try{await F.setDoc(dref("settings","budgets"),{total,goal,cats,savedAt:new Date().toISOString()});bdraft={};toast("Budgets saved")}catch(e){toast(e.message)}};
 $("#bauto").onclick=()=>{let k=sel.slice(0,7);const ms=[];for(let i=0;i<3;i++){k=pmo(k);ms.push(k)}let n=0;
  Object.keys(CAT).forEach(c=>{const v=ms.map(x=>sum(mon(db.expenses,x).filter(e=>e.cat===c))).filter(v=>v>0);if(v.length){bdraft[c]=String(Math.ceil(v.reduce((a,b)=>a+b,0)/v.length/50)*50);n++}});
  if(!n)return toast("Not enough past spending to suggest budgets yet");render();toast("Filled from your last 3 months' average. Review, then press Save.")};
