@@ -782,6 +782,129 @@ html body main>section#p-accounts.pg:not([hidden]){flex:0 0 auto!important;heigh
 #nMan th{font-size:10.5px;text-transform:uppercase;letter-spacing:.03em;color:#68736e;background:#f6f6f0}
 #nMan #mfQ{flex:1;min-width:120px;padding:3px 8px;font-size:12px;border-radius:8px}
 #nMan tr:hover td{background:#fafaf5}
+</style><style id="ux4">
+/* ===== ux4: Accounts & Net Worth - roomy, high-visibility layout (uses the free space below) ===== */
+html body #p-accounts{--r4:18px;--bd4:#dfe6df}
+/* 1. page grid: full-width KPI band on top, accounts left, chart + manual records right */
+html body #p-accounts .acp{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);grid-template-areas:"sum sum" "acc gr" "acc man";gap:18px 20px;align-items:start}
+html body #p-accounts .acp>.acl{display:contents!important}
+html body #p-accounts #aSum{grid-area:sum}
+html body #p-accounts #nAcc{grid-area:acc;align-self:stretch;display:flex;flex-direction:column;gap:16px}
+html body #p-accounts #aGr{grid-area:gr}
+html body #p-accounts #nMan{grid-area:man}
+/* 2. KPI band: hero net-worth card + 8 readable stats + action column */
+html body #p-accounts #aSum{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
+html body #p-accounts #aSum>.bkc{display:grid!important;grid-template-columns:auto minmax(0,1fr);column-gap:12px;row-gap:2px;align-items:center;align-content:center;padding:14px 16px!important;min-height:92px;border-radius:var(--r4);background:color-mix(in srgb,var(--tc,#1f5c50) 7%,#fff);border:1px solid color-mix(in srgb,var(--tc,#1f5c50) 22%,transparent);box-shadow:0 1px 2px rgba(15,31,61,.05)}
+html body #p-accounts #aSum .bki{width:44px;height:44px;border-radius:14px;grid-row:1/4}
+html body #p-accounts #aSum .bki .px{width:24px;height:24px}
+html body #p-accounts #aSum .bkc .m{font-size:12.5px;line-height:1.3;color:#4d5a54;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+html body #p-accounts #aSum .bkc>.m:last-child{display:-webkit-box;font-size:11.5px;color:#6b7770}
+html body #p-accounts #aSum .bkc>b{font-size:23px;line-height:1.2;font-weight:700;color:#14231e;white-space:nowrap}
+html body #p-accounts #aSum .bkc>b.t-ov{color:#b3392e}
+html body #p-accounts #aSum .bkc>b.t-ok{color:#14704f}
+/* placement */
+html body #p-accounts #aSum>.bkc:nth-child(7){grid-column:1/3;grid-row:1/3;order:0;grid-template-columns:1fr;justify-items:start;align-content:center;row-gap:4px;padding:22px 24px!important;background:linear-gradient(145deg,#1f5c50,#12392f)!important;border-color:transparent!important;box-shadow:0 8px 22px rgba(18,57,47,.28)}
+html body #p-accounts #aSum>.bkc:nth-child(7) .bki{grid-row:auto;width:48px;height:48px;background:rgba(255,255,255,.18);color:#fff;margin-bottom:6px}
+html body #p-accounts #aSum>.bkc:nth-child(7) .m{color:rgba(255,255,255,.88)!important;font-size:14px;-webkit-line-clamp:2}
+html body #p-accounts #aSum>.bkc:nth-child(7)>b{font-size:40px;line-height:1.1;color:#fff!important;letter-spacing:-.5px}
+html body #p-accounts #aSum>.bkc:nth-child(7)>b.t-ov{color:#ffc9bf!important}
+html body #p-accounts #aSum>.bkc:nth-child(7)>.m:last-child{font-size:12.5px;color:rgba(255,255,255,.75)!important}
+html body #p-accounts #aSum>.bkc:nth-child(4){grid-column:7;grid-row:1/3;order:0;display:flex!important;flex-direction:column;justify-content:center;gap:10px!important;background:#f4f8f5;border:1.5px dashed #b9c9bd;padding:14px!important}
+html body #p-accounts #aSum>.bkc:nth-child(4) .btn{width:100%;padding:11px 10px;font-size:14px;font-weight:700;border-radius:12px;white-space:normal;line-height:1.25}
+html body #p-accounts #aSum>.bkc:nth-child(4) .btn:not(.w){background:#1f5c50;color:#fff;border-color:#1f5c50}
+html body #p-accounts #aSum>.bkc:nth-child(4) .btn.w{background:#fff;color:#1f5c50;border:1.5px solid #1f5c50}
+html body #p-accounts #aSum>.bkc:nth-child(5){order:1}html body #p-accounts #aSum>.bkc:nth-child(6){order:2}
+html body #p-accounts #aSum>.bkc:nth-child(1){order:3}html body #p-accounts #aSum>.bkc:nth-child(10){order:4}
+html body #p-accounts #aSum>.bkc:nth-child(8){order:5}html body #p-accounts #aSum>.bkc:nth-child(9){order:6}
+html body #p-accounts #aSum>.bkc:nth-child(2){order:7}html body #p-accounts #aSum>.bkc:nth-child(3){order:8}
+/* 3. account cards */
+html body #p-accounts #nAcc .acc-grid{grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px}
+html body #p-accounts #nAcc .acc-grid>.bkc{padding:18px 18px 16px!important;border-radius:var(--r4);column-gap:14px;row-gap:3px;box-shadow:0 1px 3px rgba(15,31,61,.06);border:1px solid color-mix(in srgb,var(--tc,#0f8a6b) 26%,transparent)}
+html body #p-accounts #nAcc .acc-grid>.bkc>.bki{width:52px;height:52px;border-radius:16px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.bki .px{width:28px;height:28px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.m{font-size:12.5px;line-height:1.35;color:#5a6760}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(1){font-size:19px;color:#14231e}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(2){font-size:30px;line-height:1.15;color:#0f6a4c;letter-spacing:-.3px}
+html body #p-accounts #nAcc .acc-grid>.bkc>b.t-ov{color:#b3392e}
+html body #p-accounts #nAcc .acc-grid>.bkc>.m[style*="d97706"]{background:#fff6e5;border:1px solid #f3d9a4;border-radius:10px;padding:7px 10px;color:#8a5a06!important;font-size:12px;margin-top:8px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.row{margin-top:12px!important;gap:8px!important}
+html body #p-accounts #nAcc .acc-grid .btn{padding:7px 14px;font-size:13px;font-weight:600;border-radius:10px}
+/* 4. transfers */
+html body #p-accounts #nTrf{margin-top:0!important;flex:1}
+html body #p-accounts #nTrf .card{height:100%;padding:18px 20px!important;border-radius:var(--r4)}
+html body #p-accounts #nTrf h3{font-size:17px;margin:0 0 6px}
+html body #p-accounts #nTrf p.m{display:block!important;font-size:12.5px;margin:0 0 12px!important;color:#5a6760}
+html body #p-accounts #nTrf th{font-size:12px;padding:9px 10px;background:#f1f5f1;color:#4d5a54;letter-spacing:.04em}
+html body #p-accounts #nTrf td{font-size:14.5px;padding:12px 10px;border-bottom:1px solid #e9eee9;color:#14231e}
+html body #p-accounts #nTrf td.ra:nth-child(3){font-weight:700;font-variant-numeric:tabular-nums}
+html body #p-accounts #nTrf tr:nth-child(even) td{background:#fafcfa}
+html body #p-accounts #nTrf .btn{padding:6px 13px;font-size:13px;font-weight:600;border-radius:9px}
+html body #p-accounts #nTrf tr[style*="line-through"] td{color:#7b867f}
+/* 5. net-worth chart */
+html body #p-accounts .nwc{padding:18px 20px 14px!important;border-radius:var(--r4)}
+html body #p-accounts .nwh{gap:12px;margin-bottom:8px}
+html body #p-accounts .nwh h3{font-size:17px}
+html body #p-accounts .nwl{font-size:13px;gap:16px;color:#3f4b45}
+html body #p-accounts .nwl i,html body #p-accounts .nwt i{width:10px;height:10px}
+html body #p-accounts .nwh .btn{padding:7px 14px;font-size:13px;font-weight:600;border-radius:10px}
+html body #p-accounts .nwb svg{max-height:none;min-height:230px}
+html body #p-accounts .nwt{font-size:13px;padding:10px 12px;min-width:200px}
+/* 6. manual assets & liabilities */
+html body #p-accounts #nMan>.card{padding:18px 20px!important;border-radius:var(--r4)}
+html body #p-accounts #nMan h3{font-size:17px;margin:0 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+html body #p-accounts #nMan h3 .btn{padding:8px 16px;font-size:13.5px;font-weight:700;background:#1f5c50;color:#fff;border-color:#1f5c50;border-radius:10px}
+html body #p-accounts #nMan .bkk{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:10px!important;margin-bottom:14px!important}
+html body #p-accounts #nMan .bkc{padding:12px 14px!important;min-height:82px;border-radius:14px;column-gap:10px}
+html body #p-accounts #nMan .bki{width:38px;height:38px;border-radius:12px}
+html body #p-accounts #nMan .bki .px{width:21px;height:21px}
+html body #p-accounts #nMan .bkc .m{font-size:12px;line-height:1.3;color:#4d5a54;-webkit-line-clamp:2}
+html body #p-accounts #nMan .bkc>b{font-size:21px;font-weight:700;color:#14231e}
+html body #p-accounts #nMan .bkc>.m:last-child{display:-webkit-box!important;font-size:11.5px;color:#6b7770;-webkit-line-clamp:2}
+html body #p-accounts #nMan .row{gap:10px!important;margin-bottom:12px!important}
+html body #p-accounts #nMan select,html body #p-accounts #nMan input[type=date],html body #p-accounts #nMan #mfQ{padding:8px 10px;font-size:13.5px;border-radius:10px}
+html body #p-accounts #nMan #mfQ{min-width:180px}
+html body #p-accounts #nMan .row .m{font-size:13px}
+html body #p-accounts #nMan table{min-width:0!important}
+html body #p-accounts #nMan th{font-size:12px;padding:10px;background:#f1f5f1;color:#4d5a54;letter-spacing:.04em}
+html body #p-accounts #nMan td{font-size:14.5px;padding:13px 10px;border-bottom:1px solid #e9eee9;vertical-align:middle;color:#14231e}
+html body #p-accounts #nMan td b{font-size:15px}
+html body #p-accounts #nMan td.ra{font-variant-numeric:tabular-nums}
+html body #p-accounts #nMan td:last-child{min-width:230px;text-align:right}
+html body #p-accounts #nMan .btn{padding:6px 12px;font-size:12.5px;font-weight:600;margin:2px 0 2px 4px;border-radius:9px}
+html body #p-accounts #nMan>.card>p.m{display:block!important;font-size:12px;color:#6b7770}
+/* 7. smaller screens */
+@media(max-width:1500px){
+ html body #p-accounts #aSum{grid-template-columns:repeat(4,minmax(0,1fr))}
+ html body #p-accounts #aSum>.bkc:nth-child(7){grid-column:1/3;grid-row:1/3}
+ html body #p-accounts #aSum>.bkc:nth-child(4){grid-column:1/-1;grid-row:auto;order:9;flex-direction:row;padding:12px 14px!important}
+ html body #p-accounts #aSum>.bkc:nth-child(4) .btn{flex:1}
+}
+@media(max-width:1400px){
+ html body #p-accounts .acp{grid-template-areas:"sum" "acc" "gr" "man";grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:1180px){
+ html body #p-accounts .acp{grid-template-areas:"sum" "acc" "gr" "man";grid-template-columns:minmax(0,1fr)}
+ html body #p-accounts #nMan .bkk{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+ html body #p-accounts #aSum{grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body #p-accounts #aSum>.bkc:nth-child(7){grid-column:1/-1}
+ html body #p-accounts #aSum>.bkc:nth-child(7)>b{font-size:32px}
+ html body #p-accounts #aSum>.bkc:nth-child(4){grid-column:1/-1}
+ html body #p-accounts #aSum>.bkc>b{font-size:19px}
+ html body #p-accounts #nMan td:last-child{min-width:0}
+}
+
+/* ux4 fixes: no clipped values, no wrapped dates/amounts, tidy card buttons */
+html body #p-accounts #nMan .bkk{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html body #p-accounts #nMan .bkc{min-height:76px}
+html body #p-accounts #nMan .bkc>b{white-space:nowrap}
+html body #p-accounts #nMan td:nth-child(3),html body #p-accounts #nMan td:nth-child(4),html body #p-accounts #nMan td:nth-child(5),html body #p-accounts #nTrf td:nth-child(1),html body #p-accounts #nTrf td:nth-child(3){white-space:nowrap}
+html body #p-accounts #nAcc .acc-grid>.bkc{padding:16px 14px 14px!important;column-gap:12px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.row{flex-wrap:wrap;gap:6px!important}
+html body #p-accounts #nAcc .acc-grid .btn{padding:6px 11px;font-size:12.5px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.bki{width:46px;height:46px}
+html body #p-accounts #nMan .bkc>.m,html body #p-accounts #nMan .bkc>b{grid-column:2}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -1164,7 +1287,7 @@ function nwChart(at,t,has){
   else{const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));d=e.toISOString().slice(0,10);lb=en?MS[e.getUTCMonth()]:BM[e.getUTCMonth()];tt=lb+" "+e.getUTCFullYear()}
   const r=at(d);P.push({lb,tt,d,A:r.A,L:r.L,N:r.N})}
  NWP=P;
- const W=720,H=122,pl=46,pr=14,pt=8,pb=20,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
+ const W=720,H=215,pl=52,pr=16,pt=12,pb=26,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
  let mn=Math.min(0,...all),mx=Math.max(0,...all);if(mx===mn)mx=1;
  const raw=(mx-mn)/3,mag=Math.pow(10,Math.floor(Math.log10(raw))),nr=raw/mag,step=(nr<=1?1:nr<=2?2:nr<=5?5:10)*mag,lo=Math.floor(mn/step)*step,hi=Math.ceil(mx/step)*step;
  const X=i=>pl+pw*(i+.5)/6,Y=v=>pt+ph*(1-(v-lo)/(hi-lo)),f=n=>n.toFixed(1);
@@ -1175,12 +1298,12 @@ function nwChart(at,t,has){
  const S=(key,col)=>({pts:P.map((p,i)=>[X(i),Y(p[key])]),col});
  const sN=S("N","#1f9d6b"),sA=S("A","#2f7fd6"),sL=S("L","#d9534f");
  let g="";for(let v=lo,c=0;v<=hi+step/1e6&&c<8;v+=step,c++){const y=Y(v),z=Math.abs(v)<step/1e6;
-  g+=`<line x1="${pl}" x2="${W-pr}" y1="${f(y)}" y2="${f(y)}" stroke="${z?"#8a968f":"#e7ebe4"}" stroke-width="${z?1.1:.8}"${z?' stroke-dasharray="4 3"':""}/><text x="${pl-6}" y="${f(y+3)}" text-anchor="end" font-size="9.5" fill="#7b867f">${sh(v)}</text>`}
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${f(y)}" y2="${f(y)}" stroke="${z?"#8a968f":"#e7ebe4"}" stroke-width="${z?1.1:.8}"${z?' stroke-dasharray="4 3"':""}/><text x="${pl-6}" y="${f(y+3)}" text-anchor="end" font-size="11.5" fill="#6b7770">${sh(v)}</text>`}
  const y0=Y(0),area=sp(sN.pts)+`L${f(X(5))} ${f(y0)}L${f(X(0))} ${f(y0)}Z`;
- const dots=s=>s.pts.map(q=>`<circle cx="${f(q[0])}" cy="${f(q[1])}" r="3" fill="${s.col}" stroke="#fff" stroke-width="1.5"/>`).join("");
- const lines=s=>`<path d="${sp(s.pts)}" fill="none" stroke="${s.col}" stroke-width="2" stroke-linecap="round"/>`;
+ const dots=s=>s.pts.map(q=>`<circle cx="${f(q[0])}" cy="${f(q[1])}" r="4" fill="${s.col}" stroke="#fff" stroke-width="1.8"/>`).join("");
+ const lines=s=>`<path d="${sp(s.pts)}" fill="none" stroke="${s.col}" stroke-width="2.6" stroke-linecap="round"/>`;
  const hits=P.map((p,i)=>`<rect class="hit" data-i="${i}" data-x="${f(X(i))}" x="${f(pl+pw*i/6)}" y="${pt}" width="${f(pw/6)}" height="${ph}" fill="transparent"/>`).join("");
- const labs=P.map((p,i)=>`<text x="${f(X(i))}" y="${H-5}" text-anchor="middle" font-size="10.5" fill="#68736e">${p.lb}</text>`).join("");
+ const labs=P.map((p,i)=>`<text x="${f(X(i))}" y="${H-6}" text-anchor="middle" font-size="12.5" fill="#55625b">${p.lb}</text>`).join("");
  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net worth, last 6 months"><defs><linearGradient id="nwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".30"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".03"/></linearGradient></defs>${g}<path d="${area}" fill="url(#nwg)"/>${lines(sL)}${lines(sA)}${lines(sN)}${dots(sL)}${dots(sA)}${dots(sN)}<line id="nwGl" y1="${pt}" y2="${pt+ph}" stroke="#1f5c50" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>${labs}${hits}</svg>`;
  return`<div class="card nwc"><div class="nwh"><h3><span>Net worth, last 6 months</span></h3>${inf("History uses account balances; manual items are shown at today’s value. Savings goals are not added again: money in a savings account is already in its balance.")}<div class="nwl"><span><i style="background:#1f9d6b"></i>Net worth</span><span><i style="background:#2f7fd6"></i>Total Assets</span><span><i style="background:#d9534f"></i>Total Liabilities</span></div><button class="btn w" data-a="addL">+ Add manual asset / liability</button></div><div class="nwb">${svg}<div class="nwt" hidden></div></div></div>`}
 {const nwTip=e=>{const h=e.target.closest&&e.target.closest(".nwc .hit"),c=document.querySelector(".nwc .nwb");if(!c)return;const tip=c.querySelector(".nwt"),gl=c.querySelector("#nwGl");
