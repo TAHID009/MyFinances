@@ -1050,6 +1050,18 @@ html body #p-accounts .mc .mcat{font-size:13px}
 html body #p-accounts .macts .btn{font-size:13.5px!important;padding:5px 11px!important}
 html body #p-accounts #nMan>.card>p.m{font-size:12.5px}
 html body #p-accounts .mcards{max-height:none;overflow:visible}
+
+/* ux8: monthly overview chart */
+#mo,#mo2{position:relative}
+#mo svg{touch-action:pan-y}
+#mo2 svg{max-height:none!important;height:auto!important}
+.mh{cursor:pointer}
+.motip{position:absolute;top:2px;z-index:6;transform:translateX(-50%);pointer-events:none;background:#14231e;color:#fff;border-radius:10px;padding:8px 12px;font-size:13px;line-height:1.55;box-shadow:0 8px 22px rgba(0,0,0,.28);min-width:170px;white-space:nowrap}
+.motip[hidden]{display:none}
+.motip>b{display:block;margin-bottom:3px;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,.22);font-size:13.5px}
+.motip>div{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.motip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
+#ov h3 .m{font-size:13px!important}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -1243,10 +1255,7 @@ const bc=Object.keys(CAT).map(c=>[c,sum(eN.filter(x=>x.cat===c)),CAT[c].c]);cons
  const D=[];for(let k=0;k<=mi;k++){const mm=y+"-"+String(k+1).padStart(2,"0"),a=sum(mon(db.income,mm)),b=sum(mon(db.expenses,mm));D.push([a,b,a-b])}
  {const tdy_=TD(),cur_=tdy_.slice(0,7),dm_=new Date(y,mi+1,0).getDate(),el_=m<cur_?dm_:m===cur_?+tdy_.slice(8):0,ci=[0],ce=[0],cr=[0];let ai=0,ae=0;for(let d=1;d<=el_;d++){const dd=m+"-"+String(d).padStart(2,"0");ai+=sum(iN.filter(x=>x.date===dd));ae+=sum(eN.filter(x=>x.date===dd));ci.push(ai);ce.push(ae);cr.push(ai-ae)}
  const sp=(a,c)=>{const n=a.length;if(n<2)return"";const lo=Math.min(...a,0),hi=Math.max(...a,0),q=(hi-lo)||1,l=a.map((v,i)=>(i/(n-1)*100)+","+(36-(v-lo)/q*32)).join(" ");return`<svg class="spk" viewBox="0 0 100 40" preserveAspectRatio="none"><polygon points="0,40 ${l} 100,40" fill="${c}" opacity=".12"/><polyline points="${l}" fill="none" stroke="${c}" stroke-width="1.6" vector-effect="non-scaling-stroke"/></svg>`},k=$("#kp").children;if(k[0])k[0].insertAdjacentHTML("beforeend",sp(ci,"#16a34a"));if(k[1])k[1].insertAdjacentHTML("beforeend",sp(ce,"#ef4444"));if(k[2])k[2].insertAdjacentHTML("beforeend",sp(cr,"#1f5c50"))}
- const mx=Math.max(100000,Math.ceil(Math.max(...D.flat())/20000)*20000),Y=v=>180-v/mx*170,n=D.length,sl=330/n;let s=`<svg viewBox="0 0 380 205" width="100%">`;
- for(let t=0;t<=5;t++){const v=mx/5*t;s+=`<line x1="40" x2="375" y1="${Y(v)}" y2="${Y(v)}" stroke="#e6ebf3"/><text x="34" y="${Y(v)+3}" font-size="8" text-anchor="end" fill="#68736e">${v?v/1000+"K":0}</text>`}
- D.forEach((d,k)=>{const x=44+k*sl,w=sl*.3;s+=`<rect x="${x+sl*.15}" y="${Y(d[0])}" width="${w}" height="${180-Y(d[0])}" fill="#2e9e5b"/><rect x="${x+sl*.15+w}" y="${Y(d[1])}" width="${w}" height="${180-Y(d[1])}" fill="#527994"/><text x="${x+sl*.45}" y="195" font-size="8" text-anchor="middle" fill="#68736e">${MS[k]}</text>`});
- const pts=D.map((d,k)=>[44+k*sl+sl*.45,Y(Math.max(0,d[2]))]);s+=`<polyline fill="none" stroke="#1f5c50" stroke-width="1.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>`+pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="2.5" fill="#1f5c50"/>`).join("")+`</svg>`;$("#mo").innerHTML=s;$("#mo2").innerHTML=s;
+ window._moD=D;window._moY=y;moDraw();
  // table
  const st=new Date(Date.UTC(+sel.slice(0,4),+sel.slice(5,7)-1,+sel.slice(8))-6*864e5).toISOString().slice(0,10);
  const rows=db.ex.filter(x=>typeof x.date==="string").filter(x=>lrange==="day"?x.date===sel:lrange==="week"?x.date>=st&&x.date<=sel:lrange==="all"?true:x.date.startsWith(m)).sort((a,b)=>b.date.localeCompare(a.date));
@@ -1424,6 +1433,34 @@ function repayForm(l){const live=ND.accounts.filter(a=>a.status!=="Inactive");if
 function nwSeries(){const manA=sum(ND.liabilities.filter(x=>x.kind==="Asset"&&x.inc!==true));
  const at=up=>{const r=nwAt(up);return{A:r.A,L:r.L,N:r.N,manA}};return at}
 let NWP=[];
+function moDraw(){try{var D=window._moD,Y0=window._moY;if(!D||!D.length)return;
+ var hosts=[document.getElementById("mo"),document.getElementById("mo2")];
+ if(!window._moRO&&hosts[0]&&window.ResizeObserver){window._moRO=1;var lw=0,lh=0;new ResizeObserver(function(){var h=hosts[0];if(Math.abs(h.clientWidth-lw)<3&&Math.abs(h.clientHeight-lh)<3)return;clearTimeout(window._mot);window._mot=setTimeout(moDraw,120)}).observe(hosts[0])}
+ hosts.forEach(function(host){if(!host)return;
+  var W=Math.max(300,host.clientWidth||520),H=host.clientHeight>80?host.clientHeight:Math.round(W*.34);H=Math.max(150,Math.min(H,420));
+  var fs=Math.max(11.5,Math.min(15,W/40)),L=Math.round(fs*3.6),R=8,T=10,B=Math.round(fs*2),pw=W-L-R,ph=H-T-B,n=D.length,sl=pw/n,bw=Math.min(sl*.36,30);
+  var mx=Math.max(100000,Math.ceil(Math.max.apply(null,D.reduce(function(a,d){return a.concat(d)},[]))/20000)*20000),Y=function(v){return T+ph*(1-v/mx)};
+  var s='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img">';
+  for(var t=0;t<=5;t++){var v=mx/5*t;s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="'+(t?'#e3e9e3':'#b9c4bc')+'"/><text x="'+(L-6)+'" y="'+(Y(v)+fs*.35)+'" font-size="'+fs+'" text-anchor="end" fill="#55625b">'+(v?v/1000+"K":0)+'</text>'}
+  D.forEach(function(d,k){var gx=L+k*sl+sl/2;
+   s+='<rect class="mhl" data-k="'+k+'" x="'+(L+k*sl)+'" y="'+T+'" width="'+sl+'" height="'+ph+'" fill="#1f5c50" opacity="0" rx="6"/>'
+    +'<rect x="'+(gx-bw-1)+'" y="'+Y(d[0])+'" width="'+bw+'" height="'+Math.max(0,T+ph-Y(d[0]))+'" fill="#2e9e5b" rx="3"/>'
+    +'<rect x="'+(gx+1)+'" y="'+Y(d[1])+'" width="'+bw+'" height="'+Math.max(0,T+ph-Y(d[1]))+'" fill="#527994" rx="3"/>'
+    +'<text x="'+gx+'" y="'+(H-B*.28)+'" font-size="'+fs+'" text-anchor="middle" fill="#3f4b45">'+MS[k]+'</text>'});
+  var pts=D.map(function(d,k){return[L+k*sl+sl/2,Y(Math.max(0,d[2]))]});
+  s+='<polyline fill="none" stroke="#1f5c50" stroke-width="2.6" stroke-linejoin="round" points="'+pts.map(function(p){return p.join(",")}).join(" ")+'"/>'+pts.map(function(p){return'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4.5" fill="#1f5c50" stroke="#fff" stroke-width="1.8"/>'}).join("");
+  D.forEach(function(d,k){s+='<rect class="mh" data-k="'+k+'" x="'+(L+k*sl)+'" y="'+T+'" width="'+sl+'" height="'+ph+'" fill="transparent"/>'});
+  s+='</svg><div class="motip" hidden></div>';host.innerHTML=s})}catch(e){console.error(e)}}
+(function(){var show=function(e){var h=e.target&&e.target.closest&&e.target.closest(".mh"),all=document.querySelectorAll(".motip");
+ if(!h){all.forEach(function(t){t.hidden=true});document.querySelectorAll(".mhl").forEach(function(r){r.setAttribute("opacity","0")});return}
+ var host=h.closest("#mo,#mo2"),tip=host.querySelector(".motip"),k=+h.dataset.k,d=window._moD[k];if(!d||!tip)return;
+ host.querySelectorAll(".mhl").forEach(function(r){r.setAttribute("opacity",r.dataset.k==k?".09":"0")});
+ var net=d[2],row=function(c,l,v,cl){return'<div><span><i style="background:'+c+'"></i><span>'+l+'</span></span><b'+(cl?' style="color:'+cl+'"':'')+'>'+fmt(v)+'</b></div>'};
+ tip.innerHTML='<b>'+MS[k]+' '+String(window._moY).slice(0,4)+'</b>'+row("#2e9e5b","Income",d[0])+row("#527994","Expenses",d[1])+row("#1f5c50","Savings",net,net<0?"#ffb4a8":"#8be3b0");
+ tip.hidden=false;var hr=h.getBoundingClientRect(),br=host.getBoundingClientRect(),w=tip.offsetWidth,x=hr.left-br.left+hr.width/2;
+ var cx=hr.left-br.left+hr.width/2;x=cx>br.width/2?hr.left-br.left-w/2-6:hr.right-br.left+w/2+6;x=Math.max(w/2+2,Math.min(br.width-w/2-2,x));tip.style.left=x+"px"};
+ document.addEventListener("pointermove",show);document.addEventListener("pointerdown",show)})();
+
 function nwChart(at,t,has){
  if(!has)return'<div class="card"><h3><span>Net worth, last 6 months</span></h3><p class="m">Add accounts to see net worth. Nothing is estimated.</p></div>';
  const en=getLang()==="en",P=[];
