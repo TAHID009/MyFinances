@@ -1007,6 +1007,49 @@ html body #p-accounts .mc-fig b{font-size:17px;color:#14231e;white-space:nowrap}
 html body #p-accounts .mc .macts{justify-content:flex-start;max-width:none;min-width:0;margin:0}
 html body #p-accounts .mc-empty{grid-column:1/-1;padding:14px;border:1px dashed #c9d3c9;border-radius:12px;text-align:center}
 html body #p-accounts #nTrf{flex:none!important}html body #p-accounts #nTrf .card{height:auto!important}
+
+/* ux7: no page header on Accounts, bigger type */
+html body main:has(#p-accounts:not([hidden]))>.top{display:none!important}
+html body #p-accounts .gd{padding:5px 12px!important;margin:0 0 8px!important;border-radius:10px}
+html body #p-accounts .gd summary{font-size:13.5px}
+/* KPI band */
+html body #p-accounts #aSum .bkc .m{font-size:13.5px}
+html body #p-accounts #aSum .bkc>.m:last-child{font-size:12.5px}
+html body #p-accounts #aSum .bkc>b{font-size:23px}
+html body #p-accounts #aSum>.bkc:nth-child(7){padding:16px 22px!important}
+html body #p-accounts #aSum>.bkc:nth-child(7) .m{font-size:15.5px}
+html body #p-accounts #aSum>.bkc:nth-child(7)>b{font-size:40px}
+html body #p-accounts #aSum>.bkc:nth-child(7)>.m:last-child{font-size:13.5px}
+html body #p-accounts #aSum>.bkc:nth-child(4) .btn{font-size:15px;padding:10px 10px}
+/* account cards */
+html body #p-accounts #nAcc .acc-grid>.bkc>.m{font-size:13.5px}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(1){font-size:20px}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(2){font-size:29px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.m[style*="d97706"]{font-size:12.5px}
+html body #p-accounts #nAcc .acc-grid .btn{font-size:14px;padding:6px 12px}
+/* transfers */
+html body #p-accounts #nTrf h3,html body #p-accounts .nwh h3,html body #p-accounts #nMan h3{font-size:18px}
+html body #p-accounts #nTrf p.m{font-size:13.5px}
+html body #p-accounts #nTrf th{font-size:13px}
+html body #p-accounts #nTrf td{font-size:15.5px;padding:9px 10px}
+html body #p-accounts #nTrf .btn{font-size:14px}
+html body #p-accounts .trvt{font-size:14px}
+/* chart header */
+html body #p-accounts .nwl{font-size:14px}
+html body #p-accounts .nwh .btn,html body #p-accounts #nMan h3 .btn{font-size:14px}
+/* manual assets */
+html body #p-accounts #nMan .bkc .m{font-size:13px}
+html body #p-accounts #nMan .bkc>b{font-size:21px}
+html body #p-accounts #nMan select,html body #p-accounts #nMan input[type=date],html body #p-accounts #nMan #mfQ{font-size:14.5px}
+html body #p-accounts #nMan .row .m{font-size:14px}
+html body #p-accounts .mc-name{font-size:21px}
+html body #p-accounts .mc-date{font-size:13.5px}
+html body #p-accounts .mc-fig span{font-size:13px}
+html body #p-accounts .mc-fig b{font-size:19px}
+html body #p-accounts .mc .mcat{font-size:13px}
+html body #p-accounts .macts .btn{font-size:13.5px!important;padding:5px 11px!important}
+html body #p-accounts #nMan>.card>p.m{font-size:12.5px}
+html body #p-accounts .mcards{max-height:none;overflow:visible}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -1389,7 +1432,7 @@ function nwChart(at,t,has){
   else{const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));d=e.toISOString().slice(0,10);lb=en?MS[e.getUTCMonth()]:BM[e.getUTCMonth()];tt=lb+" "+e.getUTCFullYear()}
   const r=at(d);P.push({lb,tt,d,A:r.A,L:r.L,N:r.N})}
  NWP=P;
- const W=1000,H=185,pl=56,pr=18,pt=10,pb=26,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
+ const W=1000,H=190,pl=62,pr=18,pt=12,pb=30,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
  let mn=Math.min(0,...all),mx=Math.max(0,...all);if(mx===mn)mx=1;
  const raw=(mx-mn)/3,mag=Math.pow(10,Math.floor(Math.log10(raw))),nr=raw/mag,step=(nr<=1?1:nr<=2?2:nr<=5?5:10)*mag,lo=Math.floor(mn/step)*step,hi=Math.ceil(mx/step)*step;
  const X=i=>pl+pw*(i+.5)/6,Y=v=>pt+ph*(1-(v-lo)/(hi-lo)),f=n=>n.toFixed(1);
@@ -1400,12 +1443,12 @@ function nwChart(at,t,has){
  const S=(key,col)=>({pts:P.map((p,i)=>[X(i),Y(p[key])]),col});
  const sN=S("N","#1f9d6b"),sA=S("A","#2f7fd6"),sL=S("L","#d9534f");
  let g="";for(let v=lo,c=0;v<=hi+step/1e6&&c<8;v+=step,c++){const y=Y(v),z=Math.abs(v)<step/1e6;
-  g+=`<line x1="${pl}" x2="${W-pr}" y1="${f(y)}" y2="${f(y)}" stroke="${z?"#8a968f":"#e7ebe4"}" stroke-width="${z?1.1:.8}"${z?' stroke-dasharray="4 3"':""}/><text x="${pl-6}" y="${f(y+3)}" text-anchor="end" font-size="11.5" fill="#6b7770">${sh(v)}</text>`}
+  g+=`<line x1="${pl}" x2="${W-pr}" y1="${f(y)}" y2="${f(y)}" stroke="${z?"#8a968f":"#e7ebe4"}" stroke-width="${z?1.1:.8}"${z?' stroke-dasharray="4 3"':""}/><text x="${pl-6}" y="${f(y+3)}" text-anchor="end" font-size="14.5" fill="#55625b">${sh(v)}</text>`}
  const y0=Y(0),area=sp(sN.pts)+`L${f(X(5))} ${f(y0)}L${f(X(0))} ${f(y0)}Z`;
  const dots=s=>s.pts.map(q=>`<circle cx="${f(q[0])}" cy="${f(q[1])}" r="4" fill="${s.col}" stroke="#fff" stroke-width="1.8"/>`).join("");
  const lines=s=>`<path d="${sp(s.pts)}" fill="none" stroke="${s.col}" stroke-width="2.6" stroke-linecap="round"/>`;
  const hits=P.map((p,i)=>`<rect class="hit" data-i="${i}" data-x="${f(X(i))}" x="${f(pl+pw*i/6)}" y="${pt}" width="${f(pw/6)}" height="${ph}" fill="transparent"/>`).join("");
- const labs=P.map((p,i)=>`<text x="${f(X(i))}" y="${H-6}" text-anchor="middle" font-size="12.5" fill="#55625b">${p.lb}</text>`).join("");
+ const labs=P.map((p,i)=>`<text x="${f(X(i))}" y="${H-6}" text-anchor="middle" font-size="15.5" fill="#3f4b45">${p.lb}</text>`).join("");
  const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net worth, last 6 months"><defs><linearGradient id="nwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".30"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".03"/></linearGradient></defs>${g}<path d="${area}" fill="url(#nwg)"/>${lines(sL)}${lines(sA)}${lines(sN)}${dots(sL)}${dots(sA)}${dots(sN)}<line id="nwGl" y1="${pt}" y2="${pt+ph}" stroke="#1f5c50" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>${labs}${hits}</svg>`;
  return`<div class="card nwc"><div class="nwh"><h3><span>Net worth, last 6 months</span></h3>${inf("History uses account balances; manual items are shown at today’s value. Savings goals are not added again: money in a savings account is already in its balance.")}<div class="nwl"><span><i style="background:#1f9d6b"></i>Net worth</span><span><i style="background:#2f7fd6"></i>Total Assets</span><span><i style="background:#d9534f"></i>Total Liabilities</span></div><button class="btn w" data-a="addL">+ Add manual asset / liability</button></div><div class="nwb">${svg}<div class="nwt" hidden></div></div></div>`}
 {const nwTip=e=>{const h=e.target.closest&&e.target.closest(".nwc .hit"),c=document.querySelector(".nwc .nwb");if(!c)return;const tip=c.querySelector(".nwt"),gl=c.querySelector("#nwGl");
@@ -2102,7 +2145,7 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
 })();
 </script><script id="fit5">
 (function(){
- var busy=0,t,DW=2500,MINZ=.6;
+ var busy=0,t,DW=2500,MINZ=.7;
  function fit(){
   var s=document.getElementById("p-accounts"),m=document.getElementById("top");
   if(!s||!m||s.hidden||busy)return;busy=1;
