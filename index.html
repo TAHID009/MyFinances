@@ -652,6 +652,36 @@ html body main>section#p-accounts.pg:not([hidden]){flex:0 0 auto!important;heigh
 #nNW .bkk>.bkc:nth-child(-n+3)>b{font-size:25px}
 #nNW .bkc:has(b.t-ov) .bki{--tc:#b4443a}#nNW .bkc:has(b.t-ok) .bki{--tc:#1f7a4a}
 @media(max-width:1000px){#p-accounts .acg{grid-template-columns:1fr}#nNW .bkk{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ux2b: fix overlap in right column */
+#cyc .cyadd{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:10px;font-weight:600;font-size:12px;cursor:pointer;white-space:nowrap;border:1px solid transparent}
+#cyc .cyadd.inc{background:var(--pri,#1f5c50);color:#fff}
+#cyc .cyadd.exp{background:#fff;color:#a95043;border-color:#e3b8b0}
+#p-dash:has(#cyc .cyadd) .r2b{display:none!important}
+@media(min-width:1201px){
+ #p-dash .col:last-child{grid-template-rows:auto auto minmax(0,1fr) auto!important}
+ #p-dash .col:last-child>#fo,#p-dash .col:last-child>#ub,#p-dash .col:last-child>.card:nth-child(3){min-height:min-content}
+ #p-dash .col:last-child>.card:nth-child(3)>h3{display:none}
+ #p-dash #fo{padding:8px 10px}
+ #fo .fsh{margin-bottom:6px}
+ #fo .fsf{margin-bottom:6px;gap:5px}
+ #fo .fdates input{padding:2px 6px;font-size:11.5px}
+ #fo .fpills .bset{white-space:nowrap;padding:2px 4px;font-size:11px;line-height:1.5}
+ #p-dash #fo .fsc{padding:4px 8px;gap:7px;border-radius:10px}
+ #fo .fsc .fi{width:24px;height:24px;border-radius:8px}
+ #fo .fsc .fi .px{width:15px;height:15px}
+ #fo .fsc .l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10.5px}
+ #fo .fsc b{font-size:13px}
+ #p-dash #fo .fsc.hero{padding:5px 8px;gap:3px}
+ #fo .fsc.hero .fi{width:20px;height:20px;border-radius:7px}
+ #fo .fsc.hero .fi .px{width:13px;height:13px}
+ #fo .fhero{margin-bottom:5px;gap:5px}#fo .fsg{gap:5px}
+ #fo .fsan{margin-top:6px;padding:4px}
+ #p-dash .cal span{padding:1px 0!important}
+ #p-dash .col:last-child>.card:nth-child(3){padding:6px 10px}
+}
+@media(min-width:1201px) and (max-height:960px){#p-dash .card:has(>#rt){display:none}}
+@media(min-width:1201px) and (max-height:800px){#p-dash #ub{display:none}}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -805,6 +835,7 @@ coins:'<ellipse class="pd" cx="12" cy="7" rx="7" ry="3"/><path class="ps" d="M5 
 check:'<circle class="pd" cx="12" cy="12" r="9"/><circle class="ps" cx="12" cy="12" r="9"/><path class="ps" d="M8 12.4l2.8 2.8 5.4-5.6"/>',
 out:'<circle class="pd" cx="12" cy="12" r="9"/><circle class="ps" cx="12" cy="12" r="9"/><path class="ps" d="M9 9l6 6M15 9.5V15H9.5"/>',
 list:'<path class="ps" d="M4 6.5h16M4 12h16M4 17.5h10"/>',
+plus:'<path class="ps" d="M12 5v14M5 12h14" style="stroke-width:2"/>',
 chart:'<path class="pd" d="M5 20v-8h3.5v8zM10.3 20V5h3.5v15zM15.5 20v-9H19v9z"/><path class="ps" d="M5 20v-8h3.5v8zM10.3 20V5h3.5v15zM15.5 20v-9H19v9zM3.5 20.5h17"/>',
 cal:'<rect class="pd" x="3.5" y="5" width="17" height="15" rx="2.5"/><rect class="ps" x="3.5" y="5" width="17" height="15" rx="2.5"/><path class="ps" d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/>'};
 const pxi=(n,z=18)=>`<svg class="px" viewBox="0 0 24 24" width="${z}" height="${z}" aria-hidden="true">${PXD[n]||""}</svg>`;
@@ -1586,9 +1617,9 @@ function cyCompute(I,E,today){
   inc=sm(I.filter(x=>inR(x)&&!x.bor)),exp=sm(E.filter(x=>inR(x)&&!x.liab&&!x.prin)),bor=sm(I.filter(x=>inR(x)&&x.bor)),
   res=inc-exp,extra=Math.max(0,-res),fromSave=Math.min(extra,Math.max(0,carry)),fromBor=Math.min(extra-fromSave,bor),
   o={...b,n:b.pre?0:++n,inc,exp,res,carry,bor,extra,fromSave,fromBor,unk:extra-fromSave-fromBor};carry+=res;return o})}
-const CYT={bn:{t:"বেতনের অধ্যায়",none:"এখনো কোনো আয়-খরচের রেকর্ড নেই। বেতন যোগ করলেই প্রথম অধ্যায় শুরু হবে।",pre:"বেতনের আগের হিসাব",per:"অধ্যায় ",before:"প্রথম বেতনের আগে",from:" থেকে",fromFirst:false,hint:"· বেতন যোগ হলে নতুন অধ্যায় শুরু",cur:" (চলমান)",inc:"আয়",exp:"খরচ",short:"ঘাটতি",sav:"সঞ্চয়",all:"সব অধ্যায় দেখুন",res:"ফল",okS:"আয় খরচের চেয়ে বেশি",badS:"খরচ আয়ের চেয়ে বেশি",eqS:"আয়-খরচ সমান",
+const CYT={bn:{t:"বেতনের অধ্যায়",none:"এখনো কোনো আয়-খরচের রেকর্ড নেই। বেতন যোগ করলেই প্রথম অধ্যায় শুরু হবে।",pre:"বেতনের আগের হিসাব",per:"অধ্যায় ",before:"প্রথম বেতনের আগে",from:" থেকে",fromFirst:false,hint:"· বেতন যোগ হলে নতুন অধ্যায় শুরু",cur:" (চলমান)",inc:"আয়",exp:"খরচ",short:"ঘাটতি",sav:"সঞ্চয়",all:"সব অধ্যায় দেখুন",res:"ফল",okS:"আয় খরচের চেয়ে বেশি",addI:"আয় যোগ করুন",addE:"খরচ যোগ করুন",badS:"খরচ আয়ের চেয়ে বেশি",eqS:"আয়-খরচ সমান",
  ok:(v)=>`✅ এই অধ্যায়ে <b>সঞ্চয় ${v}</b> (আয় খরচের চেয়ে বেশি)।`,bad:(a,b,c,d)=>`⚠️ <b>অতিরিক্ত খরচ ${a}</b> — আয়ের চেয়ে খরচ বেশি। টাকার উৎস: আগের জমা ${b} · ধার/ঋণ ${c} · উৎস পাওয়া যায়নি ${d}`,badn:"উৎস পাওয়া যায়নি অংশটি ঋণ ধরা হয়নি; রেকর্ড মিলিয়ে দেখুন।",eq:"আয় ও খরচ সমান — সঞ্চয়ও নেই, অতিরিক্ত খরচও নেই।"},
- en:{t:"Salary period",none:"No income or expense records yet. The first period starts when you add a salary.",pre:"Before first salary",per:"Period ",before:"Before the first salary",from:"From ",fromFirst:true,hint:"· a new period starts when a salary is added",cur:" (current)",inc:"Income",exp:"Expenses",short:"Shortfall",sav:"Savings",all:"View all periods",res:"Result",okS:"Income above expenses",badS:"Expenses above income",eqS:"Income equals expenses",
+ en:{t:"Salary period",none:"No income or expense records yet. The first period starts when you add a salary.",pre:"Before first salary",per:"Period ",before:"Before the first salary",from:"From ",fromFirst:true,hint:"· a new period starts when a salary is added",cur:" (current)",inc:"Income",exp:"Expenses",short:"Shortfall",sav:"Savings",all:"View all periods",res:"Result",okS:"Income above expenses",addI:"Add Income",addE:"Add Expense",badS:"Expenses above income",eqS:"Income equals expenses",
  ok:(v)=>`✅ This period you <b>saved ${v}</b> (income was higher than expenses).`,bad:(a,b,c,d)=>`⚠️ <b>Overspent ${a}</b> — expenses were higher than income. Where the money came from: earlier savings ${b} · borrowed ${c} · unaccounted ${d}`,badn:"The unaccounted part is not treated as borrowing; please check your records.",eq:"Income equals expenses — no savings and no overspending."}};
 const cyT=k=>{const L=getLang(),v=(CYT[L==="en"?"en":"bn"])[k];return(L==="bl"&&typeof v==="string"&&typeof bl==="function")?bl(v):v},cyF=(k,...a)=>{const L=getLang(),v=(CYT[L==="en"?"en":"bn"])[k](...a);return v};
 function cyParts(){
@@ -1610,12 +1641,12 @@ function cyRender(){
  h.innerHTML=`<div class="cyt" title="${cyT("hint").replace(/^·\s*/,"")}"><span class="cyi" style="--tc:#1f5c50">${pxi("cal",18)}</span><span class="cytt"><b>${cyT("t")}</b><small>${nm(c)} · ${rg(c)}${cur}</small></span></div>
  <select id="cySel">${L.map((x,i)=>`<option value="${i}"${i===CY.sel?" selected":""}>${nm(x)} · ${rg(x)}${i===L.length-1?cyT("cur"):""}</option>`).join("")}</select>
  <div class="cym">${chip("trend","#1f7a4a",cyT("inc"),c.inc)}${chip("out","#b7791f",cyT("exp"),c.exp)}${chip(c.res<0?"debt":"coins",c.res<0?"#b4443a":"#1f5c50",c.res<0?cyT("short"):cyT("sav"),Math.abs(c.res))}</div>
- ${st}<button type="button" class="cyall" data-cyall="1">${pxi("list",15)}${cyT("all")}</button>`}
+ ${st}<button type="button" class="cyadd inc" data-cyadd="i">${pxi("plus",14)}${cyT("addI")}</button><button type="button" class="cyadd exp" data-cyadd="e">${pxi("plus",14)}${cyT("addE")}</button><button type="button" class="cyall" data-cyall="1">${pxi("list",15)}${cyT("all")}</button>`}
 function cyOpen(){
  const P=cyParts();if(!P)return;const{L,c,nm,ban}=P;
  mdlg("dCy",`<h3 style="margin:0 0 8px">${cyT("t")}</h3>${ban}<div class="cyh" style="font-weight:700;color:#68736e"><span>${cyT("per").trim()}</span><span>${cyT("inc")}</span><span>${cyT("exp")}</span><span>${cyT("res")}</span></div>
  ${L.slice().reverse().map(x=>`<div class="cyh${x===c?" on":""}"><span>${nm(x)}</span><span>${fmt(x.inc)}</span><span>${fmt(x.exp)}</span><span style="color:${x.res<0?"#a95043":"#1f5c50"}">${x.res<0?"−":"+"}${fmt(Math.abs(x.res))}</span></div>`).join("")}`)}
-document.addEventListener("click",e=>{if(e.target.closest("[data-cyall]"))cyOpen()});
+document.addEventListener("click",e=>{if(e.target.closest("[data-cyall]"))cyOpen();const b=e.target.closest("[data-cyadd]");if(b){const x=document.getElementById(b.dataset.cyadd==="i"?"addinc2":"add3");x&&x.click()}});
 document.addEventListener("toggle",e=>{if(e.target.classList&&e.target.classList.contains("cyd"))CY.open=e.target.open},true);
 document.addEventListener("change",e=>{if(e.target.id==="cySel"){CY.sel=+e.target.value;cyRender()}});
 {const _rc=render;render=function(){_rc.apply(this,arguments);try{cyRender()}catch(x){console.error(x)}}}
