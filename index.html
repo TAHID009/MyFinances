@@ -905,6 +905,89 @@ html body #p-accounts #nAcc .acc-grid>.bkc>.row{flex-wrap:wrap;gap:6px!important
 html body #p-accounts #nAcc .acc-grid .btn{padding:6px 11px;font-size:12.5px}
 html body #p-accounts #nAcc .acc-grid>.bkc>.bki{width:46px;height:46px}
 html body #p-accounts #nMan .bkc>.m,html body #p-accounts #nMan .bkc>b{grid-column:2}
+
+/* ===== ux5: manual table polish, dashboard category card fix, fit-to-screen ===== */
+html body #p-accounts .mcat{display:inline-block;padding:4px 12px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap;background:#eef2ef;color:#3b4943}
+html body #p-accounts .mcat-lg{background:#e3f1fb;color:#18598f}
+html body #p-accounts .mcat-inv{background:#ece8fb;color:#4b3bb0}
+html body #p-accounts .mcat-pg{background:#fdeedd;color:#a1560b}
+html body #p-accounts .mcat-oth{background:#e8efe9;color:#3b5a49}
+html body #p-accounts #nMan table{border-collapse:separate;border-spacing:0;width:100%}
+html body #p-accounts #nMan tbody tr:hover td{background:#f6faf7}
+html body #p-accounts #nMan td{vertical-align:middle}
+html body #p-accounts #nMan td:nth-child(2) b{font-size:15.5px}
+html body #p-accounts #nMan td:nth-child(5){font-weight:700}
+html body #p-accounts #nMan td span[style*="border-radius:10px"]{font-size:12.5px!important;padding:4px 12px!important;border-radius:999px!important;white-space:nowrap}
+html body #p-accounts #nMan td:last-child{min-width:0;width:1%}
+html body #p-accounts .macts{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;max-width:330px;margin-left:auto}
+html body #p-accounts .macts .btn{margin:0!important;padding:5px 11px!important;font-size:12.5px!important;font-weight:600;border-radius:8px;background:#fff!important;color:#1f5c50!important;border:1px solid #c5d3c9!important;box-shadow:none!important}
+html body #p-accounts .macts .btn:hover{background:#eef5f0!important;border-color:#1f5c50!important}
+html body #p-accounts .macts .btn[data-mv="view"]{background:#eef5f0!important}
+html body #p-accounts .macts .btn[data-mv="del"]{color:#b3392e!important;border-color:#efc9c4!important}
+html body #p-accounts .macts .btn[data-mv="del"]:hover{background:#fdeeec!important;border-color:#b3392e!important}
+html body #p-accounts .macts .btn[data-mv="repay"],html body #p-accounts .macts .btn[data-mv="fund"],html body #p-accounts .macts .btn[data-mv="val"],html body #p-accounts .macts .btn[data-mv="liabrepay"]{background:#1f5c50!important;color:#fff!important;border-color:#1f5c50!important}
+/* tighter so the page fits the screen */
+html body #p-accounts .acp{gap:14px 16px}
+html body #p-accounts #aSum>.bkc{min-height:80px;padding:11px 14px!important}
+html body #p-accounts .nwb svg{min-height:190px}
+html body #p-accounts{padding-bottom:8px!important}
+/* dashboard: category donut never clipped, legend scrolls beside it */
+html body #p-dash #cd{flex-direction:row!important;align-items:stretch!important;gap:14px;overflow:hidden}
+html body #p-dash #cd>.dn{align-self:center;flex:none}
+html body #p-dash #cd>.leg{align-self:stretch;overflow-y:auto;min-height:0;max-height:100%;font-size:12.5px}
+html body #p-dash #cd>.leg div{padding:3px 0;border-bottom:1px solid #eef1ee}
+html body #p-dash #cd>.dn b{font-size:13px}
+html body #p-dash #cd>.dn small{font-size:10px}
+
+/* ux5b: compact density */
+html body #p-accounts #nMan .bkk{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;margin-bottom:10px!important}
+html body #p-accounts #nMan .bkc{display:flex!important;flex-direction:column;align-items:flex-start;gap:1px;min-height:0;padding:9px 12px!important}
+html body #p-accounts #nMan .bki{display:none!important}
+html body #p-accounts #nMan .bkc>.m,html body #p-accounts #nMan .bkc>b{grid-column:auto}
+html body #p-accounts #nMan .bkc>b{font-size:20px}
+html body #p-accounts #nMan td{padding:8px 10px}
+html body #p-accounts #nMan .row{margin-bottom:8px!important}
+html body #p-accounts #nTrf td{padding:8px 10px}
+html body #p-accounts #nTrf .card,html body #p-accounts #nMan>.card,html body #p-accounts .nwc{padding:14px 18px!important}
+html body #p-accounts .nwb svg{min-height:0;max-height:none}
+html body #p-accounts .macts{max-width:300px}
+
+/* ux5c: stop action buttons stacking, 3 account cards per row */
+html body #p-accounts #nMan td:last-child{width:auto!important}
+html body #p-accounts .macts{min-width:200px;max-width:290px}
+html body #p-accounts #nAcc .acc-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+html body #p-accounts #nMan .row #mfQ{min-width:120px;flex:1}
+
+/* ux5d: density pass so the whole page fits one screen at a readable size */
+html body #p-accounts #nAcc .acc-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))!important;gap:10px}
+html body #p-accounts #aSum{gap:9px}
+html body #p-accounts #aSum>.bkc{min-height:66px;padding:8px 12px!important;border-radius:14px}
+html body #p-accounts #aSum .bki{width:38px;height:38px}
+html body #p-accounts #aSum .bkc>b{font-size:20px}
+html body #p-accounts #aSum .bkc .m{font-size:12px}
+html body #p-accounts #aSum>.bkc:nth-child(7){padding:14px 20px!important}
+html body #p-accounts #aSum>.bkc:nth-child(7)>b{font-size:34px}
+html body #p-accounts #aSum>.bkc:nth-child(7) .bki{width:40px;height:40px;margin-bottom:2px}
+html body #p-accounts #aSum>.bkc:nth-child(4) .btn{padding:8px 10px;font-size:13.5px}
+html body #p-accounts #nAcc .acc-grid>.bkc{padding:12px 14px 12px!important;border-radius:14px}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(2){font-size:25px}
+html body #p-accounts #nAcc .acc-grid>.bkc>b:nth-of-type(1){font-size:17px}
+html body #p-accounts #nAcc .acc-grid>.bkc>.row{margin-top:8px!important}
+html body #p-accounts #nAcc .acc-grid>.bkc>.m[style*="d97706"]{margin-top:6px;padding:5px 8px;font-size:11.5px}
+html body #p-accounts #nAcc{gap:12px}
+html body #p-accounts #nTrf td{font-size:13.5px;padding:7px 10px}
+html body #p-accounts #nTrf th{padding:7px 10px}
+html body #p-accounts #nTrf p.m{margin:0 0 8px!important}
+html body #p-accounts .nwc{padding:12px 16px 8px!important}
+html body #p-accounts .nwh h3,html body #p-accounts #nMan h3,html body #p-accounts #nTrf h3{font-size:16px}
+html body #p-accounts .nwh .btn,html body #p-accounts #nMan h3 .btn{padding:6px 12px}
+html body #p-accounts #nMan .bkc{padding:7px 12px!important}
+html body #p-accounts #nMan .bkc>b{font-size:18px}
+html body #p-accounts #nMan td{font-size:13.5px;padding:7px 10px}
+html body #p-accounts #nMan td:nth-child(2) b{font-size:14.5px}
+html body #p-accounts .macts{max-width:340px}
+html body #p-accounts .macts .btn{padding:4px 10px!important;font-size:12px!important}
+html body #p-accounts .acp{gap:12px 14px}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -1287,7 +1370,7 @@ function nwChart(at,t,has){
   else{const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));d=e.toISOString().slice(0,10);lb=en?MS[e.getUTCMonth()]:BM[e.getUTCMonth()];tt=lb+" "+e.getUTCFullYear()}
   const r=at(d);P.push({lb,tt,d,A:r.A,L:r.L,N:r.N})}
  NWP=P;
- const W=720,H=215,pl=52,pr=16,pt=12,pb=26,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
+ const W=1000,H=185,pl=56,pr=18,pt=10,pb=26,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
  let mn=Math.min(0,...all),mx=Math.max(0,...all);if(mx===mn)mx=1;
  const raw=(mx-mn)/3,mag=Math.pow(10,Math.floor(Math.log10(raw))),nr=raw/mag,step=(nr<=1?1:nr<=2?2:nr<=5?5:10)*mag,lo=Math.floor(mn/step)*step,hi=Math.ceil(mx/step)*step;
  const X=i=>pl+pw*(i+.5)/6,Y=v=>pt+ph*(1-(v-lo)/(hi-lo)),f=n=>n.toFixed(1);
@@ -1762,7 +1845,7 @@ function renderMan(){try{var el=document.getElementById("nMan");if(!el)return;va
   if(t==="lg"&&lgOut(r)>0.5)h+=" "+mBtn("repay","lg",id,"Repayment");if(t==="inv"&&r.status!=="Closed")h+=" "+mBtn("val","inv",id,"Update value")+" "+mBtn("fund","inv",id,"Add funds")+" "+mBtn("wd","inv",id,"Withdraw");
   if(t==="oth"&&r.kind==="Liability"&&(+r.amount||0)>0)h+=" "+mBtn("liabrepay","oth",id,"Repay");if(t==="leg")h+=" "+mBtn("review","leg",id,"Review & convert");
   h+=" "+mBtn("edit",t,id,"Edit");if(t==="inv")h+=" "+mBtn("close","inv",id,r.status==="Closed"?"Reopen":"Close");return h+" "+mBtn("del",t,id,"Delete")};
- var rows=R.map(function(x){return'<tr style="'+(x.del?"opacity:.55":"")+'"><td>'+CN[x.c]+'</td><td><b>'+esc(x.name||"")+"</b></td><td>"+(x.date||"—")+'</td><td class="ra">'+fmt(+x.amt||0)+'</td><td class="ra">'+(x.cur==null?"—":fmt(x.cur))+"</td><td>"+badge(x.st[0],x.st[1])+'</td><td class="ra" style="white-space:nowrap">'+acts(x)+"</td></tr>"}).join("");
+ var rows=R.map(function(x){return'<tr style="'+(x.del?"opacity:.55":"")+'"><td><span class="mcat mcat-'+x.c+'">'+CN[x.c]+'</span></td><td><b>'+esc(x.name||"")+"</b></td><td>"+(x.date||"—")+'</td><td class="ra">'+fmt(+x.amt||0)+'</td><td class="ra">'+(x.cur==null?"—":fmt(x.cur))+"</td><td>"+badge(x.st[0],x.st[1])+'</td><td class="ra"><div class="macts">'+acts(x)+"</div></td></tr>"}).join("");
  el.innerHTML='<div class="card"><h3><span>Manual assets &amp; liabilities</span><button class="btn" data-mv="add" type="button">+ Add record</button></h3>'+
  '<div class="bkk" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:10px">'+sumc("Loan Given outstanding",fmt(o.rec),"Receivable asset",pxi("give"))+sumc("Investments (current)",fmt(o.invV),"Latest recorded value",pxi("trend"))+sumc("Permanently Given",fmt(sumA(pgRows(),function(x){return x.amount})),"Lifetime, an expense",pxi("gift"))+sumc("Other assets counted",fmt(o.manAc),"Other liabilities "+fmt(o.manL),pxi("coins"))+"</div>"+
  '<div class="row" style="gap:8px;flex-wrap:wrap;margin-bottom:8px"><select id="mfC"><option value="all">All categories</option>'+MCATS.map(function(c){return'<option value="'+(c[0])+'"'+(MF.cat===c[0]?" selected":"")+">"+c[1]+"</option>"}).join("")+'</select><input type="date" id="mfF" value="'+MF.from+'" title="From"><input type="date" id="mfT" value="'+MF.to+'" title="To"><input type="search" id="mfQ" placeholder="Search" value="'+esc(MF.qr||"")+'"><label class="m" style="display:flex;gap:4px;align-items:center"><input type="checkbox" id="mfD"'+(MF.del?" checked":"")+'> Show deleted</label></div>'+
@@ -1996,5 +2079,36 @@ document.addEventListener("keydown",function(e){
 // keep the user tooltip in sync with the signed-in email
 var sn=document.getElementById("sbn");
 if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textContent)}).observe(sn,{childList:true,characterData:true,subtree:true})}
+})();
+</script><script id="fit5">
+(function(){
+ var busy=0,t,DW=2500,MINZ=.6;
+ function fit(){
+  var s=document.getElementById("p-accounts"),m=document.getElementById("top");
+  if(!s||!m||s.hidden||busy)return;busy=1;
+  try{
+   s.style.zoom="";s.style.width="";s.style.margin="";
+   if(window.innerWidth<1400){return}
+   var cs=getComputedStyle(m),avW=m.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+   var z=1,w=Math.min(DW,avW);
+   for(var i=0;i<4;i++){
+    s.style.zoom=z;s.style.width=w+"px";s.style.margin="0 auto";
+    var top=s.getBoundingClientRect().top-m.getBoundingClientRect().top+m.scrollTop;
+    var avail=m.clientHeight-top-14,h=s.getBoundingClientRect().height;
+    var nz=Math.max(MINZ,Math.min(1,z*avail/h));
+    var nw=Math.min(DW,avW/nz);
+    if(Math.abs(nz-z)<.004&&Math.abs(nw-w)<2)break;
+    z=nz;w=nw;
+   }
+   m.scrollTop=0;
+  }finally{busy=0}
+ }
+ function later(){clearTimeout(t);t=setTimeout(fit,60)}
+ function init(){
+  var s=document.getElementById("p-accounts");if(!s)return;
+  new MutationObserver(later).observe(s,{childList:true,subtree:true,attributes:true,attributeFilter:["hidden"]});
+  window.addEventListener("resize",later);window.addEventListener("hashchange",later);later();
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script></body></html>
