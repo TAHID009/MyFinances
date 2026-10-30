@@ -688,6 +688,44 @@ html body main>section#p-accounts.pg:not([hidden]){flex:0 0 auto!important;heigh
  html body main:has(>#p-accounts:not([hidden])){overflow-y:auto!important;overflow-x:hidden!important}
  main:has(>#p-accounts:not([hidden]))>.top{position:sticky;top:0;z-index:20;background:#f5f3ed;padding-bottom:6px}
 }
+
+/* ux2d: compact Accounts page so it fits one screen */
+@media(min-width:1251px){
+ #p-accounts .stb{margin-bottom:6px}
+ #p-accounts .stb button{padding:4px 12px;font-size:12px}
+ #p-accounts .gd{margin:0 0 8px;padding:0}#p-accounts .gd summary{padding:7px 14px;font-size:12.5px}
+ #p-accounts .acg{gap:10px}
+ #p-accounts .card{padding:8px 12px!important;border-radius:12px}
+ #p-accounts .card h3{margin:0 0 5px;font-size:13px}
+ #p-accounts .acl>h2{margin:0 0 6px!important;font-size:14px!important}
+ #p-accounts .acl>div,#nAcc{display:grid;gap:8px}
+ #p-accounts .bkk{gap:8px}
+ #p-accounts .bkc{gap:0;padding:7px 12px!important}
+ #p-accounts .bkc .m{font-size:11px;line-height:1.25}
+ #p-accounts .bkc>.m:last-child{font-size:10.5px}
+ #nAcc .bkc b{font-size:16px}
+ #nAcc .btn,#nAcc .btn.w{padding:4px 10px;font-size:12px}
+ #nAcc .row{gap:6px}
+ #nTrf p.m,#nBillsHint{display:none}
+ #nNW .row{margin-bottom:6px!important}#nNW .btn.w{padding:4px 12px;font-size:12px}
+ #nNW .bkk{gap:8px}
+ #nNW .bkc{padding:7px 50px 7px 12px!important}
+ #nNW .bkc>.m:last-child{display:none}
+ #nNW .bkk>.bkc:nth-child(-n+3)>b{font-size:20px}
+ #nNW .bkc>b{font-size:16px}
+ #nNW .bki{width:26px;height:26px;top:8px;right:10px;border-radius:9px}#nNW .bki .px{width:15px;height:15px}
+ #nNW .bt2{margin-top:8px}
+ #nNW .wr{padding:0;margin:0;min-height:0;gap:8px}#nNW .wr .pb{height:7px}#nNW .wr span,#nNW .wr b{font-size:11.5px;line-height:1.5}
+ #nNW .bt2 .card p.m{display:none}
+ #nMan .card{margin-top:0}
+ #nMan .bkk{margin-bottom:6px!important}
+ #nMan .bkc{padding:5px 10px!important}#nMan .bkc b{font-size:16px}#nMan .bkc>.m:last-child{display:none}
+ #nMan .row{margin-bottom:5px!important;gap:6px!important}
+ #nMan select,#nMan input[type=date]{padding:3px 6px;font-size:12px}
+ #nMan th,#nMan td{padding:3px 6px;font-size:12px}
+ #nMan .btn{padding:1px 7px;font-size:11px}
+ #nMan>.card>p.m{display:none}
+}
 </style></head><body>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
