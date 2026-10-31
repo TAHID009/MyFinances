@@ -2325,7 +2325,7 @@ document.querySelectorAll("#fe [name=amount],#fi [name=amount]").forEach(inp=>{i
 let FMS="cyc";
 const dtOf=x=>String(x.date).slice(0,10);
 function fmLayout(){const pd=$("#p-dash"),cy=$("#cyc");if(!pd)return;
- if(window.matchMedia("(min-width:1201px)").matches&&cy&&!pd.hidden){pd.classList.remove("fmx");pd.style.removeProperty("--lm");
+ if(false&&cy&&!pd.hidden){pd.classList.remove("fmx");pd.style.removeProperty("--lm");
   const lm=Math.max(pd.clientHeight-cy.offsetHeight-10,window.innerHeight<=760?760:0);pd.style.setProperty("--lm",lm+"px");pd.classList.add("fmx")}
  else{pd.classList.remove("fmx");pd.style.removeProperty("--lm")}}
 function fmRender(){
@@ -2594,4 +2594,219 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  }
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
-</script></body></html>
+</script><style id="dashfit">
+/* ===== dashfit: bigger text, cards fill their space, whole dashboard fits the screen (no scrollbar) ===== */
+@media(min-width:1201px){
+ html body #p-dash:not([hidden]){--u:clamp(11px,min(.8vw,1.6vh),20px);--gp:calc(var(--u)*.65);display:flex!important;flex-direction:column!important;overflow:hidden!important;height:auto!important;font-size:var(--u)!important}
+ html body #p-dash.fmx:not([hidden]){overflow:hidden!important}
+ html body #p-dash .card{padding:calc(var(--u)*.7) calc(var(--u)*.95)!important;border-radius:calc(var(--u)*1)!important;min-height:0!important;font-size:var(--u)}
+ html body #p-dash .card h3{font-size:calc(var(--u)*1.12)!important;margin:0 0 calc(var(--u)*.45)!important}
+ html body #p-dash .m{font-size:.88em!important}
+ html body #p-dash svg.px{width:1.15em;height:1.15em}
+ html body #p-dash .inf summary{width:1.5em;height:1.5em}
+
+ /* top strips */
+ html body #p-dash #cyc,html body #p-dash #fmc{margin:0 0 var(--gp)!important;gap:calc(var(--u)*.5) calc(var(--u)*.9)!important;flex:none!important}
+ html body #p-dash #cyc .cytt b,html body #p-dash #fmc .fmtt b{font-size:1.12em!important}
+ html body #p-dash #cyc .cytt small,html body #p-dash #fmc .fmtt small{font-size:.86em!important}
+ html body #p-dash #cyc .cyi{width:2.5em;height:2.5em}
+ html body #p-dash #cyc select{font-size:1em!important;max-width:none;flex:0 1 16em;min-width:0;padding:.35em .5em}
+ html body #p-dash #cyc .cym{flex:1 1 26em;gap:.6em}
+ html body #p-dash #cyc .cyc3{padding:.35em .7em;gap:.6em}
+ html body #p-dash #cyc .cyc3 .fi{width:2.1em;height:2.1em}
+ html body #p-dash #cyc .cyc3 .cl{font-size:.86em!important}
+ html body #p-dash #cyc .cyc3 b{font-size:1.3em!important}
+ html body #p-dash #cyc .cys,html body #p-dash #cyc .cyadd,html body #p-dash #cyc .cyall{font-size:.95em!important;padding:.45em .85em}
+ html body #p-dash #fmc .fmi{width:2.3em;height:2.3em;font-size:1.15em}
+ html body #p-dash #fmc .fmg button{font-size:.95em!important;padding:.3em .85em}
+ html body #p-dash #fmc .fmtile{padding:.3em .8em}
+ html body #p-dash #fmc .fmtile .fe{font-size:1.15em!important}
+ html body #p-dash #fmc .fmtile .fl{font-size:.95em!important}
+ html body #p-dash #fmc .fmtile b{font-size:1.2em!important}
+ html body #p-dash #fmc .fmtile small{font-size:.92em!important}
+ html body #p-dash #fmc .fmbar{height:calc(var(--u)*.4)}
+
+ /* main grid */
+ html body #p-dash .layout{flex:1 1 0!important;min-height:0!important;height:auto!important;gap:var(--gp)!important;grid-template-columns:minmax(0,1fr) clamp(300px,calc(var(--u)*27),560px)!important}
+ html body #p-dash .col{gap:var(--gp)!important;min-height:0}
+ html body #p-dash .col:first-child{grid-template-rows:auto auto minmax(0,1fr)!important}
+ html body #p-dash .r3,html body #p-dash .r2{gap:var(--gp)!important;min-height:0}
+ html body #p-dash .r3{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.1fr)!important}
+
+ /* KPI cards: icon beside text, sparkline fills the leftover room */
+ html body #p-dash #kp{gap:var(--gp)!important}
+ html body #p-dash #kp .card{position:relative;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;justify-content:space-between;gap:calc(var(--u)*.45)!important;align-content:stretch}
+ html body #p-dash #kp .card>.ic{position:absolute;left:calc(var(--u)*.95);top:calc(var(--u)*.8);width:calc(var(--u)*3);height:calc(var(--u)*3);border-radius:calc(var(--u)*.9)}
+ html body #p-dash #kp .card>.ic svg{width:calc(var(--u)*1.6);height:calc(var(--u)*1.6)}
+ html body #p-dash #kp .card>div:nth-child(2){padding-left:0;min-height:calc(var(--u)*3.2)}
+ html body #p-dash #kp .card>div:nth-child(2)>.kt,html body #p-dash #kp .card>div:nth-child(2)>div.m{padding-left:calc(var(--u)*3.9)}
+ html body #p-dash #kp .card>div:nth-child(2)>.kt{margin-top:.1em}
+ html body #p-dash #kp .kt{font-size:1.1em;line-height:1.3}
+ html body #p-dash #kp .kv{font-size:calc(var(--u)*1.95)!important;line-height:1.15;margin:.05em 0}
+ html body #p-dash #kp .card>div:nth-child(2) .m,html body #p-dash #kp .card>div:nth-child(2) span{font-size:.9em}
+ html body #p-dash #kp .bm .bmt{font-size:.95em!important;margin-bottom:.35em}
+ html body #p-dash #kp .bm .bmt .m{font-size:.85em!important}
+ html body #p-dash #kp .bm .bms{font-size:.9em!important;margin-top:.3em}
+ html body #p-dash #kp .pb{height:calc(var(--u)*.6)}
+ html body #p-dash #kp .spk{display:block!important;flex:1 1 auto;width:100%;height:calc(var(--u)*2.2)!important;min-height:calc(var(--u)*1.5);max-height:none}
+ html body #p-dash #kp .bset{font-size:.9em!important;padding:.4em .6em;white-space:normal;text-align:center;line-height:1.25}
+ html body #p-dash #kp .brk{display:none!important}
+
+ /* Budget / Accounts / Key numbers */
+ html body #p-dash .r3 .card{display:flex!important;flex-direction:column}
+ html body #p-dash .dbx{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:flex!important;flex-direction:column;justify-content:space-between;gap:calc(var(--u)*.4)!important}
+ html body #p-dash .dbm{font-size:1.12em!important}html body #p-dash .dbm b{font-size:1.45em!important}
+ html body #p-dash .dbx .pb{height:calc(var(--u)*.8);flex:none}
+ html body #p-dash .dbs{gap:.6em!important;grid-template-columns:1fr 1fr!important}
+ html body #p-dash .dbs small{font-size:.9em!important}html body #p-dash .dbs b{font-size:1.55em!important}
+ html body #p-dash .dbr2{font-size:1.08em!important;flex:1 1 0;min-height:0;padding:.15em 0!important}
+ html body #p-dash .dbr2 b{font-size:1.3em!important}html body #p-dash .dbr2 small{font-size:.8em!important}
+ html body #p-dash .dbr2>span{display:flex;flex-direction:column;justify-content:center}
+ html body #p-dash #kfl{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:grid!important;grid-template-columns:1fr 1fr!important;grid-auto-rows:minmax(0,1fr);gap:calc(var(--u)*.5)!important;align-content:stretch!important}
+ html body #p-dash #kfl .kfi{padding:.35em .65em!important;gap:.1em!important;align-content:center;overflow:hidden}
+ html body #p-dash #kfl .kfi b{font-size:1.4em!important}
+ html body #p-dash #kfl .kfi .m{font-size:.9em!important}
+ html body #p-dash #kfl .kfic{right:.5em;top:.4em}
+ html body #p-dash #kfl .kfi:nth-child(n+5){display:none!important}
+
+ /* Day-to-day + selected day */
+ html body #p-dash .r2{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)!important}
+ html body #p-dash #qc{display:flex!important;flex-direction:column}
+ html body #p-dash #qc h3{font-size:1.12em!important}
+ html body #p-dash #td{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+ html body #p-dash #td .dtg{flex:1 1 0;min-height:0;grid-template-columns:minmax(0,1.15fr) minmax(0,3fr)!important;gap:var(--gp)!important}
+ html body #p-dash #td .dtq{gap:calc(var(--u)*.55)!important}
+ html body #p-dash #td .dtt,html body #p-dash #td .dtc{padding:.4em .7em!important;gap:.6em!important;grid-template-columns:2.6em minmax(0,1fr)!important;overflow:hidden}
+ html body #p-dash #td .dtic{width:2.6em;height:2.6em}
+ html body #p-dash #td .dtic svg{width:1.2em;height:1.2em}
+ html body #p-dash #td .dtt .kv{font-size:2em!important}
+ html body #p-dash #td .dtt b,html body #p-dash #td .dtt .m{font-size:.95em!important}
+ html body #p-dash #td .dtc{font-size:1.05em!important}html body #p-dash #td .dtc b{font-size:1.55em!important}
+ html body #p-dash #td .dtc .m,html body #p-dash #td .dtc .g,html body #p-dash #td .dtc .r{font-size:.9em!important}
+ html body #p-dash #sdc{display:flex!important;flex-direction:column}
+ html body #p-dash #sdc h3{font-size:1.12em!important}
+ html body #p-dash #sdl{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*.4)}
+ html body #p-dash #sdl .sdr{font-size:1em!important;padding:.4em .6em!important;margin:0!important;grid-template-columns:2.2em 1fr auto!important}
+ html body #p-dash #sdl .sdi{width:1.9em;height:1.9em;font-size:1em!important}
+
+ /* Right column */
+ html body #p-dash .col:last-child{grid-template-rows:auto minmax(0,1fr) auto!important}
+ html body #p-dash .col:last-child>.card:not(#fo):not(#ub):not(:has(>#rt)){display:flex!important;flex-direction:column;justify-content:space-between}
+ html body #p-dash #fo{display:flex!important;flex-direction:column;min-height:0!important}
+ html body #p-dash #fo .fsh h3{font-size:1.15em!important}
+ html body #p-dash #fo .fsh{margin-bottom:calc(var(--u)*.45)}
+ html body #p-dash #fo .fsh .bset{font-size:.85em!important;padding:.25em .7em}
+ html body #p-dash #fo .fsf{gap:calc(var(--u)*.4);margin-bottom:calc(var(--u)*.5)}
+ html body #p-dash #fo .fdates input{font-size:.95em!important;padding:.25em .45em}
+ html body #p-dash #fo .fpills .bset{font-size:.9em!important;padding:.2em .4em}
+ html body #p-dash #fo .fhero{gap:calc(var(--u)*.4);margin-bottom:calc(var(--u)*.4)}
+ html body #p-dash #fo .fsg{gap:calc(var(--u)*.4)}
+ html body #p-dash #fo .fsc{padding:.3em .55em!important;gap:.5em!important}
+ html body #p-dash #fo .fsc .l{font-size:.86em!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ html body #p-dash #fo .fsc b{font-size:1.2em!important}
+ html body #p-dash #fo .fsc .fsub{font-size:.78em!important}
+ html body #p-dash #fo .fsc .fi{width:2em;height:2em}
+ html body #p-dash #fo .fsc .fi .px{width:1.2em;height:1.2em}
+ html body #p-dash #fo .fsc.hero{padding:.4em .55em!important;gap:.2em!important}
+ html body #p-dash #fo .fsc.hero .fi{width:1.8em;height:1.8em}
+ html body #p-dash #fo .fsc.hero b{font-size:1.3em!important}
+ html body #p-dash #fo .fsan{font-size:.95em!important;padding:.35em;margin-top:calc(var(--u)*.4)}
+ html body #p-dash .cal{font-size:.95em!important;flex:1 1 auto;grid-auto-rows:1fr;align-content:stretch;gap:1px!important}
+ html body #p-dash .cal span{padding:0!important;display:grid;place-items:center;min-height:0}
+ html body #p-dash #cm{font-size:1.1em}
+ html body #p-dash .kb{font-size:1.3em}
+ html body #p-dash #ub{display:flex!important;flex-direction:column;min-height:0}
+ html body #p-dash #ub h3{margin-bottom:calc(var(--u)*.3)!important}
+ html body #p-dash .card:has(>#rt){display:none!important}
+ html body #p-dash.fit-rt .card:has(>#rt){display:flex!important;flex-direction:column;min-height:0}
+ html body #p-dash.fit-nobills #ub{display:none!important}
+ html body #p-dash #rt{overflow:hidden!important;-webkit-mask-image:none!important;mask-image:none!important;flex:1 1 0}
+
+ /* polish */
+ html body #p-dash .col:last-child{font-size:calc(var(--u)*.9)}
+ html body #p-dash .col:last-child .card{font-size:calc(var(--u)*.9)}
+ html body #p-dash #kp .card:nth-child(4){justify-content:center}
+ html body #p-dash #kp .card:nth-child(4)>div:nth-child(2){padding-top:calc(var(--u)*3.6)}
+ html body #p-dash #kp .card:nth-child(4) .kv{font-size:calc(var(--u)*2.3)!important}
+ html body #p-dash #kp .card:nth-child(4)>div:nth-child(2) .m{font-size:1em}
+ html body #p-dash .dbx{justify-content:space-evenly!important}
+ html body #p-dash #qc h3,html body #p-dash #sdc h3{width:100%;justify-content:space-between!important;text-align:left}
+ html body #p-dash #sdl>.m:only-child{margin:auto;font-size:1.05em!important}
+
+ html body #p-dash #acxl:has(.dbr2:nth-child(5)){display:grid!important;grid-template-columns:1fr 1fr;column-gap:calc(var(--u)*1.2);align-content:space-evenly}
+ html body #p-dash #acxl:has(.dbr2:nth-child(9)){grid-template-columns:1fr 1fr 1fr}
+ html body #p-dash #acxl:has(.dbr2:nth-child(5))>.dbm{grid-column:1/-1}
+
+ /* accounts rows: name and type on one line */
+ html body #p-dash .dbr2>span{flex-direction:row!important;align-items:baseline;gap:.6em;min-width:0;overflow:hidden;white-space:nowrap}
+ html body #p-dash .dbr2>span small{display:inline!important;overflow:hidden;text-overflow:ellipsis}
+ html body #p-dash .dbr2{align-items:center}
+
+ /* upcoming bills / recent transactions rows */
+ html body #p-dash #ubl>.tx:nth-child(n+3){display:none!important}
+ html body #p-dash .tx{padding:.2em 0!important;gap:.6em!important}
+ html body #p-dash .tx .ic{width:2.2em!important;height:2.2em!important;font-size:1em}
+ html body #p-dash .tx b{font-size:1.05em!important}
+ html body #p-dash .tx .m{font-size:.85em!important}
+
+ html body #p-dash.fit-b1 #ubl>.tx:nth-child(n+2){display:none!important}
+
+ html body #p-dash #kp .card:nth-child(4)>div:nth-child(2)>.kt{padding-left:0}
+ html body #p-dash #td b[style]{font-size:.95em!important}
+ html body #p-dash #sdc .m,html body #p-dash #sdh{font-size:1em!important}
+
+ html body #p-dash .dbr2{padding:0!important}
+ html body #p-dash #acxl .dbm{flex:none}
+
+ html body #p-dash.fit-scroll:not([hidden]){overflow-y:auto!important}
+ html body #p-dash.fit-scroll .layout{flex:none!important;min-height:780px!important}
+}
+</style>
+<script id="dashfit-js">
+/* dashfit: picks the largest text size at which the whole dashboard fits the window (desktop), so there is never a scrollbar */
+(function(){
+ var MQ=window.matchMedia("(min-width:1201px)"),timer=0,running=0,MINU=10,MAXU=22;
+ function pd(){return document.getElementById("p-dash")}
+ function vis(e){return e&&e.offsetParent!==null}
+ function overflows(p){
+  if(p.scrollHeight>p.clientHeight+1||p.scrollWidth>p.clientWidth+1)return true;
+  var l=p.querySelector(".layout");if(!l)return false;
+  if(l.scrollHeight>l.clientHeight+1)return true;
+  var q=p.querySelectorAll(".card,.col,.dbx,#kfl,#sdl,#td,.dtg,.kfi,.dtc,.dtt,.fsc,.sdr,#fo .fsg,#fo .fhero");
+  for(var i=0;i<q.length;i++){var e=q[i];if(!vis(e))continue;
+   if(e.scrollHeight>e.clientHeight+4||e.scrollWidth>e.clientWidth+4)return true}
+  return false}
+ function setU(p,v){p.style.setProperty("--u",v.toFixed(2)+"px")}
+ function best(p){
+  var lo=MINU,hi=MAXU;
+  setU(p,lo);if(overflows(p))return lo;
+  for(var i=0;i<9;i++){var mid=(lo+hi)/2;setU(p,mid);if(overflows(p))hi=mid;else lo=mid}
+  return lo}
+ function fit(){
+  var p=pd();if(!p||running)return;running=1;
+  try{
+   if(!MQ.matches||p.hidden){p.style.removeProperty("--u");p.classList.remove("fit-rt","fit-b1","fit-nobills","fit-scroll");return}
+   var cur=parseFloat(p.style.getPropertyValue("--u"));
+   if(cur&&!p.classList.contains("fit-scroll")&&!overflows(p)){setU(p,cur*1.025);var grows=!overflows(p);setU(p,cur);if(!grows&&cur>=MINU)return}
+   var tiers=[["fit-rt",16],["",13.8],["fit-b1",12.5],["fit-nobills",0]],all=["fit-rt","fit-b1","fit-nobills"],pick=null;
+   for(var i=0;i<tiers.length;i++){
+    p.classList.remove("fit-scroll");all.forEach(function(c){p.classList.remove(c)});if(tiers[i][0])p.classList.add(tiers[i][0]);
+    var u=best(p);pick={c:tiers[i][0],u:u};
+    if(u>=tiers[i][1])break}
+   all.forEach(function(c){p.classList.remove(c)});if(pick.c)p.classList.add(pick.c);
+   setU(p,pick.u);p.classList.remove("fit-scroll");if(overflows(p)){p.classList.add("fit-scroll");setU(p,11.5)}
+  }finally{running=0}}
+ function later(){clearTimeout(timer);timer=setTimeout(fit,90)}
+ function init(){
+  var p=pd();if(!p)return;
+  new MutationObserver(later).observe(p,{childList:true,subtree:true,characterData:true});
+  new MutationObserver(later).observe(p,{attributes:true,attributeFilter:["hidden"]});
+  window.addEventListener("resize",later);window.addEventListener("hashchange",later);window.addEventListener("load",later);
+  if(MQ.addEventListener)MQ.addEventListener("change",later);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(later);
+  later()}
+ window.__fitDash=fit;
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
+})();
+</script>
+</body></html>
