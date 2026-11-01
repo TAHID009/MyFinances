@@ -2627,7 +2627,7 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash #fmc .fmbar{height:calc(var(--u)*.4)}
 
  /* main grid */
- html body #p-dash .layout{flex:1 1 0!important;min-height:0!important;height:auto!important;gap:var(--gp)!important;grid-template-columns:minmax(0,1fr) clamp(300px,calc(var(--u)*27),560px)!important}
+ html body #p-dash .layout{flex:1 1 0!important;min-height:0!important;height:auto!important;gap:var(--gp)!important;grid-template-columns:minmax(0,1fr) clamp(320px,calc(var(--u)*30),620px)!important}
  html body #p-dash .col{gap:var(--gp)!important;min-height:0}
  html body #p-dash .col:first-child{grid-template-rows:auto auto minmax(0,1fr)!important}
  html body #p-dash .r3,html body #p-dash .r2{gap:var(--gp)!important;min-height:0}
@@ -2636,10 +2636,10 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  /* KPI cards: icon beside text, sparkline fills the leftover room */
  html body #p-dash #kp{gap:var(--gp)!important}
  html body #p-dash #kp .card{position:relative;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;justify-content:space-between;gap:calc(var(--u)*.45)!important;align-content:stretch}
- html body #p-dash #kp .card>.ic{position:absolute;left:calc(var(--u)*.95);top:calc(var(--u)*.8);width:calc(var(--u)*3);height:calc(var(--u)*3);border-radius:calc(var(--u)*.9)}
- html body #p-dash #kp .card>.ic svg{width:calc(var(--u)*1.6);height:calc(var(--u)*1.6)}
+ html body #p-dash #kp .card>.ic{position:absolute;left:calc(var(--u)*.95);top:calc(var(--u)*.8);width:calc(var(--u)*2.1);height:calc(var(--u)*2.1);border-radius:calc(var(--u)*.7)}
+ html body #p-dash #kp .card>.ic svg{width:calc(var(--u)*1.15);height:calc(var(--u)*1.15)}
  html body #p-dash #kp .card>div:nth-child(2){padding-left:0;min-height:calc(var(--u)*3.2)}
- html body #p-dash #kp .card>div:nth-child(2)>.kt,html body #p-dash #kp .card>div:nth-child(2)>div.m{padding-left:calc(var(--u)*3.9)}
+ html body #p-dash #kp .card>div:nth-child(2)>.kt,html body #p-dash #kp .card>div:nth-child(2)>div.m{padding-left:calc(var(--u)*3)}
  html body #p-dash #kp .card>div:nth-child(2)>.kt{margin-top:.1em}
  html body #p-dash #kp .kt{font-size:1.1em;line-height:1.3}
  html body #p-dash #kp .kv{font-size:calc(var(--u)*1.95)!important;line-height:1.15;margin:.05em 0}
@@ -2655,17 +2655,17 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  /* Budget / Accounts / Key numbers */
  html body #p-dash .r3 .card{display:flex!important;flex-direction:column}
  html body #p-dash .dbx{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:flex!important;flex-direction:column;justify-content:space-between;gap:calc(var(--u)*.4)!important}
- html body #p-dash .dbm{font-size:1.12em!important}html body #p-dash .dbm b{font-size:1.45em!important}
+ html body #p-dash .dbm{font-size:1.12em!important}html body #p-dash .dbm b{font-size:1.7em!important}
  html body #p-dash .dbx .pb{height:calc(var(--u)*.8);flex:none}
  html body #p-dash .dbs{gap:.6em!important;grid-template-columns:1fr 1fr!important}
- html body #p-dash .dbs small{font-size:.9em!important}html body #p-dash .dbs b{font-size:1.55em!important}
+ html body #p-dash .dbs small{font-size:.9em!important}html body #p-dash .dbs b{font-size:1.8em!important}
  html body #p-dash .dbr2{font-size:1.08em!important;flex:1 1 0;min-height:0;padding:.15em 0!important}
  html body #p-dash .dbr2 b{font-size:1.3em!important}html body #p-dash .dbr2 small{font-size:.8em!important}
  html body #p-dash .dbr2>span{display:flex;flex-direction:column;justify-content:center}
  html body #p-dash #kfl{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:grid!important;grid-template-columns:1fr 1fr!important;grid-auto-rows:minmax(0,1fr);gap:calc(var(--u)*.5)!important;align-content:stretch!important}
  html body #p-dash #kfl .kfi{padding:.35em .65em!important;gap:.1em!important;align-content:center;overflow:hidden}
- html body #p-dash #kfl .kfi b{font-size:1.4em!important}
- html body #p-dash #kfl .kfi .m{font-size:.9em!important}
+ html body #p-dash #kfl .kfi b{font-size:1.65em!important}
+ html body #p-dash #kfl .kfi .m{font-size:1em!important}
  html body #p-dash #kfl .kfic{right:.5em;top:.4em}
  html body #p-dash #kfl .kfi:nth-child(n+5){display:none!important}
 
@@ -2673,8 +2673,8 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash .r2{grid-template-columns:minmax(0,2.4fr) minmax(0,1fr)!important}
  html body #p-dash #qc{display:flex!important;flex-direction:column}
  html body #p-dash #qc h3{font-size:1.12em!important}
- html body #p-dash #td{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
- html body #p-dash #td .dtg{flex:1 1 0;min-height:0;grid-template-columns:minmax(0,1.15fr) minmax(0,3fr)!important;gap:var(--gp)!important}
+ html body #p-dash #td{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+ html body #p-dash #td .dtg{flex:1 1 auto;min-height:0;grid-template-columns:minmax(0,1.15fr) minmax(0,3fr)!important;gap:var(--gp)!important}
  html body #p-dash #td .dtq{gap:calc(var(--u)*.55)!important}
  html body #p-dash #td .dtt,html body #p-dash #td .dtc{padding:.4em .7em!important;gap:.6em!important;grid-template-columns:2.6em minmax(0,1fr)!important;overflow:hidden}
  html body #p-dash #td .dtic{width:2.6em;height:2.6em}
@@ -2685,7 +2685,7 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash #td .dtc .m,html body #p-dash #td .dtc .g,html body #p-dash #td .dtc .r{font-size:.9em!important}
  html body #p-dash #sdc{display:flex!important;flex-direction:column}
  html body #p-dash #sdc h3{font-size:1.12em!important}
- html body #p-dash #sdl{flex:1 1 0;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*.4)}
+ html body #p-dash #sdl{flex:1 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*.4)}
  html body #p-dash #sdl .sdr{font-size:1em!important;padding:.4em .6em!important;margin:0!important;grid-template-columns:2.2em 1fr auto!important}
  html body #p-dash #sdl .sdi{width:1.9em;height:1.9em;font-size:1em!important}
 
@@ -2723,10 +2723,10 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash #rt{overflow:hidden!important;-webkit-mask-image:none!important;mask-image:none!important;flex:1 1 0}
 
  /* polish */
- html body #p-dash .col:last-child{font-size:calc(var(--u)*.9)}
- html body #p-dash .col:last-child .card{font-size:calc(var(--u)*.9)}
+ html body #p-dash .col:last-child{font-size:calc(var(--u)*.96)}
+ html body #p-dash .col:last-child .card{font-size:calc(var(--u)*.96)}
  html body #p-dash #kp .card:nth-child(4){justify-content:center}
- html body #p-dash #kp .card:nth-child(4)>div:nth-child(2){padding-top:calc(var(--u)*3.6)}
+ html body #p-dash #kp .card:nth-child(4)>div:nth-child(2){padding-top:calc(var(--u)*2.6)}
  html body #p-dash #kp .card:nth-child(4) .kv{font-size:calc(var(--u)*2.3)!important}
  html body #p-dash #kp .card:nth-child(4)>div:nth-child(2) .m{font-size:1em}
  html body #p-dash .dbx{justify-content:space-evenly!important}
@@ -2760,6 +2760,13 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
 
  html body #p-dash.fit-scroll:not([hidden]){overflow-y:auto!important}
  html body #p-dash.fit-scroll .layout{flex:none!important;min-height:780px!important}
+
+ /* v2 layout: KPIs, then day-to-day in the middle, budget + key numbers at the bottom; account card removed (shown in Financial Situation) */
+ html body #p-dash #acx{display:none!important}
+ html body #p-dash .col:first-child>#kp{order:1}
+ html body #p-dash .col:first-child>.r2{order:2}
+ html body #p-dash .col:first-child>.r3{order:3}
+ html body #p-dash .r3{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)!important}
 }
 </style>
 <script id="dashfit-js">
