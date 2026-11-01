@@ -2802,9 +2802,24 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
 #pcc .pcbars i em{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-style:normal;font-size:.72em;font-weight:600;color:#202925;white-space:nowrap;line-height:1.3}
 #pcc .pcn{font-size:.78em;color:var(--mut,#68736e);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.2em;line-height:1.3}
 #pcc .pcr{font-size:.82em;font-weight:700;text-align:center;line-height:1.3}#pcc .pcr.pos{color:#1f5c50}#pcc .pcr.neg{color:#a95043}
-@media(min-width:1201px){html body #p-dash .r3{grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr) minmax(0,1.5fr)!important}}
+@media(min-width:1201px){html body #p-dash .r3{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)!important}}
 @media(min-width:1201px){html body #p-dash .r3 .dbx{justify-content:space-evenly!important}html body #p-dash #kfl{align-content:space-evenly!important}}
 @media(min-width:1201px) and (max-height:780px){#pcc .pcb{min-height:7.5em!important}#pcc .pcbars{min-height:3.4em!important}}
+
+@media(min-width:1201px){
+ html body #p-dash #bkc{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);column-gap:calc(var(--u)*1.1);min-width:0}
+ html body #p-dash #bkc .bk1,html body #p-dash #bkc .bk2{display:flex;flex-direction:column;min-width:0;min-height:0}
+ html body #p-dash #bkc .bk2{border-left:1px solid #e4e6dc;padding-left:calc(var(--u)*1.1)}
+ html body #p-dash #bkc #kfl{flex:1 1 auto!important;grid-template-columns:1fr 1fr!important;grid-auto-rows:auto!important;align-content:space-evenly!important}
+ html body #p-dash #bkc #kfl .kfi:nth-child(n+3){display:grid!important}
+ html body #p-dash #bkc #kfl .kfi:nth-child(2){grid-column:1/-1}
+ html body #p-dash #bkc #kfl .kfi:first-child{display:none!important}
+}
+#incPop{border:0;padding:0;background:transparent;width:min(440px,94vw);max-width:none;overflow:visible}
+#incPop::backdrop{background:rgba(18,28,24,.5);backdrop-filter:blur(2px)}
+#incPop #inc{margin:0!important;width:100%!important;max-width:none!important;height:auto!important;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.35)!important}
+#incPop .ipx{position:absolute;top:.6rem;right:.7rem;z-index:3;width:2rem;height:2rem;border-radius:50%;border:0;background:rgba(0,0,0,.07);font-size:1.4rem;line-height:1;cursor:pointer;color:#202925}
+#incPop .ipx:hover{background:rgba(0,0,0,.14)}
 </style>
 <script id="dashfit-js">
 /* dashfit: picks the largest text size at which the whole dashboard fits the window (desktop), so there is never a scrollbar */
@@ -2852,5 +2867,50 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  window.__fitDash=fit;
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
+</script>
+<script type="module" id="bkmerge-js">
+/* one "Budget + Key numbers" card: the budget block and the key-number tiles move into a single card (the duplicate "budget used" tile is hidden in CSS) */
+function mergeBK(){
+ var b=document.getElementById("bgc"),k=document.getElementById("kf");
+ if(!b||!k||document.getElementById("bkc"))return;
+ var c=document.createElement("div");c.className="card";c.id="bkc";
+ var l=document.createElement("div");l.className="bk1";var r=document.createElement("div");r.className="bk2";
+ while(b.firstChild)l.appendChild(b.firstChild);
+ while(k.firstChild)r.appendChild(k.firstChild);
+ c.appendChild(l);c.appendChild(r);
+ b.parentNode.insertBefore(c,b);
+ b.style.setProperty("display","none","important");k.style.setProperty("display","none","important");
+}
+mergeBK();document.addEventListener("DOMContentLoaded",mergeBK);setTimeout(mergeBK,300);setTimeout(mergeBK,1200);
+</script>
+<script type="module" id="incpop-js">
+/* "Add Income" opens the existing Quick Income Entry form in a popup instead of jumping to the Income page */
+var ph=null;
+function restore(){var inc=document.getElementById("inc");if(inc&&ph&&ph.parentNode){ph.parentNode.insertBefore(inc,ph);ph.remove();ph=null}}
+function pop(){
+ var inc=document.getElementById("inc");if(!inc)return;
+ var d=document.getElementById("incPop");
+ if(!d){
+  d=document.createElement("dialog");d.id="incPop";
+  var x=document.createElement("button");x.type="button";x.className="ipx";x.setAttribute("aria-label","Close");x.innerHTML="&times;";x.onclick=function(){d.close()};
+  d.appendChild(x);document.body.appendChild(d);
+  d.addEventListener("close",restore);
+  d.addEventListener("click",function(e){if(e.target===d)d.close()});
+  var f=inc.querySelector("form");
+  if(f)f.addEventListener("submit",function(){
+   var btn=f.querySelector(".btn");
+   if(!btn||!btn.disabled||!d.open)return;
+   var n=0,t=setInterval(function(){n++;if(!btn.disabled||n>60){clearInterval(t);if(d.open)setTimeout(function(){d.close()},350)}},150);
+  });
+ }
+ if(!ph&&inc.parentNode!==d){ph=document.createComment("inc");inc.parentNode.insertBefore(ph,inc)}
+ d.appendChild(inc);
+ if(!d.open)d.showModal();
+ var a=inc.querySelector("[name=amount]");if(a)setTimeout(function(){a.focus()},80);
+}
+function wire(){
+ ["addinc","addinc2"].forEach(function(id){var e=document.getElementById(id);if(e)e.onclick=pop});
+}
+wire();document.addEventListener("DOMContentLoaded",wire);setTimeout(wire,300);setTimeout(wire,1200);
 </script>
 </body></html>
