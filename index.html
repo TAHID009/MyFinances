@@ -2629,7 +2629,7 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  /* main grid */
  html body #p-dash .layout{flex:1 1 0!important;min-height:0!important;height:auto!important;gap:var(--gp)!important;grid-template-columns:minmax(0,1fr) clamp(320px,calc(var(--u)*30),620px)!important}
  html body #p-dash .col{gap:var(--gp)!important;min-height:0}
- html body #p-dash .col:first-child{grid-template-rows:auto auto minmax(0,1fr)!important}
+ html body #p-dash .col:first-child{grid-template-rows:auto minmax(0,1fr) auto!important}
  html body #p-dash .r3,html body #p-dash .r2{gap:var(--gp)!important;min-height:0}
  html body #p-dash .r3{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1.1fr)!important}
 
@@ -2655,17 +2655,17 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  /* Budget / Accounts / Key numbers */
  html body #p-dash .r3 .card{display:flex!important;flex-direction:column}
  html body #p-dash .dbx{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:flex!important;flex-direction:column;justify-content:space-between;gap:calc(var(--u)*.4)!important}
- html body #p-dash .dbm{font-size:1.12em!important}html body #p-dash .dbm b{font-size:1.7em!important}
+ html body #p-dash .dbm{font-size:1.12em!important}html body #p-dash .dbm b{font-size:1.35em!important}
  html body #p-dash .dbx .pb{height:calc(var(--u)*.8);flex:none}
  html body #p-dash .dbs{gap:.6em!important;grid-template-columns:1fr 1fr!important}
- html body #p-dash .dbs small{font-size:.9em!important}html body #p-dash .dbs b{font-size:1.8em!important}
+ html body #p-dash .dbs small{font-size:.9em!important}html body #p-dash .dbs b{font-size:1.4em!important}
  html body #p-dash .dbr2{font-size:1.08em!important;flex:1 1 0;min-height:0;padding:.15em 0!important}
  html body #p-dash .dbr2 b{font-size:1.3em!important}html body #p-dash .dbr2 small{font-size:.8em!important}
  html body #p-dash .dbr2>span{display:flex;flex-direction:column;justify-content:center}
  html body #p-dash #kfl{flex:1 1 auto!important;min-height:0;overflow:hidden!important;display:grid!important;grid-template-columns:1fr 1fr!important;grid-auto-rows:minmax(0,1fr);gap:calc(var(--u)*.5)!important;align-content:stretch!important}
  html body #p-dash #kfl .kfi{padding:.35em .65em!important;gap:.1em!important;align-content:center;overflow:hidden}
- html body #p-dash #kfl .kfi b{font-size:1.65em!important}
- html body #p-dash #kfl .kfi .m{font-size:1em!important}
+ html body #p-dash #kfl .kfi b{font-size:1.3em!important}
+ html body #p-dash #kfl .kfi .m{font-size:.9em!important}
  html body #p-dash #kfl .kfic{right:.5em;top:.4em}
  html body #p-dash #kfl .kfi:nth-child(n+5){display:none!important}
 
@@ -2677,11 +2677,11 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash #td .dtg{flex:1 1 auto;min-height:0;grid-template-columns:minmax(0,1.15fr) minmax(0,3fr)!important;gap:var(--gp)!important}
  html body #p-dash #td .dtq{gap:calc(var(--u)*.55)!important}
  html body #p-dash #td .dtt,html body #p-dash #td .dtc{padding:.4em .7em!important;gap:.6em!important;grid-template-columns:2.6em minmax(0,1fr)!important;overflow:hidden}
- html body #p-dash #td .dtic{width:2.6em;height:2.6em}
+ html body #p-dash #td .dtic{width:2.9em;height:2.9em}
  html body #p-dash #td .dtic svg{width:1.2em;height:1.2em}
- html body #p-dash #td .dtt .kv{font-size:2em!important}
+ html body #p-dash #td .dtt .kv{font-size:2.3em!important}
  html body #p-dash #td .dtt b,html body #p-dash #td .dtt .m{font-size:.95em!important}
- html body #p-dash #td .dtc{font-size:1.05em!important}html body #p-dash #td .dtc b{font-size:1.55em!important}
+ html body #p-dash #td .dtc{font-size:1.05em!important}html body #p-dash #td .dtc b{font-size:1.85em!important}
  html body #p-dash #td .dtc .m,html body #p-dash #td .dtc .g,html body #p-dash #td .dtc .r{font-size:.9em!important}
  html body #p-dash #sdc{display:flex!important;flex-direction:column}
  html body #p-dash #sdc h3{font-size:1.12em!important}
@@ -2767,6 +2767,10 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash .col:first-child>.r2{order:2}
  html body #p-dash .col:first-child>.r3{order:3}
  html body #p-dash .r3{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)!important}
+
+ html body #p-dash .r3 .card{padding-top:calc(var(--u)*.55)!important;padding-bottom:calc(var(--u)*.6)!important}
+ html body #p-dash .r3 .dbx{gap:calc(var(--u)*.6)!important;justify-content:flex-start!important}
+ html body #p-dash .r3 .dbs{margin-top:calc(var(--u)*.2)}
 }
 </style>
 <script id="dashfit-js">
