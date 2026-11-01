@@ -2205,7 +2205,23 @@ function cyParts(){
   :c.res<0?`<div class="cyb bad">${B(cyF("bad",fmt(c.extra),fmt(c.fromSave),fmt(c.fromBor),fmt(c.unk)))}${c.unk>0?`<br><small>${cyT("badn")}</small>`:""}</div>`
   :`<div class="cyb eq">${cyT("eq")}</div>`;
  return{L,c,nm,rg,ban}}
-function cyRender(){
+function pcRender(){
+ try{
+  const host=document.querySelector("#p-dash .r3");if(!host)return;
+  let c=document.getElementById("pcc");
+  if(!c){c=document.createElement("div");c.className="card";c.id="pcc";host.appendChild(c)}
+  const en=getLang()!=="bn",all=cyCompute(db.inc,db.ex,TD());
+  let L=all.filter(x=>!x.pre);if(!L.length)L=all;
+  const ttl=en?"Income vs expenses by period":"অধ্যায়ভিত্তিক আয়–খরচ তুলনা";
+  if(!L.length){c.innerHTML=`<h3><span>${ttl}</span></h3><div class="m">${en?"No periods yet.":"এখনো কোনো অধ্যায় নেই।"}</div>`;return}
+  const S=L.slice(-6),mx=Math.max(1,...S.map(x=>Math.max(x.inc,x.exp)));
+  const k=v=>{v=Math.abs(v);if(v>=1e6)return(v/1e6).toFixed(1).replace(/\.0$/,"")+"M";if(v>=1e3)return(v/1e3).toFixed(v>=1e5?0:1).replace(/\.0$/,"")+"k";return String(Math.round(v))};
+  const last=L[L.length-1];
+  c.innerHTML=`<h3><span>${ttl}</span><span class="pcl"><b class="pi"></b>${cyT("inc")}<b class="pe"></b>${cyT("exp")}</span></h3><div class="pcb">`+
+   S.map(x=>`<div class="pcg${x===last?" cur":""}" title="${cyT("per")}${x.n}: ${cyT("inc")} ${fmt(x.inc)} · ${cyT("exp")} ${fmt(x.exp)} · ${cyT("res")} ${x.res<0?"−":"+"}${fmt(Math.abs(x.res))}"><div class="pcbars"><i class="pi" style="height:${(x.inc/mx*100).toFixed(1)}%"><em>${k(x.inc)}</em></i><i class="pe" style="height:${(x.exp/mx*100).toFixed(1)}%"><em>${k(x.exp)}</em></i></div><small class="pcn">${cyT("per")}${x.n}</small><small class="pcr ${x.res<0?"neg":"pos"}">${x.res<0?"−":"+"}${k(x.res)}</small></div>`).join("")+`</div>`;
+ }catch(e){}
+}
+function cyRender(){try{pcRender()}catch(e){}
  let h=$("#cyc");if(!h){const c=$("#p-dash"),l=$("#p-dash .layout");if(!c||!l)return;h=document.createElement("div");h.className="card";h.id="cyc";c.insertBefore(h,l)}
  const P=cyParts();
  if(!P){h.innerHTML=`<h3>${cyT("t")}</h3><div class='m'>${cyT("none")}</div>`;return}
@@ -2766,12 +2782,29 @@ if(sn&&u){new MutationObserver(function(){u.setAttribute("data-tip",sn.textConte
  html body #p-dash .col:first-child>#kp{order:1}
  html body #p-dash .col:first-child>.r2{order:2}
  html body #p-dash .col:first-child>.r3{order:3}
- html body #p-dash .r3{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)!important}
 
  html body #p-dash .r3 .card{padding-top:calc(var(--u)*.55)!important;padding-bottom:calc(var(--u)*.6)!important}
  html body #p-dash .r3 .dbx{gap:calc(var(--u)*.6)!important;justify-content:flex-start!important}
  html body #p-dash .r3 .dbs{margin-top:calc(var(--u)*.2)}
 }
+</style>
+<style id="pcc-css">
+#pcc{display:flex;flex-direction:column;min-width:0}
+#pcc h3{display:flex;justify-content:space-between;align-items:center;gap:.6em;flex-wrap:wrap}
+#pcc .pcl{font-size:.8em;font-weight:500;color:var(--mut,#68736e);display:inline-flex;align-items:center;gap:.4em;white-space:nowrap}
+#pcc .pcl b{width:.8em;height:.8em;border-radius:.2em;display:inline-block}#pcc .pcl b+*{margin-left:0}
+#pcc .pi{background:#2f9e6b}#pcc .pe{background:#e0a458}
+#pcc .pcb{flex:1 1 auto;display:flex;gap:.3em;min-height:10.5em;align-items:stretch}
+#pcc .pcg{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:stretch;padding:.15em .1em;border-radius:.6em}
+#pcc .pcg.cur{background:color-mix(in srgb,#1f5c50 7%,transparent)}
+#pcc .pcbars{flex:1 1 0;min-height:5.6em;display:flex;align-items:flex-end;justify-content:center;gap:.25em;padding-top:1.4em;border-bottom:1px solid #dedfd5}
+#pcc .pcbars i{position:relative;display:block;width:38%;max-width:2.8em;min-height:2px;border-radius:.3em .3em 0 0}
+#pcc .pcbars i em{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-style:normal;font-size:.72em;font-weight:600;color:#202925;white-space:nowrap;line-height:1.3}
+#pcc .pcn{font-size:.78em;color:var(--mut,#68736e);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.2em;line-height:1.3}
+#pcc .pcr{font-size:.82em;font-weight:700;text-align:center;line-height:1.3}#pcc .pcr.pos{color:#1f5c50}#pcc .pcr.neg{color:#a95043}
+@media(min-width:1201px){html body #p-dash .r3{grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr) minmax(0,1.5fr)!important}}
+@media(min-width:1201px){html body #p-dash .r3 .dbx{justify-content:space-evenly!important}html body #p-dash #kfl{align-content:space-evenly!important}}
+@media(min-width:1201px) and (max-height:780px){#pcc .pcb{min-height:7.5em!important}#pcc .pcbars{min-height:3.4em!important}}
 </style>
 <script id="dashfit-js">
 /* dashfit: picks the largest text size at which the whole dashboard fits the window (desktop), so there is never a scrollbar */
