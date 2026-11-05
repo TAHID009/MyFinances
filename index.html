@@ -1515,14 +1515,7 @@ const norm=s=>String(s||"").trim().toLowerCase(),AT=["Cash","Bank Account","Mobi
 function newSnaps(){NC.forEach(k=>{ND[k]=[];un.push(F.onSnapshot(col(k),s=>{ND[k]=s.docs.map(d=>({id:d.id,...d.data()}));if(k==="liabilities"||k==="loans"){ND[k+"Del"]=ND[k].filter(x=>x.deleted);ND[k]=ND[k].filter(x=>!x.deleted)}renderNew();if(k==="settles")render();else drawOv()},e=>toast(e.message)))})}
 /* Balance is derived from the ledger (never stored), so edits/retries can never double-apply. */
 /* A record with no linked account matches an account by name; method "Cash" falls back to the first active Cash-type account when none is literally named "Cash". */
-function methMatch(x,a){const m=norm(x.method);if(!m)return false;if(m===norm(a.name))return true;const live=ND.accounts.filter(z=>z.status!=="Inactive");
- /* A method with no account literally named after it falls back to an account of the matching type, so "Bank" reaches "City Bank", "DBBL" etc. */
- if(live.some(z=>norm(z.name)===m))return false;
- let f=null;
- if(m==="cash")f=live.find(z=>z.type==="Cash")||live.find(z=>/cash|wallet/i.test(z.name||""));
- else if(m==="bank"||m==="card")f=live.find(z=>z.type==="Bank Account"&&norm(z.name).includes(m))||live.find(z=>z.type==="Bank Account");
- else if(m==="bkash"||m==="nagad"||m==="rocket"||m==="upay")f=live.find(z=>norm(z.name).includes(m))||live.find(z=>z.type==="Mobile Financial Service"&&norm(z.name).includes(m));
- return !!f&&f.id===a.id}
+function methMatch(x,a){const m=norm(x.method);if(m===norm(a.name))return true;if(m!=="cash")return false;const live=ND.accounts.filter(z=>z.status!=="Inactive");if(live.some(z=>norm(z.name)==="cash"))return false;const f=live.find(z=>z.type==="Cash")||live.find(z=>/cash|wallet/i.test(z.name||""));return !!f&&f.id===a.id}
 /* Records that no account balance counts, with the reason (so nothing silently disappears). */
 function uncounted(){const live=ND.accounts.filter(a=>a.status!=="Inactive"),o=[];[["Income",db.inc],["Expense",db.ex]].forEach(([k,arr])=>arr.forEach(x=>{if(x.acct){const a=ND.accounts.find(z=>z.id===x.acct);if(!a)o.push({k,x,why:"Linked account no longer exists"});else if(a.status==="Inactive")o.push({k,x,why:"Linked account is inactive"});else if(x.date<(a.asof||"0000"))o.push({k,x,why:"Dated before "+a.name+" opening date ("+a.asof+")"});return}
  const a=live.find(z=>methMatch(x,z));if(!a)o.push({k,x,why:"No account matches payment method \u201c"+(x.method||"")+"\u201d"});else if(x.date<(a.asof||"0000"))o.push({k,x,why:"Dated before "+a.name+" opening date ("+a.asof+")"})}));return o}
