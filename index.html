@@ -1297,8 +1297,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 function R2(n){n=+n;return isFinite(n)?Math.round((n+(n<0?-1e-9:1e-9))*100)/100:0}
 function C100(n){return Math.round(R2(n)*100)}
 function isLive(x){return !!x&&!x.void&&!x.voided&&!x.deleted&&x.status!=="void"&&x.status!=="deleted"}
-function finIsRegIncome(x){return isLive(x)&&typeof x.date==="string"&&x.date.length>=10&&!x.bor}
-function finIsRegExpense(x){return isLive(x)&&typeof x.date==="string"&&x.date.length>=10&&!x.liab&&!x.prin}
+function finIsRegIncome(x){return isLive(x)&&typeof x.date==="string"&&x.date.length>=10&&!x.bor&&!x.fund}
+function finIsRegExpense(x){return isLive(x)&&typeof x.date==="string"&&x.date.length>=10&&!x.liab&&!x.prin&&!x.fund}
 const sum=(a,f)=>a.reduce((s,x)=>s+C100(f?f(x):x.amount),0)/100,uid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
 const toast=m=>{const t=$("#toast");if(/insufficient permissions|permission-denied/i.test(String(m)))m="Firebase blocked this. Your Firestore rules do not allow this collection yet. Add the rule shown in the setup note, then publish it.";t.textContent=m;t.style.display="block";try{if(!t.matches(":popover-open"))t.showPopover()}catch(e){}clearTimeout(t.h);t.h=setTimeout(()=>{t.style.display="none";try{if(t.matches(":popover-open"))t.hidePopover()}catch(e){}},4500)};
 let db={income:[],expenses:[],inc:[],ex:[]},sel=new Date().toLocaleDateString("en-CA"),inType="Salary",lrange="month",user,F,AU,fdb,auth,un=[];
@@ -2231,7 +2231,7 @@ function drawOv(){try{var el=document.getElementById("fo");if(!el)return;var o=f
  invs=ND.loans.filter(function(l){return l.kind===LK.inv}).map(invInfo),openI=ND.loans.filter(function(l){return l.kind===LK.inv&&l.status!=="Closed"}).map(invInfo),tr=nwTrend();
  var an='<div class="fsa"><h3 style="margin:0 0 6px">Analysis</h3>'+
  '<h4>Loan Given</h4>'+P([["Disbursed (period)",fmt(S.disb)],["Principal recovered (period)",fmt(S.rec)],["Interest received (period)",fmt(S.int)],["Outstanding balance",fmt(S.out)],["Upcoming repayments (30 days)",fmt(S.upT)+" · "+S.up.length],["Overdue amount",'<span class="r">'+fmt(S.odT)+"</span> · "+S.od.length]])+
- '<h4>Investments</h4>'+P([["Invested principal (open)",fmt(sumA(openI,function(q){return q.cost}))],["Latest current value",fmt(o.invV)],["Realized profit / loss (all)",(sumA(invs,function(q){return q.real})<0?"− ":"")+fmt(Math.abs(sumA(invs,function(q){return q.real})))],["Unrealized gain / loss",(sumA(openI,function(q){return q.unreal})<0?"− ":"")+fmt(Math.abs(sumA(openI,function(q){return q.unreal})))]])+
+ '<h4>Investments</h4>'+(o.il&&o.il.hasI?(function(){var q=ilCalc(ilAll());return P([["Capital invested",fmt(q.cap)],["Fund balance",fmt(o.invV)],["Profit received (all)",fmt(q.profit)],["Reinvested",fmt(q.reinv)]])})():P([["Invested principal (open)",fmt(sumA(openI,function(q){return q.cost}))],["Latest current value",fmt(o.invV)],["Realized profit / loss (all)",(sumA(invs,function(q){return q.real})<0?"− ":"")+fmt(Math.abs(sumA(invs,function(q){return q.real})))],["Unrealized gain / loss",(sumA(openI,function(q){return q.unreal})<0?"− ":"")+fmt(Math.abs(sumA(openI,function(q){return q.unreal})))]]))+
  '<h4>Permanently Given (selected period)</h4><div class="m" style="font-size:11px">By recipient</div>'+P(byR.map(function(x){return[x[0],fmt(x[1])]}))+'<div class="m" style="font-size:11px">By category</div>'+P(byC.map(function(x){return[x[0],fmt(x[1])]}))+'<div class="m" style="font-size:11px">By month</div>'+P(byM.map(function(x){return[x[0],fmt(x[1])]}))+
  '<h4>Net worth trend</h4>'+P(tr.map(function(x,i){var d=i?x[1]-tr[i-1][1]:null;return[x[0],fmt(x[1])+(d==null?"":' <span class="'+(d<0?"r":"g")+'" style="font-size:11px">'+(d<0?"− ":"+ ")+fmt(Math.abs(d))+"</span>")]}))+'<div class="m" style="font-size:10.5px">Estimated from recorded dates and valuations.</div></div>';
  FSAN=an;
@@ -2247,9 +2247,10 @@ function fsDlg(k){var o=finOv(),S=mSum(),h="",goto="oth",T=function(a,b,c){retur
  var lgT=function(cls){var L=ND.liabilities.filter(function(x){return x.kind==="Receivable"&&(cls==="u"?(!x.lg||(x.term!=="short"&&x.term!=="long")):x.lg&&x.term===cls)});return mTbl([["Name"],["Date"],["Principal",1],["Repaid",1],["Outstanding",1],["Due"],["Status"],[""]],L.map(function(x){var s=x.lg?lgStat(x):["Legacy: review","#d97706"];return"<tr><td>"+esc(x.name)+"</td><td>"+(x.date||"—")+'</td><td class="ra">'+fmt(x.lg?x.principal:x.amount)+'</td><td class="ra">'+fmt(x.lg?lgPaid(x):0)+'</td><td class="ra">'+fmt(recOut(x))+"</td><td>"+(x.due||"—")+"</td><td>"+badge(s[0],s[1])+"</td><td>"+mBtn("view",x.lg?"lg":"leg",x.id,"View")+"</td></tr>"}))};
  if(k==="bank"||k==="cash"){goto="accounts";var A=ND.accounts.filter(function(a){return a.status!=="Inactive"&&(k==="bank"?a.type==="Bank Account":a.type!=="Bank Account")});h=T(k==="bank"?"Bank Balance":"Cash / Wallet",fmt(k==="bank"?o.bank:o.wallet))+mTbl([["Account"],["Type"],["Balance",1]],A.map(function(a){return"<tr><td>"+esc(a.name)+"</td><td>"+esc(a.type)+'</td><td class="ra">'+fmt(accBal(a))+"</td></tr>"}))}
  else if(k==="stg"||k==="ltg"||k==="rcu"){h=T(k==="stg"?"Short-term Loan Given":k==="ltg"?"Long-term Loan Given":"Receivable (to review)",fmt(k==="stg"?o.recS:k==="ltg"?o.recL:o.recU),lgT(k==="stg"?"short":k==="ltg"?"long":"u"));MF.cat="lg"}
+ else if(k==="inv"&&o.il&&o.il.hasI){h=T("Investments",fmt(o.invV))+mTbl([["Item"],["Amount",1]],ilInvRows())}
  else if(k==="inv"){MF.cat="inv";h=T("Investments",fmt(o.invV))+mTbl([["Name"],["Invested",1],["Current value",1],["Unrealized",1],["Status"],[""]],ND.loans.filter(function(l){return l.kind===LK.inv}).map(function(l){var q=invInfo(l);return"<tr><td>"+esc(l.name)+'</td><td class="ra">'+fmt(q.cost)+'</td><td class="ra">'+fmt(q.cur)+'</td><td class="ra">'+(q.unreal<0?"− ":"")+fmt(Math.abs(q.unreal))+"</td><td>"+(l.status==="Closed"?"Closed":"Active")+"</td><td>"+mBtn("view","inv",l.id,"View")+"</td></tr>"}))}
  else if(k==="pg"){MF.cat="pg";var L=S.pg.filter(function(x){return inRange(x.date,FSR.from,FSR.to)});h=T("Permanently Given",fmt(S.pgLife),'<div class="m">Selected period '+(FSR.from||"start")+" → "+(FSR.to||"today")+": "+fmt(S.pgPer)+"</div>")+mTbl([["Date"],["Recipient"],["Purpose"],["Amount",1],[""]],L.sort(function(a,b){return b.date.localeCompare(a.date)}).map(function(x){return"<tr><td>"+x.date+"</td><td>"+esc(x.to||"")+"</td><td>"+esc(x.pgp||"")+'</td><td class="ra">'+fmt(x.amount)+"</td><td>"+mBtn("view","pg",x.id,"View")+"</td></tr>"}))}
- else if(k==="stt"||k==="ltt"){goto="loans";var L2=ND.loans.filter(function(l){return l.kind===(k==="stt"?LK.ml:LK.lt)&&l.status!=="Closed"});h=T(k==="stt"?"Short-term Loan Taken":"Long-term Loan Taken",fmt(k==="stt"?o.shortL:o.longL))+mTbl([["Loan"],["Remaining",1]],L2.map(function(l){return"<tr><td>"+esc(l.name)+'</td><td class="ra">'+fmt(lInfo(l).rem)+"</td></tr>"}))}
+ else if(k==="stt"||k==="ltt"){goto="loans";var L2=ND.loans.filter(function(l){return l.kind===(k==="stt"?LK.ml:LK.lt)&&l.status!=="Closed"});h=T(k==="stt"?"Short-term Loan Taken":"Long-term Loan Taken",fmt(k==="stt"?o.shortL:o.longL))+mTbl([["Loan"],["Remaining",1]],(o.il&&o.il.hasT?ilLoanRows(k==="ltt","t"):L2.map(function(l){return"<tr><td>"+esc(l.name)+'</td><td class="ra">'+fmt(lInfo(l).rem)+"</td></tr>"})))}
  else if(k==="ta"){h=T("Total Assets",fmt(o.assets))+mTbl([["Part"],["Amount",1]],[["Bank balance",o.bank],["Cash / wallet",o.wallet],["Short-term loans given",o.recS],["Long-term loans given",o.recL],["Receivable to review",o.recU],["Investments (current value)",o.invV],["Other assets counted",o.manAc]].map(function(r){return"<tr><td>"+r[0]+'</td><td class="ra">'+fmt(r[1])+"</td></tr>"}))}
  else if(k==="tl"){h=T("Total Liabilities",fmt(o.liab))+mTbl([["Part"],["Amount",1]],[["Short-term loans taken",o.shortL],["Long-term loans taken",o.longL],["Other liabilities",o.manL],["Overdrawn accounts",o.od]].map(function(r){return"<tr><td>"+r[0]+'</td><td class="ra">'+fmt(r[1])+"</td></tr>"}))}
  else{h=T("Net Worth",fmt(o.nw),'<div class="m">Total Assets '+fmt(o.assets)+" − Total Liabilities "+fmt(o.liab)+". A loan given is an asset, a principal repayment is not income, and Permanently Given is an expense.</div>")+mTbl([["Month"],["Net worth",1]],nwTrend().map(function(x){return"<tr><td>"+x[0]+'</td><td class="ra">'+fmt(x[1])+"</td></tr>"}))}
@@ -2950,7 +2951,7 @@ var IL={f:{t:"",p:"",s:"",a:"",b:""}};
 function ilAll(){return(ND.fundlog||[]).filter(function(e){return e.il})}
 function ilLive(a){return a.filter(function(e){return e.status==="ok"&&e.type!=="reversal"})}
 function ilCalc(all){var m={fund:0,cap:0,prinRet:0,profit:0,reinv:0,xfer:0,lgG:0,lgR:0,lgI:0,ltT:0,ltR:0,ltI:0,loans:{},bad:0,perm:0,lgS:0,lgL:0,ltS:0,ltL:0},s=function(x){return+x||0};
- ilLive(all).forEach(function(e){var p=s(e.prin),i=s(e.int),t=e.type,L;
+ ilLive(all).slice().sort(function(a,b){var ra=(a.type==="loan_give"||a.type==="loan_take")?0:1,rb=(b.type==="loan_give"||b.type==="loan_take")?0:1;return ra-rb||String(a.date).localeCompare(String(b.date))||(a.ts||0)-(b.ts||0)}).forEach(function(e){var p=s(e.prin),i=s(e.int),t=e.type,L;
   if(t==="inv_cap"){m.cap+=p;m.fund+=p}
   else if(t==="inv_return"){m.prinRet+=p;m.profit+=i;m.fund+=p+i}
   else if(t==="inv_reinv"){m.reinv+=p;m.fund-=p}
@@ -2963,8 +2964,8 @@ function ilCalc(all){var m={fund:0,cap:0,prinRet:0,profit:0,reinv:0,xfer:0,lgG:0
 function ilCheck(all){var m=ilCalc(all);if(m.bad)throw Error("A repayment points to a missing loan");if(m.fund<-0.005)throw Error("Not enough in the Investment Fund (would be "+fmt(m.fund)+")");
  for(var k in m.loans)if(m.loans[k].p-m.loans[k].r<-0.005)throw Error("Repayment is more than the outstanding principal of "+m.loans[k].e.party);return m}
 function ilDocs(e){var o=[],p=+e.prin||0,i=+e.int||0,A=function(x){return x&&x!=="fund"&&x!=="ext"?x:""},nm=e.party||"";
- var ex=function(k,a,amt,cat,item,prin){var d={date:e.date,cat:cat,item:item,amount:amt,method:a?pmOf(accOf(a)):"Others",notes:e.desc||"",il:e.id};if(a)d.acct=a;else d.fund=1;if(prin)d.prin=true;o.push({c:"expenses",id:"il_"+e.id+k,d:d})};
- var inc=function(k,a,amt,note,mv){var d={date:e.date,type:"Others",notes:note+(e.desc?" · "+e.desc:""),amount:amt,method:a?pmOf(accOf(a)):"Others",il:e.id};if(a)d.acct=a;else d.fund=1;if(mv)d.bor="il:"+e.id;o.push({c:"income",id:"il_"+e.id+k,d:d})};
+ var ex=function(k,a,amt,cat,item,prin){if(!a)return;var d={date:e.date,cat:cat,item:item,amount:amt,method:a?pmOf(accOf(a)):"Others",notes:e.desc||"",il:e.id};if(a)d.acct=a;else d.fund=1;if(prin)d.prin=true;o.push({c:"expenses",id:"il_"+e.id+k,d:d})};
+ var inc=function(k,a,amt,note,mv){if(!a)return;var d={date:e.date,type:"Others",notes:note+(e.desc?" · "+e.desc:""),amount:amt,method:a?pmOf(accOf(a)):"Others",il:e.id};if(a)d.acct=a;else d.fund=1;if(mv)d.bor="il:"+e.id;o.push({c:"income",id:"il_"+e.id+k,d:d})};
  var t=e.type;
  if(t==="inv_cap"&&A(e.src))ex("",A(e.src),p,"Investment","Investment capital: "+nm,true);
  else if(t==="inv_xfer"&&A(e.dst))inc("",A(e.dst),p,"Investment fund transfer (not income)",true);
@@ -3099,7 +3100,44 @@ function ilSD(e){var t=e.type,p=e.party||"";if(t==="inv_return")return["External
 .il2-empty{padding:22px 18px;color:var(--mut);text-align:center}
 @media(max-width:560px){.il2{padding:12px}.il2-ttl h2{font-size:21px}.il2-dn{width:130px;height:130px}.il2-dn div{width:90px;height:90px}}
 
-#p-accounts #nLoan{margin-top:20px}
+#p-accounts #nLoan{margin-top:8px}
+.il2.cmp{gap:8px;padding:10px 12px;border-radius:14px;font-size:12.5px}
+.il2.cmp .il2-top,.il2.cmp .il2-ttl{gap:8px}
+.il2.cmp .il2-ttl svg{width:26px;height:26px}
+.il2.cmp .il2-ttl h2{font-size:17px}
+.il2.cmp .il2-ttl p,.il2.cmp .il2-sel{display:none}
+.il2.cmp .il2-kpi{grid-template-columns:repeat(4,1fr);gap:8px}
+.il2.cmp .il2-k{padding:8px 10px;gap:9px;border-radius:11px}
+.il2.cmp .il2-k .ico{width:32px;height:32px;border-radius:9px}
+.il2.cmp .il2-k .ico svg{width:18px;height:18px}
+.il2.cmp .il2-k span{font-size:12px}
+.il2.cmp .il2-k b{font-size:18px}
+.il2.cmp .il2-k small{font-size:10.5px}
+.il2.cmp .il2-pn{grid-template-columns:1fr 1fr;gap:8px}
+.il2.cmp .il2-hd{padding:7px 12px}
+.il2.cmp .il2-hd h3{font-size:14px;gap:7px}
+.il2.cmp .il2-hd h3 svg{width:18px;height:18px}
+.il2.cmp .il2-hd button{font-size:12px}
+.il2.cmp .il2-bd{padding:10px 12px;gap:8px}
+.il2.cmp .il2-sum{gap:12px}
+.il2.cmp .il2-dn{width:84px;height:84px}
+.il2.cmp .il2-dn div{width:58px;height:58px}
+.il2.cmp .il2-dn b{font-size:12px}
+.il2.cmp .il2-dn small{font-size:9.5px}
+.il2.cmp .il2-lg{min-width:150px}
+.il2.cmp .il2-lg>div{padding:2px 0;font-size:12px}
+.il2.cmp .il2-lg .tot{margin-top:2px;padding-top:4px;font-size:12.5px}
+.il2.cmp .il2-note{font-size:10.5px}
+.il2.cmp .il2-ah{display:none}
+.il2.cmp .il2-ac{grid-template-columns:repeat(3,1fr)!important;gap:6px}
+.il2.cmp .il2-pn>.il2-bx:last-child .il2-ac{grid-template-columns:repeat(2,1fr)!important}
+.il2.cmp .il2-t{min-height:34px;padding:5px 8px;gap:7px;font-size:11.5px;border-radius:9px}
+.il2.cmp .il2-t svg{width:17px;height:17px}
+.il2.cmp .il2-link{font-size:12px}
+.il2-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px;font-size:12px}
+.il2-bar span{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.il2-bar svg{width:16px;height:16px;color:#168a55;flex:none}
+@media(max-width:900px){.il2.cmp .il2-pn{grid-template-columns:1fr}.il2.cmp .il2-kpi{grid-template-columns:repeat(2,1fr)}}
 `;document.head.appendChild(s)})();
 var IL2IC={
  bars:'<path d="M3 21h18"/><rect x="4" y="12" width="4" height="9" rx="1"/><rect x="10" y="8" width="4" height="13" rx="1"/><rect x="16" y="4" width="4" height="17" rx="1"/>',
@@ -3121,10 +3159,12 @@ var IL2IC={
 };
 
 /* ledger totals for net worth: as of date d (or now). Returns null if the ledger is empty. */
+function ilLoanRows(long,kind){var m=ilCalc(ilAll());return Object.keys(m.loans).map(function(i){return m.loans[i]}).filter(function(L){return L.k===kind&&(L.e.term==="long")===long&&L.p-L.r>0.005}).map(function(L){return"<tr><td>"+esc(L.e.party||"")+'</td><td class="ra">'+fmt(L.p-L.r)+"</td></tr>"})}
+function ilInvRows(){var m=ilCalc(ilAll()),oth=m.fund-m.cap-m.prinRet-m.profit+m.reinv+m.xfer,f=function(a,b){return"<tr><td>"+a+'</td><td class="ra">'+(b<0?"\u2212 ":"")+fmt(Math.abs(b))+"</td></tr>"};return[f("Capital added",m.cap),f("Principal returned",m.prinRet),f("Profit received",m.profit),f("Reinvested",-m.reinv),f("Transferred to accounts",-m.xfer)].concat(Math.abs(oth)>0.005?[f("Other movements (net)",oth)]:[]).concat([f("<b>Fund balance</b>",m.fund)])}
 function ilNW(d){try{var all=ilAll();if(!all.length)return null;var live=ilLive(all),has=function(f){return live.some(f)},ent=d?all.filter(function(e){return String(e.date)<=d}):all,m=ilCalc(ent);
  return{fund:m.fund,lgO:m.lgO,ltO:m.ltO,lgS:m.lgS,lgL:m.lgL,ltS:m.ltS,ltL:m.ltL,perm:m.perm,hasI:has(function(e){return e.type.indexOf("inv_")===0}),hasG:has(function(e){return e.type==="loan_give"&&e.term!=="perm"}),hasT:has(function(e){return e.type==="loan_take"})}}catch(x){return null}}
-function ilHtml(){
- var all=ilAll(),m=ilCalc(all),F0=IL.f,V=F0.v==="all",RG=F0.r||"12",
+function ilHtml(D){
+ var all=ilAll(),m=ilCalc(all),F0=IL.f,V=!!D,RG=F0.r||"12",
  ic=function(n){return'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IL2IC[n]+"</svg>"},
  np=m.fund+m.lgO-m.ltO,MO=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
  dt=function(s){var p=String(s||"").split("-");return p.length===3?p[2]+" "+MO[+p[1]-1]+" "+p[0]:String(s||"")},
@@ -3154,7 +3194,8 @@ function ilHtml(){
   var tr=rows.map(function(e){var sd=ilSD(e),rv=e.status==="reversed",isr=e.type==="reversal",tot=(+e.prin||0)+(+e.int||0),s=sg(e);
    return"<tr"+(rv?' style="opacity:.55;text-decoration:line-through"':"")+"><td>"+esc(e.date)+"</td><td><small>"+esc(e.id)+"</small></td><td>"+esc((ILT[e.type]||e.type)+(e.term?" · "+ilTm(e):""))+"</td><td>"+esc(e.party||"")+'</td><td class="ra">'+fmt(e.prin||0)+'</td><td class="ra">'+fmt(e.int||0)+'</td><td class="ra '+(s>0?"il2-pos":s<0?"il2-neg":"")+'"><b>'+fmt(tot)+"</b></td><td>"+esc(sd[0])+" → "+esc(sd[1])+"</td><td>"+(rv?'<span class="r">Reversed</span>':isr?'<span class="r">Reversal of '+esc(e.rev)+"</span>":"Posted")+"</td><td>"+esc(e.desc||"")+"</td><td>"+(!rv&&!isr?'<button class="ilb s" data-ilx="edit" data-id="'+esc(e.id)+'">Edit</button><button class="ilb s" data-ilx="rev" data-id="'+esc(e.id)+'">Revert</button>':"")+"</td></tr>"}).join("")||'<tr><td colspan="11" class="il2-empty">No transactions match these filters.</td></tr>';
   body='<div class="il2-fl">'+sel("t",[["","All types"],["inv","Investment"],["loan","All loans"],["lg","Loan Given"],["lt","Loan Taken"],["inv_xfer","Transfers to account"],["inv_reinv","Reinvestment"],["loan_repay","Repayments"],["loan_recv","Recoveries"],["reversal","Reversals"]])+'<input data-ilf="p" placeholder="Person / investment" value="'+esc(F0.p)+'">'+sel("s",[["","All status"],["ok","Posted"],["reversed","Reversed"]])+'<input type="date" data-ilf="a" value="'+F0.a+'" aria-label="From date"><input type="date" data-ilf="b" value="'+F0.b+'" aria-label="To date"></div><div class="il2-tb"><table class="wide"><tr><th>Date</th><th>ID</th><th>Type</th><th>Person / investment</th><th class="ra">Principal</th><th class="ra">Interest</th><th class="ra">Total</th><th>Source → Destination</th><th>Status</th><th>Description</th><th></th></tr>'+tr+"</table></div>"}
- return'<div class="il2">'
+ if(D)return'<div class="il2" style="border:0;padding:0;background:#fff"><div class="il2-rh"><h3>'+ic("clock")+'All Transactions</h3><label class="il2-sel">'+ic("cal")+sel("r",[["1","Last 30 Days"],["3","Last 3 Months"],["6","Last 6 Months"],["12","Last 12 Months"],["all","All Time"]],"12")+"</label></div>"+body+"</div>";
+ return'<div class="il2 cmp">'
  +'<div class="il2-top"><div class="il2-ttl">'+ic("bars")+'<div><h2>Investment &amp; Loan Management</h2><p>Track your investment growth and loan activities</p></div></div>'
  +'<div class="il2-tools"><button class="il2-link" data-ilx="bak" title="Download a copy of the old records">Backup old records</button><label class="il2-sel">'+ic("cal")+sel("r",[["1","Last 30 Days"],["3","Last 3 Months"],["6","Last 6 Months"],["12","Last 12 Months"],["all","All Time"]],"12")+"</label></div></div>"
  
@@ -3163,14 +3204,15 @@ function ilHtml(){
  +'<div class="il2-bx"><div class="il2-hd" style="background:#168a55"><h3>'+ic("up")+'Investment Management</h3><button data-il2="vi">View Details '+ic("arr")+'</button></div><div class="il2-bd"><div class="il2-sum"><div class="il2-dn" style="background:'+invBg+'"><div><b>'+fmt(m.fund)+"</b><small>Total Fund</small></div></div><div class=\"il2-lg\">"+LG("#168a55","Initial Capital",fmt(m.cap))+LG("#7ccf6a","Profit Received",fmt(m.profit))+(Math.abs(oth)>0.005?LG("#b7c4bd","Other movements (net)",(oth<0?"− ":"")+fmt(Math.abs(oth))):"")+LG("","Total Fund",fmt(m.fund),"tot")+'</div></div><h4 class="il2-ah">Investment Actions</h4><div class="il2-ac">'+T("inv_cap","cg","plus","Add Investment Capital")+T("inv_return","cg","gift","Record Profit (Return)")+T("inv_reinv","cb","sync","Reinvest Profit")+T("inv_xfer","co","swap","Transfer to Personal Account")+T("alloc","cp","pie","Fund Allocation")+T("keep","cg","wallet","Keep in Fund")+"</div></div></div>"
  +'<div class="il2-bx"><div class="il2-hd" style="background:#5a43a8"><h3>'+ic("swap")+'Loan Management</h3><button data-il2="vl">View Details '+ic("arr")+'</button></div><div class="il2-bd"><div class="il2-sum"><div class="il2-dn" style="background:'+loBg+'"><div><b>'+fmt(m.ltO)+"</b><small>Outstanding</small></div></div><div class=\"il2-lg\">"+LG("#5a43a8","Total Taken",fmt(m.ltT))+LG("#a592ee","Repaid",fmt(m.ltR))+LG("","Outstanding",fmt(m.ltO),"tot")+"</div></div>"+(lnote.length?'<p class="il2-note">'+lnote.join("<br>")+"</p>":"")+'<h4 class="il2-ah">Loan Actions</h4><div class="il2-ac" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">'+T("loan_give","cp","give","Give a Loan")+T("loan_take","cb","take","Take a Loan")+T("loan_repay","cg","pay","Repayment (Loan Taken)")+T("loan_recv","co","done","Settlement (Loan Given)")+"</div></div></div>"
  +"</div>"
- +'<div class="il2-bx" id="il2tx"><div class="il2-rc"><div class="il2-rh"><h3>'+ic("clock")+(V?"All Transactions":"Recent Transactions")+'</h3><button class="il2-link" data-il2="'+(V?"recent":"all")+'">'+(V?"Show recent only":"View All "+ic("arr"))+"</button></div>"+body+"</div></div>"
+ +'<div class="il2-bx il2-bar"><span>'+ic("clock")+"<b>Transactions</b> · "+(rows.length?rows.length+" in this period · latest "+esc(dt(rows[0].date))+" · "+esc(det(rows[0])):"none yet")+'</span><button class="il2-link" data-il2="all">View All '+ic("arr")+"</button></div>"
  +"</div>"}
 {const _go=go;go=function(p){_go.apply(this,arguments);if(p==="loans")setTimeout(function(){var x=document.getElementById("nLoan");if(x)x.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})},60)}}
-document.addEventListener("click",function(ev){var b=ev.target.closest("[data-il2]");if(!b)return;var a=b.dataset.il2,f=IL.f; if(a==="all"){f.v="all";f.t=""}else if(a==="recent"){f.v="";f.t="";f.p="";f.s="";f.a="";f.b=""}else if(a==="vi"){f.v="all";f.t="inv"}else if(a==="vl"){f.v="all";f.t="loan"}
- renderLoans();if(a!=="recent"){var x=document.getElementById("il2tx");if(x)x.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})}});
-renderLoans=function(){var el=document.getElementById("nLoan");if(!el)return;var a=document.activeElement;if(a&&a.dataset&&a.dataset.ilf==="p")return;el.innerHTML=ilHtml()};
-document.addEventListener("change",function(e){var f=e.target.dataset&&e.target.dataset.ilf;if(f){IL.f[f]=e.target.value;renderLoans()}});
-document.addEventListener("input",function(e){if(e.target.dataset&&e.target.dataset.ilf==="p"){IL.f.p=e.target.value;var x=document.getElementById("nLoan"),s=e.target.selectionStart;x.innerHTML=ilHtml();var n=x.querySelector('[data-ilf="p"]');n.focus();n.setSelectionRange(s,s)}});
+function ilDetail(){var d=mdlg("dIL",'<div id="ilDet">'+ilHtml(true)+'</div>');d.style.maxWidth="1180px";d.style.width="96vw";d.style.maxHeight="90vh"}
+document.addEventListener("click",function(ev){var b=ev.target.closest("[data-il2]");if(!b)return;var a=b.dataset.il2,f=IL.f;
+ if(a==="all")f.t="";else if(a==="vi")f.t="inv";else if(a==="vl")f.t="loan";else return;f.p="";f.s="";f.a="";f.b="";ilDetail()});
+renderLoans=function(){var el=document.getElementById("nLoan");if(!el)return;var a=document.activeElement;if(a&&a.dataset&&a.dataset.ilf==="p")return;el.innerHTML=ilHtml();var dd=document.getElementById("ilDet");if(dd&&!(a&&a.dataset&&a.dataset.ilf))dd.innerHTML=ilHtml(true)};
+document.addEventListener("change",function(e){var f=e.target.dataset&&e.target.dataset.ilf;if(f){IL.f[f]=e.target.value;var hh=e.target.closest("#ilDet");if(hh)hh.innerHTML=ilHtml(true);else renderLoans()}});
+document.addEventListener("input",function(e){if(e.target.dataset&&e.target.dataset.ilf==="p"){IL.f.p=e.target.value;var hh=e.target.closest("#ilDet"),x=hh||document.getElementById("nLoan"),s=e.target.selectionStart;x.innerHTML=ilHtml(!!hh);var n=x.querySelector('[data-ilf="p"]');n.focus();n.setSelectionRange(s,s)}});
 document.addEventListener("click",async function(ev){var b=ev.target.closest("[data-ilx]");if(!b)return;var a=b.dataset.ilx;try{
  if(ILT[a])ilForm(a);else if(a==="keep")toast("No transaction. The money stays in the Investment Fund");
  else if(a==="alloc"){var d=mdlg("dIA",'<h3 style="margin:0 0 8px">Fund Allocation</h3><div class="ilg"><button class="ilb" data-ilx="inv_xfer">Transfer to Personal Account</button><button class="ilb" data-ilx="loan_repay">Loan Repayment from Fund</button><button class="ilb" data-ilx="inv_reinv">Reinvest</button><button class="ilb" data-ilx="keep">Keep in Fund</button></div>')}
