@@ -1708,7 +1708,7 @@ function nwChart(at,t,has){
   else{const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));d=e.toISOString().slice(0,10);lb=en?MS[e.getUTCMonth()]:BM[e.getUTCMonth()];tt=lb+" "+e.getUTCFullYear()}
   const r=at(d);P.push({lb,tt,d,A:r.A,L:r.L,N:r.N})}
  NWP=P;
- const W=1000,H=190,pl=62,pr=18,pt=12,pb=30,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
+ const W=720,H=300,pl=54,pr=16,pt=18,pb=32,pw=W-pl-pr,ph=H-pt-pb,all=P.flatMap(p=>[p.A,p.L,p.N]);
  let mn=Math.min(0,...all),mx=Math.max(0,...all);if(mx===mn)mx=1;
  const raw=(mx-mn)/3,mag=Math.pow(10,Math.floor(Math.log10(raw))),nr=raw/mag,step=(nr<=1?1:nr<=2?2:nr<=5?5:10)*mag,lo=Math.floor(mn/step)*step,hi=Math.ceil(mx/step)*step;
  const X=i=>pl+pw*(i+.5)/6,Y=v=>pt+ph*(1-(v-lo)/(hi-lo)),f=n=>n.toFixed(1);
@@ -1722,10 +1722,11 @@ function nwChart(at,t,has){
   g+=`<line x1="${pl}" x2="${W-pr}" y1="${f(y)}" y2="${f(y)}" stroke="${z?"#8a968f":"#e7ebe4"}" stroke-width="${z?1.1:.8}"${z?' stroke-dasharray="4 3"':""}/><text x="${pl-6}" y="${f(y+3)}" text-anchor="end" font-size="14.5" fill="#55625b">${sh(v)}</text>`}
  const y0=Y(0),area=sp(sN.pts)+`L${f(X(5))} ${f(y0)}L${f(X(0))} ${f(y0)}Z`;
  const dots=s=>s.pts.map(q=>`<circle cx="${f(q[0])}" cy="${f(q[1])}" r="4" fill="${s.col}" stroke="#fff" stroke-width="1.8"/>`).join("");
+ const endl=(s,k)=>{const q=s.pts[5],v=P[5][k];return`<text x="${f(q[0]-6)}" y="${f(q[1]-10)}" text-anchor="end" font-size="14" font-weight="700" fill="${s.col}">${sh(v)}</text>`};
  const lines=s=>`<path d="${sp(s.pts)}" fill="none" stroke="${s.col}" stroke-width="2.6" stroke-linecap="round"/>`;
  const hits=P.map((p,i)=>`<rect class="hit" data-i="${i}" data-x="${f(X(i))}" x="${f(pl+pw*i/6)}" y="${pt}" width="${f(pw/6)}" height="${ph}" fill="transparent"/>`).join("");
  const labs=P.map((p,i)=>`<text x="${f(X(i))}" y="${H-6}" text-anchor="middle" font-size="15.5" fill="#3f4b45">${p.lb}</text>`).join("");
- const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net worth, last 6 months"><defs><linearGradient id="nwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".30"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".03"/></linearGradient></defs>${g}<path d="${area}" fill="url(#nwg)"/>${lines(sL)}${lines(sA)}${lines(sN)}${dots(sL)}${dots(sA)}${dots(sN)}<line id="nwGl" y1="${pt}" y2="${pt+ph}" stroke="#1f5c50" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>${labs}${hits}</svg>`;
+ const svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Net worth, last 6 months"><defs><linearGradient id="nwg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".30"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".03"/></linearGradient></defs>${g}<path d="${area}" fill="url(#nwg)"/>${lines(sL)}${lines(sA)}${lines(sN)}${dots(sL)}${dots(sA)}${dots(sN)}${endl(sL,"L")}${endl(sA,"A")}${endl(sN,"N")}<line id="nwGl" y1="${pt}" y2="${pt+ph}" stroke="#1f5c50" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>${labs}${hits}</svg>`;
  return`<div class="card nwc"><div class="nwh"><h3><span>Net worth, last 6 months</span></h3>${inf("History uses account balances; manual items are shown at today’s value. Savings goals are not added again: money in a savings account is already in its balance.")}<div class="nwl"><span><i style="background:#1f9d6b"></i>Net worth</span><span><i style="background:#2f7fd6"></i>Total Assets</span><span><i style="background:#d9534f"></i>Total Liabilities</span></div><button class="btn w" data-a="addL">+ Add manual asset / liability</button></div><div class="nwb">${svg}<div class="nwt" hidden></div></div></div>`}
 {const nwTip=e=>{const h=e.target.closest&&e.target.closest(".nwc .hit"),c=document.querySelector(".nwc .nwb");if(!c)return;const tip=c.querySelector(".nwt"),gl=c.querySelector("#nwGl");
  if(!h){tip.hidden=true;gl&&gl.setAttribute("opacity","0");return}
@@ -3154,6 +3155,42 @@ html body #p-accounts .mcards.mcflex>.mis{flex:1 1 240px;min-width:220px}
 .il2-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px;font-size:12px}
 .il2-bar span{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .il2-bar svg{width:16px;height:16px;color:#168a55;flex:none}
+html body #p-accounts .acp{grid-template-areas:"acc acc" "sum sum"!important}
+html body #p-accounts #nAcc .acc-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important}
+#p-accounts #acMid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:10px;margin-top:8px;align-items:stretch}
+html body #p-accounts #acMid>#nLoan{margin-top:0!important;min-width:0}
+html body #p-accounts #acMid>#nLoan>.il2{height:100%;box-sizing:border-box;align-content:start}
+html body #p-accounts #acMid>#aGr{grid-area:auto!important;display:flex;min-width:0}
+html body #p-accounts #acMid>#aGr>.card{flex:1;margin:0!important}
+html body #p-accounts #aGr .nwh{flex-wrap:wrap;gap:6px 12px}
+html body #p-accounts #aGr .nwb svg{min-height:0}
+@media(max-width:1100px){#p-accounts #acMid{grid-template-columns:1fr}}
+.il2.cmp{font-size:14px}
+.il2.cmp .il2-ttl h2{font-size:19px}
+.il2.cmp .il2-k{padding:10px 12px}
+.il2.cmp .il2-k .ico{width:38px;height:38px}
+.il2.cmp .il2-k .ico svg{width:21px;height:21px}
+.il2.cmp .il2-k span{font-size:13.5px}
+.il2.cmp .il2-k b{font-size:22px}
+.il2.cmp .il2-k small{font-size:12px}
+.il2.cmp .il2-hd{padding:9px 14px}
+.il2.cmp .il2-hd h3{font-size:16px}
+.il2.cmp .il2-hd h3 svg{width:20px;height:20px}
+.il2.cmp .il2-hd button{font-size:13.5px}
+.il2.cmp .il2-bd{padding:12px 14px;gap:10px}
+.il2.cmp .il2-dn{width:96px;height:96px}
+.il2.cmp .il2-dn div{width:68px;height:68px}
+.il2.cmp .il2-dn b{font-size:14px}
+.il2.cmp .il2-dn small{font-size:11px}
+.il2.cmp .il2-lg>div{font-size:14px;padding:3px 0}
+.il2.cmp .il2-lg .tot{font-size:14.5px}
+.il2.cmp .il2-note{font-size:12px}
+.il2.cmp .il2-t{min-height:40px;font-size:13.5px;padding:6px 10px}
+.il2.cmp .il2-t svg{width:20px;height:20px}
+.il2.cmp .il2-link{font-size:13.5px}
+.il2-bar{font-size:13.5px}
+.il2.cmp .il2-pn{grid-template-columns:1fr}
+@media(min-width:1500px){.il2.cmp .il2-pn{grid-template-columns:1fr 1fr}}
 @media(max-width:900px){.il2.cmp .il2-pn{grid-template-columns:1fr}.il2.cmp .il2-kpi{grid-template-columns:repeat(2,1fr)}}
 `;document.head.appendChild(s)})();
 var IL2IC={
@@ -3179,7 +3216,9 @@ var IL2IC={
 /* ===== accounts layout: Investment & Loan in the middle, Transfers + Manual records at the bottom, histories in popups ===== */
 function trfTable(list){return'<div style="overflow:auto"><table><tr><th>Date</th><th>From \u2192 To</th><th class="ra">Amount</th><th>Note</th><th></th></tr>'+(list.map(function(x){return'<tr class="'+(x.status==="void"?"trv":"")+'"><td>'+x.date+"</td><td>"+esc(aName(x.from))+" \u2192 "+esc(aName(x.to))+'</td><td class="ra">'+fmt(x.amount)+"</td><td>"+(x.status==="void"?badge("Cancelled","#64748b")+" ":"")+esc(x.notes||"")+'</td><td class="ra">'+(x.status==="void"?bt("unvoid",x.id,"Restore"):bt("editT",x.id,"Edit")+" "+bt("void",x.id,"Void"))+"</td></tr>"}).join("")||'<tr><td colspan="5" class="m">No transfers yet.</td></tr>')+"</table></div>"}
 function trfDetFill(){var h=document.getElementById("trfDet");if(!h)return;var all=ND.transfers.slice().sort(function(x,y){return y.date.localeCompare(x.date)}),n=all.filter(function(x){return x.status==="void"}).length;h.innerHTML='<p class="m" style="font-size:12px;margin:0 0 8px">Each transfer is one linked record: it reduces one account and increases the other, and is excluded from income and expense totals.</p>'+(n?'<label class="trvt"><input type="checkbox" id="trfV"'+(TRFV?" checked":"")+"><span>Show cancelled</span><span>("+n+")</span></label>":"")+trfTable(TRFV?all:all.filter(function(x){return x.status!=="void"}))}
-function acPlace(){var l=document.getElementById("nLoan"),m=document.getElementById("nMan"),n=document.getElementById("nAcc");if(!l||!m||!n)return;var b=document.getElementById("acBottom");if(!b){b=document.createElement("div");b.id="acBottom";l.after(b)}
+function acPlace(){var l=document.getElementById("nLoan"),m=document.getElementById("nMan"),n=document.getElementById("nAcc"),g=document.getElementById("aGr");if(!l||!m||!n)return;
+ var mid=document.getElementById("acMid");if(!mid){mid=document.createElement("div");mid.id="acMid";l.before(mid);mid.appendChild(l)}if(g&&g.parentNode!==mid)mid.appendChild(g);
+ var b=document.getElementById("acBottom");if(!b){b=document.createElement("div");b.id="acBottom";mid.after(b)}
  if(m.parentNode!==b)b.appendChild(m);var t=n.querySelector("#nTrf"),o=b.querySelector("#nTrf");if(t){if(o)o.remove();b.prepend(t)}}
 {const _rn=renderNew;renderNew=function(){_rn.apply(this,arguments);try{acPlace();trfDetFill()}catch(e){console.error(e)}}}
 document.addEventListener("click",function(e){var t=e.target.closest("[data-trfd]");if(t){var d=mdlg("dTrf",'<h3 style="margin:0 0 8px">Transfer history</h3><div id="trfDet"></div>');d.style.maxWidth="900px";d.style.width="96vw";trfDetFill();return}
