@@ -3103,6 +3103,10 @@ function ilSD(e){var t=e.type,p=e.party||"";if(t==="inv_return")return["External
 #p-accounts #nLoan{margin-top:8px}
 html body #p-accounts .acp{grid-template-areas:"sum sum" "acc gr"!important;margin-bottom:0}
 #p-accounts #acBottom{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:10px;margin-top:8px;align-items:start}
+html body #p-accounts #acBottom>#nMan,html body #p-accounts #acBottom>#nTrf{grid-area:auto!important;grid-column:auto!important;grid-row:auto!important;margin:0!important;align-self:stretch;min-width:0;display:block}
+html body #p-accounts #acBottom{align-items:stretch;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+html body #p-accounts #acBottom>#nTrf>.card,html body #p-accounts #acBottom>#nMan>.card{height:100%;box-sizing:border-box}
+html body #p-accounts #acBottom .mcards{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
 #p-accounts #acBottom .card{margin:0}
 #p-accounts #acBottom .card>h3{display:flex;align-items:center;gap:8px}
 @media(max-width:1100px){#p-accounts #acBottom{grid-template-columns:1fr}}
