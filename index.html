@@ -1080,64 +1080,6 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 }
 @media(max-width:360px){html body aside .it{font-size:calc(8px*var(--fs,1))}}
 </style>
-<style id="dashui">
-/* ===== Dashboard-only UI refresh. Scoped to #p-dash: no markup, ids, JS, data or other pages touched ===== */
-#p-dash{--mint:#e6f6ef;--teal:#1f5c50;--sky:#e9f1fb;--lav:#efeafb;--peach:#fdf0e3;--rose:#fdecee;--sh:0 1px 2px rgba(31,92,80,.06),0 8px 24px -10px rgba(31,92,80,.18);
- position:relative;padding:14px;border-radius:22px;background:radial-gradient(900px 380px at 8% -5%,#d9f3ea 0,transparent 65%),radial-gradient(700px 360px at 100% 0,#e8e4fa 0,transparent 60%),linear-gradient(#f5faf8,#f7f7fb)}
-#p-dash .card{border:1px solid rgba(31,92,80,.09);border-radius:18px;background:rgba(255,255,255,.92);box-shadow:var(--sh);transition:transform .18s ease,box-shadow .18s ease}
-#p-dash .card:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(31,92,80,.08),0 16px 32px -12px rgba(31,92,80,.28)}
-#p-dash #cyc,#p-dash #fmc{background:linear-gradient(100deg,#fff 0,var(--mint) 140%)}
-#p-dash .cyc3,#p-dash .fmtile{border-radius:14px;box-shadow:inset 0 0 0 1px rgba(31,92,80,.08)}
-#p-dash #kp>.card:nth-child(1){background:linear-gradient(150deg,#f4fbf7 0,#cdeedd 100%)}
-#p-dash #kp>.card:nth-child(2){background:linear-gradient(150deg,#fff7f8 0,#fbd5dc 100%)}
-#p-dash #kp>.card:nth-child(3){background:linear-gradient(150deg,#f6f9fe 0,#cfe0f8 100%)}
-#p-dash #kp>.card:nth-child(4){background:linear-gradient(150deg,#faf8ff 0,#ddd3f8 100%)}
-#p-dash #kp>.card:nth-child(n){border-radius:20px;border-top:3px solid rgba(31,92,80,.35)}#p-dash #kp>.card:nth-child(2){border-top-color:#e4607a}#p-dash #kp>.card:nth-child(3){border-top-color:#4a86d8}#p-dash #kp>.card:nth-child(4){border-top-color:#8a6fd8}
-#p-dash #bkc,#p-dash #pcc{background:linear-gradient(160deg,#fff 30%,var(--sky))}
-#p-dash #qc{background:linear-gradient(160deg,#fff 30%,var(--peach))}
-#p-dash #sdc{background:linear-gradient(160deg,#fff 30%,var(--lav))}
-#p-dash #fo{background:linear-gradient(160deg,#fff 25%,var(--mint))}
-#p-dash #fo .fhero{border-radius:16px;box-shadow:0 10px 22px -12px rgba(31,92,80,.7)}
-#p-dash .btn,#p-dash .cyadd,#p-dash .cyall,#p-dash .fsan{border-radius:12px;font-weight:600;transition:transform .15s,box-shadow .15s,filter .15s}
-#p-dash .btn:hover,#p-dash .cyadd:hover,#p-dash .cyall:hover,#p-dash .fsan:hover{transform:translateY(-1px);filter:brightness(1.04);box-shadow:0 8px 16px -8px rgba(31,92,80,.5)}
-#p-dash .cyadd.inc{background:linear-gradient(135deg,#2a7a67,#1f5c50);color:#fff;border-color:transparent}
-#p-dash .cys,#p-dash .fmg button,#p-dash .fsf button{border-radius:999px}
-#p-dash .cal{border-radius:12px}
-#p-dash .card h3{letter-spacing:.1px}
-#p-dash #dashIL{grid-column:1/-1;margin-top:14px}#p-dash #dashIL .il2{box-shadow:var(--sh);background:rgba(255,255,255,.92);border-color:rgba(31,92,80,.09)}
-@media(min-width:900px){#p-dash #dashIL .il2-pn{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}}
-@media(max-width:600px){#p-dash #dashIL .il2{padding:12px}#p-dash #dashIL .il2-ac{grid-template-columns:repeat(2,minmax(0,1fr))!important}#p-dash #dashIL .il2-kpi{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:800px){#p-dash{padding:8px;border-radius:16px}#p-dash .card:hover{transform:none}}
-@media(prefers-reduced-motion:reduce){#p-dash .card,#p-dash .btn{transition:none}}
-</style>
-<style id="dashui2">
-/* ===== Dashboard layout v2 (reference-style grid, desktop). Presentation only; same elements, ids and scripts ===== */
-@media(min-width:1101px){
- html body main section#p-dash.pg:not([hidden]){display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr))!important;grid-auto-flow:row dense;gap:16px!important;align-items:start;overflow:visible!important;height:auto!important;flex:none!important;padding:18px!important;font-size:calc(14px*var(--fs,1))!important;--u:14px}
- html body main section#p-dash.pg .layout,html body main section#p-dash.pg .col,html body main section#p-dash.pg .r3,html body main section#p-dash.pg .r2,html body main section#p-dash.pg .r2b{display:contents!important}
- html body main section#p-dash.pg>*{margin:0!important;min-width:0}
- html body main section#p-dash.pg #cyc{grid-column:1/-1!important;order:1;width:auto!important;max-width:none!important}
- html body main section#p-dash.pg #fmc{grid-column:1/-1!important;order:2;width:auto!important;max-width:none!important}
- html body main section#p-dash.pg #kp{grid-column:1/-1!important;order:3;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important}
- html body main section#p-dash.pg #kp>.card{min-height:150px}
- html body main section#p-dash.pg #dashIL{grid-column:1/8!important;grid-row:span 3;order:4}
- html body main section#p-dash.pg #fo{grid-column:8/13!important;order:5;background:linear-gradient(160deg,#fff 20%,#dff3ea)!important}
- html body main section#p-dash.pg #fo .fsg{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- html body main section#p-dash.pg #pcc{grid-column:8/13!important;order:6;min-height:260px}
- html body main section#p-dash.pg .card:has(#rt){display:block!important;grid-column:8/13!important;order:7;max-height:360px;overflow:auto}
- html body main section#p-dash.pg .card:has(#rt) h3,html body main section#p-dash.pg #rt{display:block!important}
- html body main section#p-dash.pg #td{grid-column:1/-1!important;order:8}
- html body main section#p-dash.pg #sdc{grid-column:9/13!important;order:11}
- html body main section#p-dash.pg #bkc{grid-column:1/5!important;order:9}
- html body main section#p-dash.pg #qc{grid-column:5/9!important;order:10}
- html body main section#p-dash.pg .card:has(#cal){grid-column:9/13!important;order:12}
- html body main section#p-dash.pg #bgc,html body main section#p-dash.pg #acx,html body main section#p-dash.pg #kf,html body main section#p-dash.pg #ub{grid-column:1/-1!important;order:13}
- html body main section#p-dash.pg #kp .kv,html body main section#p-dash.pg #kp b{font-variant-numeric:tabular-nums}
- html body main section#p-dash.pg #dashIL .il2-pn{grid-template-columns:repeat(auto-fit,minmax(330px,1fr))!important}
- html body main section#p-dash.pg #dashIL .il2-ac{grid-template-columns:repeat(auto-fit,minmax(125px,1fr))!important}
- html body main section#p-dash.pg #dashIL .il2-kpi{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))!important}
-}
-</style>
 </head><body class="booting"><div id="ldbar"></div><script>window.__ready=function(){document.body.classList.remove("booting")};setTimeout(window.__ready,10000)</script>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Wealth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -3366,11 +3308,6 @@ function ilHtml(D){
  +"</div>"}
 {const _go=go;go=function(p){_go.apply(this,arguments);if(p==="loans")setTimeout(function(){var x=document.getElementById("nLoan");if(x)x.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})},60)}}
 function ilDetail(){var d=mdlg("dIL",'<div id="ilDet">'+ilHtml(true)+'</div>');d.style.maxWidth="1180px";d.style.width="96vw";d.style.maxHeight="90vh"}
-/* ===== Dashboard: shows the same Investment & Loan Management section (presentation only: reads ilHtml(), writes nothing; buttons use the existing document-level handlers) ===== */
-function dashIL(){var P=document.getElementById("p-dash");if(!P)return;var a=document.activeElement;if(a&&a.dataset&&a.dataset.ilf)return;var h=document.getElementById("dashIL");if(!h){h=document.createElement("div");h.id="dashIL";P.appendChild(h)}h.innerHTML=ilHtml()}
-{const _rD=renderNew;renderNew=function(){_rD.apply(this,arguments);try{dashIL()}catch(e){console.error(e)}}}
-{const _rL=renderLoans;renderLoans=function(){_rL.apply(this,arguments);try{dashIL()}catch(e){console.error(e)}}}
-
 document.addEventListener("click",function(ev){var b=ev.target.closest("[data-il2]");if(!b)return;var a=b.dataset.il2,f=IL.f;
  if(a==="all")f.t="";else if(a==="vi")f.t="inv";else if(a==="vl")f.t="loan";else return;f.p="";f.s="";f.a="";f.b="";ilDetail()});
 renderLoans=function(){var el=document.getElementById("nLoan");if(!el)return;var a=document.activeElement;if(a&&a.dataset&&a.dataset.ilf==="p")return;el.innerHTML=ilHtml();var dd=document.getElementById("ilDet");if(dd&&!(a&&a.dataset&&a.dataset.ilf))dd.innerHTML=ilHtml(true)};
