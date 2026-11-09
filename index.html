@@ -1080,6 +1080,76 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 }
 @media(max-width:360px){html body aside .it{font-size:calc(8px*var(--fs,1))}}
 </style>
+<style id="acx-css">
+/* acx: reference-style Accounts page */
+#p-accounts.acx>.acp,#p-accounts.acx>.fd-sh,#p-accounts.acx>details.gd,#p-accounts.acx>#nLoan{display:none!important}
+#acx{--g:#0f6b57;--g2:#12805f;--ink:#1d2b26;--mt:#5f6d67;--u:calc(1px*var(--fs,1));display:grid;gap:14px;color:var(--ink);padding:2px;font-family:var(--ff)}
+#acx *{box-sizing:border-box}
+#acx button,#acx summary{font:inherit}
+.ax-hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ax-logo{width:54px;height:54px;border-radius:16px;background:#d9efe6;color:var(--g);display:grid;place-items:center;flex:none}
+.ax-hd h2{margin:0;font-size:calc(30*var(--u));line-height:1.1;font-weight:800}.ax-hd p{margin:2px 0 0;color:var(--mt);font-size:calc(14*var(--u))}
+.ax-lang{margin-left:auto;display:flex;background:#fff;border-radius:99px;padding:4px;box-shadow:0 2px 8px rgba(15,60,45,.1)}
+.ax-lang button{all:unset;cursor:pointer;padding:6px 16px;border-radius:99px;font-size:calc(13.5*var(--u));font-weight:600;color:var(--mt)}.ax-lang .on{background:#d5efe3;color:var(--g)}
+.ax-add{position:relative}.ax-add summary{list-style:none;cursor:pointer;display:flex;gap:6px;align-items:center;background:linear-gradient(#138064,#0c5b49);color:#fff;border-radius:14px;padding:11px 18px;font-weight:700;font-size:calc(15*var(--u));box-shadow:0 6px 14px rgba(12,91,73,.28)}
+.ax-add summary::-webkit-details-marker,.ax-km summary::-webkit-details-marker{display:none}
+.ax-add>div,.ax-km>div{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:210px;background:#fff;border:1px solid #dbe6e0;border-radius:14px;padding:6px;box-shadow:0 14px 30px rgba(15,50,40,.18);display:grid;gap:2px}
+.ax-add>div button{all:unset;cursor:pointer;padding:9px 12px;border-radius:9px;font-size:calc(13.5*var(--u))}.ax-add>div button:hover{background:#eaf5f0}
+.ax-hero,.ax-pn,.ax-warn,.ax-tabs{background:rgba(255,255,255,.92);border:1px solid #e3ece7;border-radius:20px;box-shadow:0 8px 22px rgba(20,70,55,.07)}
+.ax-hero{display:grid;grid-template-columns:minmax(220px,.9fr) minmax(260px,1.1fr) minmax(220px,.9fr);gap:22px;align-items:center;padding:18px 22px;background:linear-gradient(100deg,#fff 40%,#e6f6ef)}
+.ax-nw h3{margin:0;font-size:calc(21*var(--u));font-weight:700}.ax-nw h3 span{font-weight:400;color:var(--mt);font-size:calc(16*var(--u))}
+.ax-nw>b{display:block;font-size:calc(46*var(--u));line-height:1.15;font-weight:800;letter-spacing:-.02em;margin:4px 0}.ax-nw .neg,.neg{color:#dc2626}.ax-nw .pos,.pos{color:#12805f}
+.ax-nw p{margin:0;font-weight:700;font-size:calc(15*var(--u))}.ax-nw p span{font-weight:500;color:var(--mt);font-size:calc(17*var(--u))}
+.ax-al{border-left:1px solid #dbe6e0;padding-left:24px;display:grid;gap:12px}
+.ax-eq{display:flex;gap:12px;flex-wrap:wrap;align-items:baseline;font-size:calc(17*var(--u))}.ax-eq b{font-size:calc(23*var(--u));font-weight:800}.ax-eq i{font-style:normal;color:var(--mt)}
+.ax-msg{display:flex;gap:10px;align-items:center;border-radius:99px;padding:9px 14px;font-size:calc(15.5*var(--u))}.ax-msg i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-style:normal;font-weight:800;flex:none}
+.ax-msg.bad{background:#fde6e4;color:#b42318}.ax-msg.bad i{background:#f59e0b}.ax-msg.good{background:#dcf5e8;color:#0f6b4a}.ax-msg.good i{background:#12a05f}
+.ax-sp{width:100%;height:104px}
+.ax-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ax-chip{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:20px;border:1px solid;box-shadow:0 6px 16px rgba(20,70,55,.06)}
+.ax-chip span:first-child{font-size:calc(14.5*var(--u))}.ax-chip>div span{display:block;font-size:calc(14.5*var(--u));color:#2c3a34}.ax-chip b{font-size:calc(25*var(--u));font-weight:800;white-space:nowrap}
+.ax-ci{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;flex:none;background:rgba(255,255,255,.75)}
+.ax-chip.g{background:#e4f6ee;border-color:#cfeadf;color:#0f7a58}.ax-chip.b{background:#e6f0fd;border-color:#cfe0f6;color:#2a6fc0}.ax-chip.r{background:#fde8e8;border-color:#f6cfcf;color:#d63b3b}.ax-chip.p{background:#e6f5ee;border-color:#cfe8da;color:#14805c}.ax-chip b{color:var(--ink)}
+.ax-tabs{display:flex;gap:2px;padding:4px;overflow-x:auto;background:#eef1f0}
+.ax-tabs button{all:unset;cursor:pointer;flex:1;min-width:max-content;display:flex;gap:8px;align-items:center;justify-content:center;padding:12px 18px;color:#4f5d57;font-size:calc(15.5*var(--u));border-bottom:3px solid transparent;border-radius:14px 14px 0 0}
+.ax-tabs button.on{background:#fff;color:var(--g);font-weight:800;border-bottom-color:var(--g2)}
+.ax-warn{display:flex;align-items:center;gap:12px;padding:11px 16px;background:#fff1c9;border-color:#f6dc8c;color:#4a3503;font-size:calc(16*var(--u))}.ax-warn svg{color:#e0900b;flex:none}
+.ax-warn a{color:#0f6b57;font-weight:800;text-decoration:underline}.ax-warn button{all:unset;cursor:pointer;margin-left:auto;padding:4px;color:#4a3503}
+.ax-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:stretch}
+.ax-pn{padding:16px 18px}.ax-ph{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.ax-ph h3{margin:0;font-size:calc(18*var(--u));font-weight:800}.ax-pi{color:var(--g)}
+.ax-all{margin-left:auto;color:var(--g);font-size:calc(13.5*var(--u));font-weight:600;text-decoration:underline}
+.ax-ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.ax-ac{border:1px solid #e1e9e5;border-radius:18px;padding:12px;display:grid;gap:8px;background:#fff;box-shadow:0 4px 12px rgba(20,70,55,.06)}.ax-ac.off{opacity:.55}
+.ax-at{display:flex;gap:10px;align-items:flex-start;position:relative}.ax-at b{display:block;font-size:calc(15*var(--u))}.ax-at strong{font-size:calc(24*var(--u));font-weight:800;color:var(--ink);white-space:nowrap}
+.ax-ai{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex:none}.ax-ai.wallet{background:#dff3ea;color:#12805f}.ax-ai.phone{background:#fde5ec;color:#d6336c}.ax-ai.bank{background:#dfeafb;color:#2a6fc0}
+.ax-ac small{color:var(--mt);font-size:calc(12.5*var(--u))}
+.ax-km{margin-left:auto;position:relative}.ax-km summary{list-style:none;cursor:pointer;font-size:calc(18*var(--u));line-height:1;padding:2px 6px;border-radius:8px}.ax-km>div{min-width:140px}.ax-km .btn{width:100%;text-align:left}
+.ax-b{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;gap:7px;align-items:center;justify-content:center;border-radius:12px;font-size:calc(13.5*var(--u));font-weight:600;padding:9px 14px}
+.ax-ac .ax-b{background:linear-gradient(#138064,#0c5b49);color:#fff;width:100%;font-size:calc(14.5*var(--u));box-shadow:0 4px 10px rgba(12,91,73,.25)}
+.ax-bs{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.ax-bs .ax-b{background:#e4f3ec;color:#145c49;border:1px solid #cfe5db;flex:1 1 auto}.ax-bs .ax-b:hover{background:#d6ece2}
+.ax-ar{display:grid;grid-template-columns:14px 92px minmax(0,1fr) auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #edf1ee;font-size:calc(14*var(--u))}.ax-ar:last-child{border:0}
+.ax-ar i{width:9px;height:9px;border-radius:50%;background:#9aa6a0}.ax-ar i.on{background:#12805f}.ax-ar em{font-style:normal;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ax-ar b{color:#12805f}
+.ax-seg{margin-left:auto;display:flex;background:#eef1f0;border-radius:99px;padding:3px}.ax-seg button{all:unset;cursor:pointer;padding:5px 14px;border-radius:99px;font-size:calc(13*var(--u));font-weight:600;color:#4f5d57}.ax-seg .on{background:#12805f;color:#fff}
+.ax-tr{width:100%;height:auto;display:block}
+.ax-iv{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid #e3ece7;border-radius:16px;padding:14px}
+.ax-dw{position:relative;width:140px;flex:none}.ax-dn{width:100%;display:block}.ax-dc{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.ax-dc b{font-size:calc(15*var(--u));font-weight:800}.ax-dc small{font-size:calc(12*var(--u));color:var(--mt)}
+.ax-iv ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;flex:1;min-width:190px}.ax-iv li{display:flex;gap:9px;align-items:center;font-size:calc(14*var(--u))}.ax-iv li b{margin-left:auto;font-weight:600}.ax-iv li i{width:11px;height:11px;border-radius:50%;flex:none}
+.ax-ls{display:grid;grid-template-columns:repeat(3,auto) minmax(180px,1.3fr);gap:0;align-items:center}
+.ax-ls>div{padding:4px 14px;border-right:1px solid #e3ece7}.ax-ls>div b{display:block;font-size:calc(19*var(--u));font-weight:800}.ax-ls>div span{font-size:calc(13.5*var(--u));color:var(--mt)}.ax-ls .o b,.ax-ls .o span{color:#d63b3b}
+.ax-ls>div:first-child{padding-left:0}.ax-ls .ax-rp{border:0;display:grid;gap:6px}.ax-rp span{color:var(--ink)!important;font-size:calc(13.5*var(--u))}.ax-rp>div{display:flex;align-items:center;gap:12px}.ax-rp>div b{font-size:calc(19*var(--u))!important}
+.ax-bar{flex:1;height:12px;border-radius:99px;background:#dfe5e2;overflow:hidden}.ax-bar i{display:block;height:100%;background:linear-gradient(90deg,#0f6b57,#16946f);border-radius:99px}
+.ax-hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.ax-ha{position:relative;display:flex;gap:12px;align-items:flex-start;border:1px solid #cfe0f6;background:#eef5fe;border-radius:16px;padding:14px 14px 44px}.ax-ha.non{background:#fdeeee;border-color:#f6d3d3}
+.ax-hi{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#2a6fc0;flex:none}.ax-ha.non .ax-hi{color:#d63b3b}
+.ax-ha b{display:block;font-size:calc(14.5*var(--u))}.ax-ha small{color:var(--mt);font-size:calc(13*var(--u));display:block}.ax-ha em{font-style:normal;font-weight:800;font-size:calc(15*var(--u))}
+.ax-tg{position:absolute;right:12px;bottom:12px;background:#d4f1e2;color:#0f6b4a;border-radius:8px;padding:4px 12px;font-size:calc(12.5*var(--u));font-weight:600}.ax-ha.non .ax-tg{background:#fbd5d5;color:#b42318}
+.ax-m{color:var(--mt);font-size:calc(13.5*var(--u));margin:0}
+#acx[data-tab="inv"] .ax-pn:not(.ax-p-inv),#acx[data-tab="loan"] .ax-pn:not(.ax-p-loan),#acx[data-tab="trf"] .ax-pn:not(.ax-p-act),#acx[data-tab="asset"] .ax-pn:not(.ax-p-asset){display:none}
+#acx:not([data-tab="all"]) .ax-grid{grid-template-columns:minmax(0,1fr)}
+@media(max-width:1100px){.ax-grid,.ax-hero{grid-template-columns:minmax(0,1fr)}.ax-al{border-left:0;padding-left:0}.ax-chips{grid-template-columns:repeat(2,minmax(0,1fr))}.ax-ls{grid-template-columns:repeat(3,1fr)}.ax-ls .ax-rp{grid-column:1/-1;padding:10px 0 0}}
+@media(max-width:600px){.ax-nw>b{font-size:calc(36*var(--u))}.ax-chip b{font-size:calc(19*var(--u))}.ax-chip{padding:10px 12px;gap:10px}.ax-ci{width:40px;height:40px}.ax-ar{grid-template-columns:12px 80px minmax(0,1fr)}.ax-ar b{grid-column:3}.ax-lang{margin-left:0}}
+</style>
 </head><body class="booting"><div id="ldbar"></div><script>window.__ready=function(){document.body.classList.remove("booting")};setTimeout(window.__ready,10000)</script>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Wealth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
@@ -3333,6 +3403,64 @@ function fdSync(){try{if(!P)return;P.classList.add("fd");const acp=P.querySelect
 const _rn3=renderNew;renderNew=function(){_rn3.apply(this,arguments);fdSync()};
 const _rl3=renderLoans;renderLoans=function(){_rl3.apply(this,arguments);fdX()};
 fdSync()}
+/* ===== acx: reference-style Accounts page. Reads the same data, reuses existing forms; old layout stays hidden in the DOM ===== */
+{const AX={tab:"all",rng:6,warn:1},MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const f$=n=>(n<0?"-":"")+"৳"+Math.round(Math.abs(n)).toLocaleString("en-US"),
+cp=v=>{const a=Math.abs(v),s=v<0?"-":"";return s+(a>=1e5?+(a/1e5).toFixed(1)+"L":a>=1e3?Math.round(a/1e3)+"k":Math.round(a))},
+I=(d,w)=>`<svg width="${w||18}" height="${w||18}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`,
+IC={wallet:'<path d="M4 7h13a3 3 0 0 1 3 3v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 7l10-3v3M16 14h2"/>',bank:'<path d="M3 10l9-6 9 6M5 10v8M9 10v8M15 10v8M19 10v8M3 20h18"/>',phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18h2"/>',swap:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',bars:'<path d="M5 20V11M10 20V5M15 20v-6M20 20V8"/>',card:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/>',gem:'<path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l3 5 3-5"/>',trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',hist:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',plus:'<path d="M12 5v14M5 12h14"/>',x:'<path d="M6 6l12 12M18 6L6 18"/>',warn:'<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',down:'<path d="M6 9l6 6 6-6"/>',cyc:'<path d="M20 11a8 8 0 0 0-14-4M4 13a8 8 0 0 0 14 4"/><path d="M6 3v4h4M18 21v-4h-4"/>',give:'<path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7C9 7 8 3 10 3s2 4 2 4zm0 0c3 0 4-4 2-4s-2 4-2 4z"/>'},
+ic=a=>/bank/i.test(a.type||"")?"bank":/mobile|bkash|nagad|rocket|upay|mfs/i.test((a.type||"")+" "+(a.name||""))?"phone":"wallet",
+curve=p=>p.map((q,i)=>i?`C${(p[i-1][0]+q[0])/2} ${p[i-1][1]} ${(p[i-1][0]+q[0])/2} ${q[1]} ${q[0]} ${q[1]}`:`M${q[0]} ${q[1]}`).join(""),
+ser=n=>{const t=TD(),at=nwSeries(),o=[];for(let i=n-1;i>=0;i--){const e=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7)-i,0));o.push({lb:MN[e.getUTCMonth()],N:at(e.toISOString().slice(0,10)).N})}o[n-1].N=at(t).N;return o};
+function spark(s){const W=380,H=110,mn=Math.min(...s.map(x=>x.N)),mx=Math.max(...s.map(x=>x.N)),r=mx-mn||1,p=s.map((x,i)=>[14+i*(W-28)/(s.length-1),12+(mx-x.N)/r*(H-30)]),a=curve(p)+`L${p[p.length-1][0]} ${H}L${p[0][0]} ${H}Z`;
+return`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="ax-sp"><defs><linearGradient id="axg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".28"/><stop offset="1" stop-color="#1f9d6b" stop-opacity="0"/></linearGradient></defs><path d="${a}" fill="url(#axg)"/><path d="${curve(p)}" fill="none" stroke="#12805f" stroke-width="2.4" stroke-linecap="round"/>${p.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="4" fill="#12805f" stroke="#fff" stroke-width="2"/>`).join("")}</svg>`}
+function trend(s){const W=640,H=230,l=46,r=16,t=14,b=30,mn=Math.min(0,...s.map(x=>x.N)),mx=Math.max(0,...s.map(x=>x.N)),R=mx-mn||1,X=i=>l+i*(W-l-r)/(s.length-1),Y=v=>t+(mx-v)/R*(H-t-b),p=s.map((x,i)=>[X(i),Y(x.N)]);let g="";
+for(let k=0;k<5;k++){const v=mx-R*k/4,z=Math.abs(v)<R/1e6;g+=`<line x1="${l}" x2="${W-r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${z?"#aab6b0":"#e6ece8"}" stroke-dasharray="${z?"5 4":""}"/><text x="${l-8}" y="${Y(v)+4}" text-anchor="end" font-size="13" fill="#5b6963">${z?0:cp(v)}</text>`}
+const L=p[p.length-1],lab=s.map((x,i)=>(s.length<=7||i%2===0||i===s.length-1)?`<text x="${X(i)}" y="${H-8}" text-anchor="middle" font-size="13" fill="#44514b">${x.lb}</text>`:"").join(""),z0=Y(0);
+return`<svg viewBox="0 0 ${W} ${H}" class="ax-tr" role="img" aria-label="Net worth trend"><defs><linearGradient id="axg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".22"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".02"/></linearGradient></defs>${g}<path d="${curve(p)}L${L[0]} ${z0}L${p[0][0]} ${z0}Z" fill="url(#axg2)"/><path d="${curve(p)}" fill="none" stroke="#12805f" stroke-width="2.6" stroke-linecap="round"/>${p.map((q,i)=>`<circle cx="${q[0]}" cy="${q[1]}" r="${i===p.length-1?7:4}" fill="${i===p.length-1?"#12805f":"#12805f"}" stroke="#fff" stroke-width="2.2"><title>${s[i].lb}: ${f$(s[i].N)}</title></circle>`).join("")}${lab}<g transform="translate(${Math.min(L[0]-56,W-130)} ${Math.max(2,L[1]-44)})"><rect width="116" height="28" rx="9" fill="#fff" stroke="#d6e2dc"/><text x="58" y="19" text-anchor="middle" font-size="14" font-weight="700" fill="#22312b">${f$(s[s.length-1].N)}</text></g></svg>`}
+function donut(a,b,c){const v=[a,b,c].map(x=>Math.max(0,x)),T=v.reduce((x,y)=>x+y,0),C=2*Math.PI*52,col=["#12a05f","#a9e2c8","#aeb7c0"];let o=0;
+return`<svg viewBox="0 0 130 130" class="ax-dn"><circle cx="65" cy="65" r="52" fill="none" stroke="#e8eeea" stroke-width="16"/>${T?v.map((x,i)=>{const d=x/T*C,e=`<circle cx="65" cy="65" r="52" fill="none" stroke="${col[i]}" stroke-width="16" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${-o}" transform="rotate(-90 65 65)"/>`;o+=d;return e}).join(""):""}</svg>`}
+function acx(){try{const P=document.getElementById("p-accounts"),acp=P&&P.querySelector(".acp");if(!acp||!ND.accounts)return;P.classList.add("acx");
+let R=document.getElementById("acx");if(!R){R=document.createElement("div");R.id="acx";acp.before(R)}
+const t=TD(),A=ND.accounts,live=A.filter(a=>a.status!=="Inactive"),fo=finOv(),m=ilCalc(ilAll()),at=nwSeries(),cash=live.reduce((s,a)=>s+accBal(a),0),oth=m.fund-m.cap-m.prinRet-m.profit+m.reinv+m.xfer,
+pm=new Date(t.slice(0,7)+"-01T00:00:00Z");pm.setUTCDate(0);const chg=at(t).N-at(pm.toISOString().slice(0,10)).N,unl=live.filter(a=>accUnv(a)>0).length,
+trf=ND.transfers.filter(x=>x.status!=="void").sort((a,b)=>b.date.localeCompare(a.date)),nw=fo.nw,lang=getLang(),
+chip=(c,ic,l,v)=>`<div class="ax-chip ${c}"><span class="ax-ci">${I(IC[ic],26)}</span><div><span>${l}</span><b>${f$(v)}</b></div></div>`,
+head=(ic,h,x)=>`<div class="ax-ph"><span class="ax-pi">${I(IC[ic],20)}</span><h3>${h}</h3>${x||""}</div>`,
+btn=(a,l,ic,x)=>`<button type="button" class="ax-b" ${x}>${ic?I(IC[ic],15):""}${l}</button>`,
+T=[["all","user","Accounts"],["inv","bars","Investments"],["loan","card","Loans"],["trf","swap","Transfers"],["asset","gem","Assets"]],
+accs=A.map(a=>{const b=accBal(a),k=ic(a),off=a.status==="Inactive";return`<div class="ax-ac${off?" off":""}"><div class="ax-at"><span class="ax-ai ${k}">${I(IC[k],26)}</span><div><b>${esc(a.name)}</b><strong class="${b<0?"neg":""}">${f$(b)}</strong></div>
+<details class="ax-km"><summary aria-label="More">⋮</summary><div>${bt("hist",a.id,"History")}${bt("recon",a.id,"Reconcile")}${bt("editA",a.id,"Edit")}${bt("togA",a.id,off?"Activate":"Deactivate")}</div></details></div><small>${off?"Inactive · ":""}Since ${a.asof||"-"}${accUnv(a)?" · estimated":""}</small>${btn("","Transfer","swap",'data-a="trf"')}</div>`}).join("")||'<p class="ax-m">No accounts yet. Use + Add to create one.</p>',
+act=trf.slice(0,5).map((x,i)=>`<div class="ax-ar"><i class="${i<3?"on":""}"></i><span>${x.date}</span><em>${esc(aName(x.from))} → ${esc(aName(x.to))}</em><b>${f$(x.amount)}</b></div>`).join("")||'<p class="ax-m">No transfers yet.</p>',
+inv=Object.keys(m.invs).map(k=>m.invs[k]).filter(v=>v.cap+v.re>0),
+pct=m.ltT>0?Math.min(100,Math.round(m.ltR/m.ltT*100)):0,
+chg$=(chg>=0?"▲":"▼")+" "+f$(Math.abs(chg));
+R.dataset.tab=AX.tab;
+R.innerHTML=`<header class="ax-hd"><span class="ax-logo">${I(IC.wallet,30)}</span><div><h2>Accounts</h2><p>Manage your financial accounts</p></div>
+<div class="ax-lang"><button type="button" data-acx="lang" data-v="bn" class="${lang==="bn"?"on":""}">বাংলা</button><button type="button" data-acx="lang" data-v="en" class="${lang==="en"?"on":""}">EN</button></div>
+<details class="ax-add"><summary>${I(IC.plus,16)} Add ${I(IC.down,14)}</summary><div><button type="button" data-a="addA">Account</button><button type="button" data-a="trf">Transfer money</button><button type="button" data-a="addL">Manual asset / liability</button><button type="button" data-a="addG">Savings goal</button><button type="button" data-a="diag">Integrity report</button></div></details></header>
+<section class="ax-hero"><div class="ax-nw"><h3>Net Worth <span title="Assets minus liabilities, same as the dashboard">ⓘ</span></h3><b class="${nw<0?"neg":"pos"}">${nw<0?"৳ -":"৳ "}${Math.round(Math.abs(nw)).toLocaleString("en-US")}</b><p class="${chg>=0?"pos":"neg"}">${chg$} <span>This Month</span></p></div>
+<div class="ax-al"><div class="ax-eq"><span>Assets <b>${f$(fo.assets)}</b></span><i>–</i><span>Liabilities <b>${f$(fo.liab)}</b></span></div><div class="ax-msg ${nw<0?"bad":"good"}"><i>!</i>${nw<0?"You owe more than you own.":"You own more than you owe."}</div></div>${spark(ser(6))}</section>
+<section class="ax-chips">${chip("g","bank","Cash &amp; Bank",cash)}${chip("b","bars","Investments",m.fund)}${chip("r","give","Loans Taken",m.ltO)}${chip("p","gem","Loans Given",m.lgO)}</section>
+<nav class="ax-tabs" role="tablist">${T.map(x=>`<button type="button" role="tab" data-acx="tab" data-v="${x[0]}" class="${AX.tab===x[0]?"on":""}">${I(IC[x[1]],19)}${x[2]}</button>`).join("")}</nav>
+${AX.warn&&unl?`<div class="ax-warn">${I(IC.warn,24)}<span>${unl} account${unl>1?"s have":" has"} unlinked records. <a href="#" data-a="diag">Review</a></span><button type="button" data-acx="warnx" aria-label="Dismiss">${I(IC.x,18)}</button></div>`:""}
+<div class="ax-grid">
+<section class="ax-pn ax-p-acc">${head("wallet","Your Accounts")}<div class="ax-ag">${accs}</div></section>
+<section class="ax-pn ax-p-act">${head("hist","Recent Activity",'<a href="#" class="ax-all" data-trfd="1">View all →</a>')}${act}</section>
+<section class="ax-pn ax-p-trend">${head("trend","Net Worth Trend",`<div class="ax-seg">${[[6,"6M"],[12,"1Y"],[24,"All"]].map(x=>`<button type="button" data-acx="rng" data-v="${x[0]}" class="${AX.rng===x[0]?"on":""}">${x[1]}</button>`).join("")}</div>`)}${trend(ser(AX.rng))}</section>
+<section class="ax-pn ax-p-inv">${head("bars","Investments",'<a href="#" class="ax-all" data-acx="det">Details →</a>')}<div class="ax-iv"><div class="ax-dw">${donut(m.cap,m.profit,oth)}<div class="ax-dc"><b>${f$(m.fund)}</b><small>Total Fund</small></div></div>
+<ul><li><i style="background:#12a05f"></i>Initial Capital<b>${f$(m.cap)}</b></li><li><i style="background:#a9e2c8"></i>Profit Received<b>${f$(m.profit)}</b></li><li><i style="background:#aeb7c0"></i>Other Movements<b>${f$(oth)}</b></li></ul></div>
+<div class="ax-bs">${btn("","Add Capital","plus",'data-acx="il" data-v="inv_cap"')}${btn("","Record Profit","trend",'data-acx="il" data-v="inv_return"')}${btn("","Reinvest","cyc",'data-acx="il" data-v="inv_reinv"')}${btn("","Transfer","swap",'data-acx="il" data-v="inv_xfer"')}</div></section>
+<section class="ax-pn ax-p-loan">${head("card","Loans",'<a href="#" class="ax-all" data-acx="det">Details →</a>')}<div class="ax-ls"><div><b>${f$(m.ltT)}</b><span>Total Taken</span></div><div><b>${f$(m.ltR)}</b><span>Repaid</span></div><div class="o"><b>${f$(m.ltO)}</b><span>Outstanding</span></div>
+<div class="ax-rp"><span>Repayment Progress</span><div><div class="ax-bar"><i style="width:${pct}%"></i></div><b>${pct}%</b></div></div></div>
+<div class="ax-bs">${btn("","Give a Loan","give",'data-acx="il" data-v="loan_give"')}${btn("","Take a Loan","swap",'data-acx="il" data-v="loan_take"')}${btn("","Settlement","card",'data-acx="sett"')}</div></section>
+<section class="ax-pn ax-p-asset">${head("gem","Hand-held Assets")}<div class="ax-hg">${inv.map(v=>{const n=v.ref==="non";return`<div class="ax-ha ${n?"non":""}"><span class="ax-hi">${I(IC.user,20)}</span><div><b>${esc(v.n||"Investment")}</b><small>${n?"Non-refundable":"Refundable"}</small><em>${f$(v.cap+v.re)}</em></div><span class="ax-tg">${n?"Non-refundable":"Refundable"}</span></div>`}).join("")||'<p class="ax-m">No invested or hand-held assets yet.</p>'}</div></section>
+</div>`}catch(e){console.error("acx",e)}}
+document.addEventListener("click",e=>{const c=e.target.closest("#acx");if(!c)return;const b=e.target.closest("[data-acx]"),v=b&&b.dataset.v;
+if(e.target.closest("a[href='#']"))e.preventDefault();
+if(b){const k=b.dataset.acx;if(k==="tab"){AX.tab=v;acx()}else if(k==="rng"){AX.rng=+v;acx()}else if(k==="il")ilForm(v);else if(k==="sett")ilForm(ilOpen("t").length?"loan_repay":"loan_recv");else if(k==="det")ilDetail();else if(k==="warnx"){AX.warn=0;acx()}else if(k==="lang"){try{localStorage.setItem("mf_lang",v)}catch(x){}location.reload()}}
+if(e.target.closest("button[data-a],a[data-a],button[data-acx='il'],button[data-acx='sett']"))c.querySelectorAll("details[open]").forEach(d=>d.open=false)});
+const _rn5=renderNew;renderNew=function(){_rn5.apply(this,arguments);acx()};const _rl5=renderLoans;renderLoans=function(){_rl5.apply(this,arguments);acx()};acx()}
 
 </script><script>
 (function(){
