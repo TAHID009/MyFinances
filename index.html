@@ -1062,7 +1062,25 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 .motip>div{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .motip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:7px}
 #ov h3 .m{font-size:calc(13px*var(--fs,1))!important}
-</style></head><body class="booting"><div id="ldbar"></div><script>window.__ready=function(){document.body.classList.remove("booting")};setTimeout(window.__ready,10000)</script>
+</style><style id="mobfix">
+/* ===== Mobile fix: bottom tab bar shows all 6 tabs evenly (no hidden/scrolled tabs) ===== */
+@media(max-width:800px){
+ html body aside{display:flex;flex-direction:row;align-items:stretch;justify-content:space-between;gap:0;overflow:hidden;padding:0 2px env(safe-area-inset-bottom,0px)}
+ html body aside .nv,html body aside .sbb{display:contents}
+ html body aside .it,html body aside .nv .it,html body aside .sbb .it{flex:1 1 0;min-width:0;width:auto;max-width:none;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;margin:0;padding:6px 2px;border-radius:10px;font-size:calc(10px*var(--fs,1));line-height:1.15;text-align:center;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+ html body aside .it i{width:26px;height:26px;flex:none;background:none;border:0;box-shadow:none}
+ html body aside .it.on,html body aside .nv .it.on{padding:6px 2px;background:rgba(255,255,255,.16)!important;color:#fff}
+ html body aside .it.on i{background:none!important;box-shadow:none;border:0}
+ html body aside .it[data-pg=setp]{margin-top:0}
+ html body aside .sbl,html body aside .sbb #lo3{display:none!important}
+ html body{padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+ html body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#f5f3ed;z-index:99990;pointer-events:none}
+ html body #toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+ html body aside .it,html body aside .nv .it,html body aside .sbb .it{-webkit-tap-highlight-color:transparent}
+}
+@media(max-width:360px){html body aside .it{font-size:calc(9px*var(--fs,1))}}
+</style>
+</head><body class="booting"><div id="ldbar"></div><script>window.__ready=function(){document.body.classList.remove("booting")};setTimeout(window.__ready,10000)</script>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
 <nav class="nv"><button class="it on" data-pg="dash"><i data-i="home"></i>Dashboard</button><button class="it" data-pg="log"><i data-i="receipt"></i>Transactions</button><button class="it" data-pg="daily"><i data-i="chart"></i>Analysis</button><button class="it" data-pg="budget"><i data-i="target"></i>Plans</button></nav><div class="promo"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg><b>Better money habits build a brighter future.</b><i></i></div><div class="sbb"><button class="it" data-pg="accounts"><i data-i="wallet"></i>Accounts &amp; Wealth</button><button class="it" data-pg="setp"><i data-i="sliders"></i>Settings</button><button class="it sbl" id="lo3" type="button"><i data-i="logout"></i>Log out</button></div><div class="sbu"><div class="a" id="sba">--</div><div><b id="sbn">Signed in</b><small>Synced</small></div><button class="sbo" id="lo2" type="button" title="Sign out" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><span class="lb">Sign out</span></button></div></aside>
 <main id="top"><div class="top"><div><h1 id="pt">Personal Finance Dashboard</h1><p id="ps"></p></div>
