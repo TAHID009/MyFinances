@@ -1082,10 +1082,12 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 </style>
 <style id="acx-css">
 /* acx: reference-style Accounts page */
-#p-accounts.acx>.acp,#p-accounts.acx>.fd-sh,#p-accounts.acx>details.gd,#p-accounts.acx>#nLoan{display:none!important}
-#acx{--g:#0f6b57;--g2:#12805f;--ink:#1d2b26;--mt:#5f6d67;--u:calc(1px*var(--fs,1));display:grid;gap:14px;color:var(--ink);padding:2px;font-family:var(--ff)}
-#acx *{box-sizing:border-box}
-#acx button,#acx summary{font:inherit}
+html body main>section#p-accounts #axp{grid-column:1/-1!important;grid-row:auto!important;order:-1!important;width:100%!important;min-width:0!important;justify-self:stretch!important;align-self:start!important}
+html body main>section#p-accounts.acx{background:linear-gradient(160deg,#eaf7f1,#f4fbf8 45%,#eef8f4)!important;border-radius:0!important}
+#p-accounts.acx>.acp,#p-accounts.acx>#acMid,#p-accounts.acx>#acBottom,#p-accounts.acx>.fd-sh,#p-accounts.acx>details.gd,#p-accounts.acx>#nLoan{display:none!important}
+#axp{--g:#0f6b57;--g2:#12805f;--ink:#1d2b26;--mt:#5f6d67;--u:calc(1px*var(--fs,1));display:grid;gap:14px;color:var(--ink);padding:2px;font-family:var(--ff)}
+#axp *{box-sizing:border-box}
+#axp button,#axp summary{font:inherit}
 .ax-hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .ax-logo{width:54px;height:54px;border-radius:16px;background:#d9efe6;color:var(--g);display:grid;place-items:center;flex:none}
 .ax-hd h2{margin:0;font-size:calc(30*var(--u));line-height:1.1;font-weight:800}.ax-hd p{margin:2px 0 0;color:var(--mt);font-size:calc(14*var(--u))}
@@ -1145,8 +1147,8 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 .ax-ha b{display:block;font-size:calc(14.5*var(--u))}.ax-ha small{color:var(--mt);font-size:calc(13*var(--u));display:block}.ax-ha em{font-style:normal;font-weight:800;font-size:calc(15*var(--u))}
 .ax-tg{position:absolute;right:12px;bottom:12px;background:#d4f1e2;color:#0f6b4a;border-radius:8px;padding:4px 12px;font-size:calc(12.5*var(--u));font-weight:600}.ax-ha.non .ax-tg{background:#fbd5d5;color:#b42318}
 .ax-m{color:var(--mt);font-size:calc(13.5*var(--u));margin:0}
-#acx[data-tab="inv"] .ax-pn:not(.ax-p-inv),#acx[data-tab="loan"] .ax-pn:not(.ax-p-loan),#acx[data-tab="trf"] .ax-pn:not(.ax-p-act),#acx[data-tab="asset"] .ax-pn:not(.ax-p-asset){display:none}
-#acx:not([data-tab="all"]) .ax-grid{grid-template-columns:minmax(0,1fr)}
+#axp[data-tab="inv"] .ax-pn:not(.ax-p-inv),#axp[data-tab="loan"] .ax-pn:not(.ax-p-loan),#axp[data-tab="trf"] .ax-pn:not(.ax-p-act),#axp[data-tab="asset"] .ax-pn:not(.ax-p-asset){display:none}
+#axp:not([data-tab="all"]) .ax-grid{grid-template-columns:minmax(0,1fr)}
 @media(max-width:1100px){.ax-grid,.ax-hero{grid-template-columns:minmax(0,1fr)}.ax-al{border-left:0;padding-left:0}.ax-chips{grid-template-columns:repeat(2,minmax(0,1fr))}.ax-ls{grid-template-columns:repeat(3,1fr)}.ax-ls .ax-rp{grid-column:1/-1;padding:10px 0 0}}
 @media(max-width:600px){.ax-nw>b{font-size:calc(36*var(--u))}.ax-chip b{font-size:calc(19*var(--u))}.ax-chip{padding:10px 12px;gap:10px}.ax-ci{width:40px;height:40px}.ax-ar{grid-template-columns:12px 80px minmax(0,1fr)}.ax-ar b{grid-column:3}.ax-lang{margin-left:0}}
 </style>
@@ -3421,7 +3423,7 @@ return`<svg viewBox="0 0 ${W} ${H}" class="ax-tr" role="img" aria-label="Net wor
 function donut(a,b,c){const v=[a,b,c].map(x=>Math.max(0,x)),T=v.reduce((x,y)=>x+y,0),C=2*Math.PI*52,col=["#12a05f","#a9e2c8","#aeb7c0"];let o=0;
 return`<svg viewBox="0 0 130 130" class="ax-dn"><circle cx="65" cy="65" r="52" fill="none" stroke="#e8eeea" stroke-width="16"/>${T?v.map((x,i)=>{const d=x/T*C,e=`<circle cx="65" cy="65" r="52" fill="none" stroke="${col[i]}" stroke-width="16" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${-o}" transform="rotate(-90 65 65)"/>`;o+=d;return e}).join(""):""}</svg>`}
 function acx(){try{const P=document.getElementById("p-accounts"),acp=P&&P.querySelector(".acp");if(!acp||!ND.accounts)return;P.classList.add("acx");
-let R=document.getElementById("acx");if(!R){R=document.createElement("div");R.id="acx";acp.before(R)}
+let R=document.getElementById("axp");if(!R){R=document.createElement("div");R.id="axp";acp.before(R)}
 const t=TD(),A=ND.accounts,live=A.filter(a=>a.status!=="Inactive"),fo=finOv(),m=ilCalc(ilAll()),at=nwSeries(),cash=live.reduce((s,a)=>s+accBal(a),0),oth=m.fund-m.cap-m.prinRet-m.profit+m.reinv+m.xfer,
 pm=new Date(t.slice(0,7)+"-01T00:00:00Z");pm.setUTCDate(0);const chg=at(t).N-at(pm.toISOString().slice(0,10)).N,unl=live.filter(a=>accUnv(a)>0).length,
 trf=ND.transfers.filter(x=>x.status!=="void").sort((a,b)=>b.date.localeCompare(a.date)),nw=fo.nw,lang=getLang(),
@@ -3456,7 +3458,7 @@ ${AX.warn&&unl?`<div class="ax-warn">${I(IC.warn,24)}<span>${unl} account${unl>1
 <div class="ax-bs">${btn("","Give a Loan","give",'data-acx="il" data-v="loan_give"')}${btn("","Take a Loan","swap",'data-acx="il" data-v="loan_take"')}${btn("","Settlement","card",'data-acx="sett"')}</div></section>
 <section class="ax-pn ax-p-asset">${head("gem","Hand-held Assets")}<div class="ax-hg">${inv.map(v=>{const n=v.ref==="non";return`<div class="ax-ha ${n?"non":""}"><span class="ax-hi">${I(IC.user,20)}</span><div><b>${esc(v.n||"Investment")}</b><small>${n?"Non-refundable":"Refundable"}</small><em>${f$(v.cap+v.re)}</em></div><span class="ax-tg">${n?"Non-refundable":"Refundable"}</span></div>`}).join("")||'<p class="ax-m">No invested or hand-held assets yet.</p>'}</div></section>
 </div>`}catch(e){console.error("acx",e)}}
-document.addEventListener("click",e=>{const c=e.target.closest("#acx");if(!c)return;const b=e.target.closest("[data-acx]"),v=b&&b.dataset.v;
+document.addEventListener("click",e=>{const c=e.target.closest("#axp");if(!c)return;const b=e.target.closest("[data-acx]"),v=b&&b.dataset.v;
 if(e.target.closest("a[href='#']"))e.preventDefault();
 if(b){const k=b.dataset.acx;if(k==="tab"){AX.tab=v;acx()}else if(k==="rng"){AX.rng=+v;acx()}else if(k==="il")ilForm(v);else if(k==="sett")ilForm(ilOpen("t").length?"loan_repay":"loan_recv");else if(k==="det")ilDetail();else if(k==="warnx"){AX.warn=0;acx()}else if(k==="lang"){try{localStorage.setItem("mf_lang",v)}catch(x){}location.reload()}}
 if(e.target.closest("button[data-a],a[data-a],button[data-acx='il'],button[data-acx='sett']"))c.querySelectorAll("details[open]").forEach(d=>d.open=false)});
