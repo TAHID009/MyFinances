@@ -2065,28 +2065,28 @@ function renderCost(){try{
   const P=cyCompute(db.inc,db.ex,td).filter(p=>!p.pre);
   if(!P.length){host.innerHTML=`<div class="m cwe">${XL("এখনো কোনো বেতনের অধ্যায় নেই। বেতন যোগ করলে অধ্যায় শুরু হবে।","No salary period yet. A period starts when you add a salary.")}</div>`;return}
   const c=P[P.length-1];start=c.s;n=dd(c.s,td)+1;
-  prevs=P.slice(-4,-1).map(p=>({s:p.s,len:dd(p.s,p.e)}));
+  prevs=P.slice(-2,-1).map(p=>({s:p.s,len:dd(p.s,p.e)}));
   const L=prevs.length?Math.round(prevs.reduce((t,p)=>t+p.len,0)/prevs.length):0;len=Math.max(L,n);rem=len-n;
   sub=XL("অধ্যায় "+c.n+" · "+fd(c.s)+" থেকে "+n+" দিন","Period "+c.n+" · "+n+" day"+(n==1?"":"s")+" since "+fd(c.s));
  }else{
   n=m===cur?+td.slice(8):m<cur?dmN:0;
   if(!n){host.innerHTML=`<div class="m cwe">${XL("এই মাসে এখনো তুলনা করার মতো খরচ নেই।","Nothing to compare yet for this month.")}</div>`;return}
   budgetOn=true;start=m+"-01";len=dmN;rem=m===cur?dmN-n:0;
-  let pm=m;for(let i=0;i<3;i++){pm=pmo(pm);if(ex.some(x=>dt(x).startsWith(pm)))prevs.push({s:pm+"-01",len:dim(pm)})}
+  const pm=pmo(m);if(ex.some(x=>dt(x).startsWith(pm)))prevs.push({s:pm+"-01",len:dim(pm)});
   sub=XL(MN[mi]+" · ১–"+n+" তারিখ",MN[mi]+" · days 1–"+n);
  }
- const k=prevs.length;
+ const k=prevs.length,P_=CW.mode==="p",UL=P_?XL("আগের অধ্যায়","prev. period"):XL("গত মাস","last month"),UB=P_?"আগের অধ্যায়ের চেয়ে":"গত মাসের চেয়ে";
  const cum=a=>{let t=0;return a.map(v=>t+=v)};
  const bucket=(arr,s0,L)=>{const o=Array(L).fill(0);arr.forEach(x=>{const i=dd(s0,dt(x));if(i>=0&&i<L)o[i]+=+x.amount||0});return o};
  const series=f=>{const cu=cum(bucket(ex.filter(x=>f(x)&&dt(x)<=td),start,len)).slice(0,n),us=Array(len).fill(0);
   if(k){prevs.forEach(p=>{const c=cum(bucket(ex.filter(f),p.s,p.len));for(let i=0;i<len;i++)us[i]+=(c[Math.min(i,c.length-1)]||0)/k})}
   return{cur:cu,usual:us}};
- const cname=x=>x.cat||"Other",cats=[...new Set(ex.map(cname))];
+ const cname=x=>x.cat||"Other",cats=[...new Set([...Object.keys(CAT),...ex.map(cname)])];
  const all=cats.map(c=>{const s=series(x=>cname(x)===c),a=s.cur[n-1]||0,b=k?s.usual[n-1]:0,fu=k?s.usual[len-1]:0,d=a-b;
   let st="ok";if(!k||!b)st=a>0?"nh":"ok";else if(d>=100&&a>=b*1.25)st="hi";else if(d>=50&&a>=b*1.1)st="wa";
-  const room=fu-a;let hint="";if((st==="hi"||st==="wa")&&rem>0)hint=room>0?XL("দৈনিক ≤ "+fmt(room/rem),"≤ "+fmt(room/rem)+"/day"):XL("সীমা পার","past usual");
+  const room=fu-a;let hint="";if((st==="hi"||st==="wa")&&rem>0)hint=room>0?XL("দৈনিক ≤ "+fmt(room/rem),"≤ "+fmt(room/rem)+"/day"):XL("সীমা পার","past "+UL);
   const bu=budgetOn?+BUD.cats[c]||0:0,pj=m===cur&&n?a/n*len:a;let bf="";if(bu&&a>bu)bf=XL("বাজেট পার","Over budget");else if(bu&&pj>bu)bf=XL("বাজেট ছাড়াবে","Will pass budget");
-  return{c,a,b,d,pc:b?d/b*100:null,st,hint,bf}});
+  return{c,a,b,d,fu,pc:b?d/b*100:null,st,hint,bf,bu}});
  const rows=all.filter(r=>r.a>0);
  const rk={hi:0,wa:1,nh:3,ok:2};
  rows.sort(CW.sort==="r"?(p,q)=>rk[p.st]-rk[q.st]||q.d-p.d:(p,q)=>q.a-p.a);
@@ -2115,31 +2115,51 @@ function renderCost(){try{
  const low=all.filter(r=>r.b>0&&r.d<0).sort((p,q)=>p.d-q.d).slice(0,3);
  const cmp=rows.filter(r=>r.b>0),Ac=sum(cmp.map(r=>({amount:r.a}))),B=sum(all.map(r=>({amount:r.b}))),nh=sum(rows.filter(r=>r.st==="nh").map(r=>({amount:r.a})));
  const head=!k?`<div class="cwa nh">${ico("info",15)}<span>${XL("তুলনার মতো আগের ডেটা এখনো নেই — শুধু আসল খরচ দেখানো হচ্ছে।","Not enough earlier data to compare yet — showing actual spending only.")}</span></div>`
-  :bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL("স্বাভাবিকের চেয়ে <b>"+fmt(extra)+"</b> বেশি — "+bad.length+"টি ক্যাটেগরিতে। আগে <b>"+esc(bad[0].c)+"</b> কমান।","<b>"+fmt(extra)+"</b> above usual in "+bad.length+" categor"+(bad.length==1?"y":"ies")+". Cut <b>"+esc(bad[0].c)+"</b> first.")}</span></div>`
-  :`<div class="cwa ok">${ico("check",15)}<span>${XL("তুলনাযোগ্য কোনো খরচ স্বাভাবিকের চেয়ে বেশি নয়।","No comparable cost is above your usual.")}</span></div>`;
+  :bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL(UB+" <b>"+fmt(extra)+"</b> বেশি — "+bad.length+"টি ক্যাটেগরিতে। আগে <b>"+esc(bad[0].c)+"</b> কমান।","<b>"+fmt(extra)+"</b> above "+UL+" in "+bad.length+" categor"+(bad.length==1?"y":"ies")+". Cut <b>"+esc(bad[0].c)+"</b> first.")}</span></div>`
+  :`<div class="cwa ok">${ico("check",15)}<span>${XL("তুলনাযোগ্য কোনো খরচ "+UB+" বেশি নয়।","No comparable cost is above "+UL+".")}</span></div>`;
  const chipOf=r=>r.st==="nh"?`<span class="cwb nh">${XL("আগের ডেটা নেই","no history")}</span>`:r.pc===null?"":`<span class="cwb ${r.st}">${r.d>0?"▲ +":r.d<0?"▼ −":""}${Math.abs(Math.round(r.pc))}%</span>`;
  const bdg={hi:"#c0392b",wa:"#e08a00",ok:"#2e9e74",nh:"#8aa0b8"};
- const row=r=>`<div class="cwr${CW.cat===r.c?" sel":""}" data-cc="${esc(r.c)}"><div class="cwn">${(CAT[r.c]||FB).i}<div><b>${esc(r.c)}</b><small>${r.b?XL("স্বাভাবিক ","usual ")+num(r.b)+" ":""}${chipOf(r)}${r.hint?` <em>${r.hint}</em>`:""}${r.bf?` <em class="bo">${r.bf}</em>`:""}</small></div></div><div class="cwbar"><i style="width:${r.a/mxA*100}%;background:${bdg[r.st]}"></i>${r.b?`<u style="left:${Math.min(100,r.b/mxA*100)}%"></u>`:""}</div><div class="cwv"><b>${num(r.a)}</b><small>${tA?Math.round(r.a/tA*100):0}%</small></div></div>`;
+ const row=r=>`<div class="cwr${CW.cat===r.c?" sel":""}" data-cc="${esc(r.c)}"><div class="cwn">${(CAT[r.c]||FB).i}<div><b>${esc(r.c)}</b><small>${r.b?UL+" "+num(r.b)+" ":""}${chipOf(r)}${r.hint?` <em>${r.hint}</em>`:""}${r.bf?` <em class="bo">${r.bf}</em>`:""}</small></div></div><div class="cwbar"><i style="width:${r.a/mxA*100}%;background:${bdg[r.st]}"></i>${r.b?`<u style="left:${Math.min(100,r.b/mxA*100)}%"></u>`:""}</div><div class="cwv"><b>${num(r.a)}</b><small>${tA?Math.round(r.a/tA*100):0}%</small></div></div>`;
  const tr=B?Math.round((Ac-B)/B*100):null,dif=Ac-B;
- host.innerHTML=`<div class="cws m">${sub}${k?XL(" · গত "+k+(CW.mode==="p"?"টি অধ্যায়":" মাসের")+" গড়ের সাথে"," · vs avg of last "+k+(CW.mode==="p"?" period":" month")+(k==1?"":"s")):""}</div>
+ host.innerHTML=`<div class="cws m">${sub}${k?XL(" · "+(P_?"আগের অধ্যায়ের":"গত মাসের")+" একই দিনের সাথে তুলনা"," · vs same days of "+UL):""}</div>
  <div class="cwg"><div class="cwgh"><b>${CW.cat?(CAT[CW.cat]||FB).i+" "+esc(CW.cat):XL("মোট খরচ — জমা হওয়ার গতি","Total spending — running total")}</b>${CW.cat?`<button type="button" class="cwx" data-cc="">✕ ${XL("সব","All")}</button>`:`<span class="m">${fmt(cN)}</span>`}</div>${svg}<div class="cwtip" id="cwtip" hidden></div>
- <div class="cwk"><span><i style="background:${col}"></i>${XL("আসল","Actual")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${XL("স্বাভাবিক","Usual")}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")} ${fmt(proj)}</span>`:""}</div></div>
+ <div class="cwk"><span><i style="background:${col}"></i>${XL("আসল","Actual")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")} ${fmt(proj)}</span>`:""}</div></div>
  ${head}
- <div class="cwsrt"><span class="m">${XL("ক্যাটেগরি ধরে ট্যাপ করুন → গ্রাফে দেখুন","Tap a category to chart it")}</span><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising first")}</button></span></div>
+ <div class="cwsrt"><span class="m">${XL("ক্যাটেগরি ধরে ট্যাপ করুন → গ্রাফে দেখুন","Tap a category to chart it")}</span><span class="cwt"><button type="button" data-cd="1" class="cwdb">${XL("বিস্তারিত","Details")}</button><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising first")}</button></span></div>
  <div class="cwl">${rows.map(row).join("")||`<div class="m cwe">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</div>`}</div>
- ${low.length?`<div class="cwo m"><span class="g">▼ ${XL("স্বাভাবিকের চেয়ে কম","Lower than usual")}:</span> ${low.map(r=>esc(r.c)+" <b class=\"g\">−"+num(Math.abs(r.d))+"</b>").join(" · ")}</div>`:""}
+ ${low.length?`<div class="cwo m"><span class="g">▼ ${XL(UB+" কম","Lower than "+UL)}:</span> ${low.map(r=>esc(r.c)+" <b class=\"g\">−"+num(Math.abs(r.d))+"</b>").join(" · ")}</div>`:""}
  <div class="cwt2"><span>${XL("মোট এখন","Total now")} <b>${fmt(tA)}</b></span>${k?`<span>${XL("তুলনাযোগ্য","Like-for-like")} <b>${fmt(Ac)}</b> ${XL("বনাম","vs")} <b>${fmt(B)}</b> <b class="${dif>0?"r":"g"}">${dif>0?"▲ +":dif<0?"▼ −":""}${num(Math.abs(dif))}${tr!==null?" ("+(tr>0?"+":"")+tr+"%)":""}</b></span>`:""}${nh?`<span>${XL("ইতিহাসহীন","No history")} <b>${fmt(nh)}</b></span>`:""}</div>`;
+ CW.last={all,UL,UB,sub:sub+(k?XL(" · "+UL+"র সাথে"," · vs "+UL):""),k,n,len,mode:CW.mode,budgetOn,tA};
+ if(CW.open)cwDetail();
  /* ---- hover ---- */
  const sv=host.querySelector("svg"),ov=host.querySelector("#cwov"),vl=host.querySelector("#cwvl"),tip=host.querySelector("#cwtip");
  if(sv&&ov){const mv=e=>{const r=sv.getBoundingClientRect(),vx=(e.clientX-r.left)/r.width*W,j=Math.max(1,Math.min(len,Math.round((vx-pl)/pw*len)));
    vl.setAttribute("x1",X(j));vl.setAttribute("x2",X(j));vl.setAttribute("visibility","visible");
    const lines=[`<b>${CW.mode==="p"?fd(dAdd(start,j-1)):XL(j+" "+MN[mi],MN[mi]+" "+j)}</b>`];
    if(j<=n)lines.push(XL("আসল ","Actual ")+fmt(C[j]));else if(proj!=null)lines.push(XL("আনুমানিক ","Projected ")+fmt(cN+(proj-cN)*(j-n)/(len-n)));
-   if(k)lines.push(XL("স্বাভাবিক ","Usual ")+fmt(U[j]));if(T)lines.push(XL("বাজেট ","Budget ")+fmt(T));
+   if(k)lines.push(UL+" "+fmt(U[j]));if(T)lines.push(XL("বাজেট ","Budget ")+fmt(T));
    tip.innerHTML=lines.join("<br>");tip.hidden=false;const gr=tip.parentNode.getBoundingClientRect(),px=e.clientX-gr.left;tip.style.left=Math.max(4,Math.min(gr.width-tip.offsetWidth-4,px+10))+"px"};
   ov.addEventListener("mousemove",mv);ov.addEventListener("touchmove",e=>{if(e.touches[0])mv(e.touches[0])},{passive:true});
   ov.addEventListener("mouseleave",()=>{vl.setAttribute("visibility","hidden");tip.hidden=true})}
 }catch(e){console.error(e)}}
+
+function cwDetail(){try{
+ const L=CW.last;let md=document.getElementById("cwm");
+ if(!CW.open||!L){if(md)md.remove();return}
+ const bn=getLang()==="bn",XL=(b,e)=>bn?b:e,{all,UL,sub,k,budgetOn}=L,P_=L.mode==="p";
+ if(!md){md=document.createElement("div");md.id="cwm";md.className="cwm";document.body.appendChild(md)}
+ const order=Object.keys(CAT),rows=all.slice().sort((p,q)=>{const i=order.indexOf(p.c),j=order.indexOf(q.c);return(i<0?999:i)-(j<0?999:j)||q.a-p.a});
+ const mx=Math.max(1,...rows.map(r=>Math.max(r.a,r.b)));
+ const tN=sum(rows.map(r=>({amount:r.a}))),tB=sum(rows.map(r=>({amount:r.b}))),tF=sum(rows.map(r=>({amount:r.fu}))),tBu=sum(rows.map(r=>({amount:r.bu})));
+ const chg=(a,b)=>{if(!k)return"–";const d=a-b;if(!d)return"–";return`<span class="${d>0?"r":"g"}">${d>0?"▲ +":"▼ −"}${num(Math.abs(d))}${b?" ("+(d>0?"+":"−")+Math.abs(Math.round(d/b*100))+"%)":""}</span>`};
+ const tr=r=>`<tr class="${r.a||r.b?"":"z"}"><td>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></td><td class="ra"><b>${r.a?num(r.a):"–"}</b><div class="cwmb"><i style="width:${r.a/mx*100}%;background:${r.st==="hi"?"#c0392b":r.st==="wa"?"#e08a00":"#2e9e74"}"></i></div></td><td class="ra">${k&&r.b?num(r.b):"–"}<div class="cwmb"><i style="width:${r.b/mx*100}%;background:#94a3b8"></i></div></td><td class="ra">${k&&r.fu?num(r.fu):"–"}</td><td class="ra">${chg(r.a,r.b)}</td>${P_?"":`<td class="ra">${r.bu?num(r.bu)+" <span class=\"m\">("+Math.round(r.a/r.bu*100)+"%)</span>":"–"}</td>`}</tr>`;
+ md.innerHTML=`<div class="cwmc"><div class="cwmh"><div><b>${XL("খরচের বিস্তারিত — সব ক্যাটেগরি","Spending details — all categories")}</b><div class="m" style="font-size:12px">${sub}</div></div><button type="button" class="cwx" data-cdx="1">✕</button></div>
+ <div class="cwmt"><table><thead><tr><th>${XL("ক্যাটেগরি","Category")}</th><th class="ra">${XL("এখন (এ পর্যন্ত)","Now (so far)")}</th><th class="ra">${UL} ${XL("(একই দিন)","(same days)")}</th><th class="ra">${UL} ${XL("(পুরো)","(full)")}</th><th class="ra">${XL("পরিবর্তন","Change")}</th>${P_?"":`<th class="ra">${XL("বাজেট (ব্যবহৃত)","Budget (used)")}</th>`}</tr></thead><tbody>${rows.map(tr).join("")}</tbody>
+ <tfoot><tr><td><b>${XL("মোট","Total")}</b></td><td class="ra"><b>${num(tN)}</b></td><td class="ra"><b>${k?num(tB):"–"}</b></td><td class="ra"><b>${k?num(tF):"–"}</b></td><td class="ra">${chg(tN,tB)}</td>${P_?"":`<td class="ra"><b>${tBu?num(tBu):"–"}</b></td>`}</tr></tfoot></table></div></div>`;
+}catch(e){console.error(e)}}
+document.addEventListener("click",e=>{if(e.target.closest("#cwb [data-cd]")){CW.open=true;cwDetail();return}
+ if(e.target.closest("[data-cdx]")||e.target.id==="cwm"){CW.open=false;cwDetail()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CW.open){CW.open=false;cwDetail()}});
 document.addEventListener("click",e=>{let b=e.target.closest("#cwt [data-cw]");if(b){CW.mode=b.dataset.cw;CW.cat=null;renderCost();return}
  b=e.target.closest("#cwb [data-cs]");if(b){CW.sort=b.dataset.cs;renderCost();return}
  b=e.target.closest("#cwb [data-cc]");if(b){const c=b.dataset.cc;CW.cat=c&&CW.cat!==c?c:null;renderCost()}});
@@ -4378,5 +4398,17 @@ d.__dirty=0;return sm.apply(d,arguments)};
 .cwsrt{display:flex;justify-content:space-between;align-items:center;gap:6px;flex:0 0 auto}
 .cwsrt .cwt{display:inline-flex}
 .cwn small .cwb{margin:0 2px}
+
+.cwdb{font-weight:600;color:var(--pri)!important}
+.cwm{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:90;display:flex;align-items:center;justify-content:center;padding:14px}
+.cwmc{background:#fff;border-radius:14px;width:100%;max-width:820px;max-height:88vh;display:flex;flex-direction:column;padding:12px 16px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.cwmh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+.cwmt{overflow:auto;min-height:0}
+.cwmt table{width:100%;min-width:560px;border-collapse:collapse;font-size:13px}
+.cwmt th{position:sticky;top:0;background:#f4f8f6;padding:6px 8px;font-size:12px;z-index:1}
+.cwmt td{padding:5px 8px;border-top:1px solid var(--line);vertical-align:middle}
+.cwmt tr.z td{color:#94a3b8}.cwmt tr.z b{font-weight:400}
+.cwmt tfoot td{position:sticky;bottom:0;background:#f4f8f6;border-top:2px solid var(--line)}
+.cwmb{height:4px;background:#eaf0ee;border-radius:3px;margin-top:3px}.cwmb i{display:block;height:100%;border-radius:3px}
 </style>
 </body></html>
