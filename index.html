@@ -1084,7 +1084,7 @@ html body #p-accounts .mcards{max-height:none;overflow:visible}
 /* acx: reference-style Accounts page */
 html body main>section#p-accounts #axp{grid-column:1/-1!important;grid-row:auto!important;order:-1!important;width:100%!important;min-width:0!important;justify-self:stretch!important;align-self:start!important}
 html body main>section#p-accounts.acx{background:linear-gradient(160deg,#eaf7f1,#f4fbf8 45%,#eef8f4)!important;border-radius:0!important}
-#p-accounts.acx>.acp,#p-accounts.acx>#acMid,#p-accounts.acx>#acBottom,#p-accounts.acx>.fd-sh,#p-accounts.acx>details.gd,#p-accounts.acx>#nLoan{display:none!important}
+html body main>section#p-accounts.pg.fd.acx>:not(#axp),html body main>section#p-accounts.pg.acx>:not(#axp),#p-accounts.acx>.acp,#p-accounts.acx>#acMid,#p-accounts.acx>#acBottom,#p-accounts.acx>.fd-sh,#p-accounts.acx>details.gd,#p-accounts.acx>#nLoan{display:none!important}
 #axp{--g:#0f6b57;--g2:#12805f;--ink:#1d2b26;--mt:#5f6d67;--u:calc(1px*var(--fs,1));display:grid;gap:14px;color:var(--ink);padding:2px;font-family:var(--ff)}
 #axp *{box-sizing:border-box}
 #axp button,#axp summary{font:inherit}
@@ -3422,7 +3422,7 @@ const L=p[p.length-1],lab=s.map((x,i)=>(s.length<=7||i%2===0||i===s.length-1)?`<
 return`<svg viewBox="0 0 ${W} ${H}" class="ax-tr" role="img" aria-label="Net worth trend"><defs><linearGradient id="axg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f9d6b" stop-opacity=".22"/><stop offset="1" stop-color="#1f9d6b" stop-opacity=".02"/></linearGradient></defs>${g}<path d="${curve(p)}L${L[0]} ${z0}L${p[0][0]} ${z0}Z" fill="url(#axg2)"/><path d="${curve(p)}" fill="none" stroke="#12805f" stroke-width="2.6" stroke-linecap="round"/>${p.map((q,i)=>`<circle cx="${q[0]}" cy="${q[1]}" r="${i===p.length-1?7:4}" fill="${i===p.length-1?"#12805f":"#12805f"}" stroke="#fff" stroke-width="2.2"><title>${s[i].lb}: ${f$(s[i].N)}</title></circle>`).join("")}${lab}<g transform="translate(${Math.min(L[0]-56,W-130)} ${Math.max(2,L[1]-44)})"><rect width="116" height="28" rx="9" fill="#fff" stroke="#d6e2dc"/><text x="58" y="19" text-anchor="middle" font-size="14" font-weight="700" fill="#22312b">${f$(s[s.length-1].N)}</text></g></svg>`}
 function donut(a,b,c){const v=[a,b,c].map(x=>Math.max(0,x)),T=v.reduce((x,y)=>x+y,0),C=2*Math.PI*52,col=["#12a05f","#a9e2c8","#aeb7c0"];let o=0;
 return`<svg viewBox="0 0 130 130" class="ax-dn"><circle cx="65" cy="65" r="52" fill="none" stroke="#e8eeea" stroke-width="16"/>${T?v.map((x,i)=>{const d=x/T*C,e=`<circle cx="65" cy="65" r="52" fill="none" stroke="${col[i]}" stroke-width="16" stroke-dasharray="${d} ${C-d}" stroke-dashoffset="${-o}" transform="rotate(-90 65 65)"/>`;o+=d;return e}).join(""):""}</svg>`}
-function acx(){try{const P=document.getElementById("p-accounts"),acp=P&&P.querySelector(".acp");if(!acp||!ND.accounts)return;P.classList.add("acx");
+function acx(){try{const P=document.getElementById("p-accounts"),acp=P&&P.querySelector(".acp");if(!acp||!ND.accounts)return;P.classList.add("acx");[...P.children].forEach(c=>{if(c.id!=="axp")c.style.setProperty("display","none","important")});
 let R=document.getElementById("axp");if(!R){R=document.createElement("div");R.id="axp";acp.before(R)}
 const t=TD(),A=ND.accounts,live=A.filter(a=>a.status!=="Inactive"),fo=finOv(),m=ilCalc(ilAll()),at=nwSeries(),cash=live.reduce((s,a)=>s+accBal(a),0),oth=m.fund-m.cap-m.prinRet-m.profit+m.reinv+m.xfer,
 pm=new Date(t.slice(0,7)+"-01T00:00:00Z");pm.setUTCDate(0);const chg=at(t).N-at(pm.toISOString().slice(0,10)).N,unl=live.filter(a=>accUnv(a)>0).length,
