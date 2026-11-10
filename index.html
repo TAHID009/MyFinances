@@ -1191,6 +1191,58 @@ html body main>section#p-accounts.pg.fd.acx>:not(#axp),html body main>section#p-
 .ax-dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.ax-dg>div{background:#f6faf8;border:1px solid #e3ece7;border-radius:12px;padding:8px 12px}.ax-dg span{display:block;color:#5f6d67;font-size:12px}.ax-dg b{font-size:16px;font-weight:800}
 
 .ax-ct{width:100%;border-collapse:collapse;font-size:14px}.ax-ct td{padding:6px 10px;border-bottom:1px solid #e3ece7}.ax-ct td.ra{text-align:right;white-space:nowrap}
+
+/* Investment detail pop-up (axInvD) */
+dialog.axd{padding:0!important;border-radius:18px!important;box-shadow:0 24px 60px rgba(10,40,32,.3);color:#22312b;overflow:hidden;width:min(95vw,1120px)}
+dialog.axd[open]{display:flex;flex-direction:column;max-height:92vh}
+dialog.axd::backdrop{background:rgba(12,38,32,.5);backdrop-filter:blur(2px)}
+dialog.axd>div:last-child{margin:0!important;padding:12px 26px!important;border-top:1px solid #e3ece7;background:#f8fbf9}
+.axd-body{padding:22px 26px 20px;overflow:auto;flex:1}
+.axd-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.axd-ti{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.axd-ti h3{margin:0;font-size:22px;font-weight:800;letter-spacing:-.01em}
+.axd-b{font-size:12px;font-weight:700;padding:4px 11px;border-radius:99px}
+.axd-b.ref{background:#e4f3ec;color:#145c49}.axd-b.non{background:#fdf0dc;color:#8a5a12}
+.axd-s{margin:6px 0 0;color:#5f6d67;font-size:13.5px}
+.axd-x{all:unset;cursor:pointer;flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:24px;line-height:1;color:#5f6d67;background:#f1f5f3}
+.axd-x:hover,.axd-x:focus-visible{background:#e3ece7;color:#22312b}
+.axd-kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.axd-k{background:#f6faf8;border:1px solid #e3ece7;border-radius:14px;padding:12px 14px}
+.axd-k span{display:block;color:#5f6d67;font-size:12px;font-weight:600}
+.axd-k b{display:block;margin-top:3px;font-size:19px;font-weight:800;font-variant-numeric:tabular-nums}
+.axd-k small{display:block;margin-top:3px;color:#7a8781;font-size:11.5px}
+.axd-k.pos b{color:#1f7a5c}
+.axd-k.hero{grid-column:1/-1;background:linear-gradient(135deg,#147D70,#105B52);border-color:transparent}
+.axd-k.hero span,.axd-k.hero small{color:rgba(255,255,255,.82)}.axd-k.hero b{color:#fff;font-size:28px}
+.axd-sec{margin-top:22px}
+.axd-sh{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.axd-sh h4{margin:0;font-size:15px;font-weight:800}.axd-sh small{color:#7a8781;font-size:12px}
+.axd-card{border:1px solid #e3ece7;border-radius:14px;padding:2px 16px}
+.axd-calc{width:100%;border-collapse:collapse;font-size:14px}
+.axd-calc td{padding:9px 2px;border-bottom:1px solid #eef3f0}.axd-calc tr:last-child td{border-bottom:0}
+.axd-calc td.ra{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.axd-calc tr.tot td{font-weight:800;font-size:15px;border-top:2px solid #cfe0d6}
+.axd-note2{margin:8px 2px 0;color:#7a8781;font-size:12px}
+.axd-tw{border:1px solid #e3ece7;border-radius:14px;overflow-x:auto}
+.axd-tb{width:100%;min-width:980px;border-collapse:separate;border-spacing:0;font-size:12.5px}
+.axd-tb th{position:sticky;top:0;z-index:1;background:#f1f6f3;color:#4a5a53;font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:10px 9px;text-align:left;white-space:nowrap;border-bottom:1px solid #dbe6e0}
+.axd-tb th.ra,.axd-tb td.ra{text-align:right}
+.axd-tb td{padding:9px;vertical-align:top;border-bottom:1px solid #eef3f0}
+.axd-tb tr:last-child td{border-bottom:0}
+.axd-tb td.nw{white-space:nowrap;font-variant-numeric:tabular-nums}
+.axd-tb td b{display:block;font-weight:700}
+.axd-tb td small{display:block;margin-top:2px;color:#7a8781;font-size:11.5px}
+.axd-tb tbody tr:hover td{background:#f9fcfa}
+.axd-tb tr.is-fund td{background:#f3f8f5}
+.axd-tb tr.is-rev td{opacity:.55}.axd-tb tr.is-rev td:not(:last-child){text-decoration:line-through}
+.axd-z{color:#a3afa9}.axd-ar{color:#8a9892}
+.axd-note{min-width:110px;color:#4a5a53}.axd-tb td:nth-child(7){min-width:180px}.axd-tb td:nth-child(8){min-width:110px}
+.axd-chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.axd-chip.cap{background:#e4f3ec;color:#145c49}.axd-chip.ret{background:#e6f0fb;color:#1f4e8c}.axd-chip.rei{background:#efe8f7;color:#72558F}.axd-chip.xfr{background:#fdf0dc;color:#8a5a12}.axd-chip.oth{background:#eef1ef;color:#4a5a53}
+.axd-st{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700}
+.axd-st.ok{background:#e4f3ec;color:#145c49}.axd-st.rev{background:#eef1ef;color:#5f6d67}
+.axd-sw{display:inline-block;width:12px;height:12px;border-radius:3px;background:#e3eee8;border:1px solid #cfe0d6;vertical-align:-2px}
+@media(max-width:640px){.axd-body{padding:16px}.axd-ti h3{font-size:19px}.axd-k.hero b{font-size:24px}dialog.axd>div:last-child{padding:10px 16px!important}}
 </style>
 </head><body class="booting"><div id="ldbar"></div><script>window.__ready=function(){document.body.classList.remove("booting")};setTimeout(window.__ready,10000)</script>
 <aside><button class="sbt" id="sbt" title="Collapse menu ( [ )" aria-label="Collapse menu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><div class="brand"><svg width="36" height="36" viewBox="0 0 100 100"><defs><linearGradient id="amg1" x1="10" y1="0" x2="90" y2="100" gradientUnits="userSpaceOnUse"><stop stop-color="#34d399"/><stop offset="1" stop-color="#0d6b5f"/></linearGradient></defs><rect width="100" height="100" rx="27" fill="url(#amg1)"/><circle cx="50" cy="52" r="26" fill="#fff" fill-opacity=".16" stroke="#fff" stroke-width="5"/><path d="M33 62l11-12 9 7 14-17" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><path d="M60 40h8v8" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="24" r="5" fill="#fde68a"/></svg><div><b>Amar Hisab</b><small>Plan Today, Secure Tomorrow</small></div></div>
@@ -3529,12 +3581,16 @@ own=e=>ilKey(e.party)===key&&String(e.type).indexOf("inv_")===0,
 meth=e=>{const id=[e.src,e.dst].find(q=>q&&q!=="fund"&&q!=="ext"&&q!=="inv"),a=id&&accOf(id);return a?esc(a.name)+(a.type?" · "+esc(a.type):""):"-"},
 tm=e=>e.ts?new Date(e.ts).toLocaleString("en-GB",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):"",
 sg=(q,z)=>`<span style="color:${q>0?"#1f7a5c":q<0?"#b3402f":"inherit"};font-weight:700">${q>0?"+ ":q<0?"− ":""}${fmt(Math.abs(q))}</span>`,
-rows=[];
+rows=[];let hasF=0;
 asc.forEach((e,i)=>{if(e.type==="reversal")return;const d=bal[i]-(i?bal[i-1]:0),rv=e.status!=="ok",o=own(e);if(!o&&Math.abs(d)<0.005)return;const sd=ilSD(e);
-rows.push(`<tr${rv?' style="opacity:.55;text-decoration:line-through"':o?"":' style="background:#f6faf8"'}><td>${e.date}<br><small>${tm(e)}</small></td><td>${esc(ILT[e.type]||e.type)}${o?"":"<br><small>Fund movement"+(e.party?" · "+esc(e.party):"")+"</small>"}</td><td class="ra">${fmt(+e.prin||0)}</td><td class="ra">${fmt(+e.int||0)}</td><td class="ra">${rv?"-":sg(d)}</td><td class="ra">${rv?"-":fmt(bal[i])}</td><td>${esc(sd[0])} → ${esc(sd[1])}</td><td>${meth(e)}</td><td>${esc(e.desc||"")}${e.type==="inv_xfer"&&e.pp?" (principal "+fmt(e.pp)+")":""}</td><td>${rv?"Reversed":"Posted"}</td></tr>`)});
-const g=(l,q)=>`<div><span>${l}</span><b>${q}</b></div>`,cr=(l,q,b)=>`<tr${b?' style="font-weight:800;border-top:2px solid #cfe0d6"':""}><td>${l}</td><td class="ra">${q}</td></tr>`;
-const calc=non?"":`<h4 style="margin:14px 0 6px">How "Currently invested" is calculated</h4><table class="ax-ct">${cr("Capital invested (incl. reinvested profit)",sg(c))}${cr("Profit received",sg(v.pf))}${cr("Principal returned",sg(-v.pr))}${cr("Withdrawn to personal account",sg(-v.wd))}${Math.abs(sh)>0.005?cr("Paid from fund (loan repayments, loans given, etc.)",sg(sh)):""}${cr("Currently invested",fmt(cur),1)}</table><p class="ax-m" style="margin:6px 0 0">${Math.abs(sh)>0.005?"Fund-level movements (shaded rows below) are shared across refundable investments by capital share"+(capT>0?" ("+(c/capT*100).toFixed(1)+"% for this one)":"")+". ":""}Fund balance now: <b>${fmt(m.fund)}</b>.</p>`;
-const d=mdlg("dAxD",`<h3 style="margin:0 0 4px">${esc(v.n)}</h3><p class="ax-m" style="margin:0 0 12px">${non?"Non-refundable: no profit, capital is not returned.":"Refundable with profit: capital comes back along with profit."}</p><div class="ax-dg">${g(non?"Paid (non-refundable)":"Capital invested",fmt(c))}${non?"":g("Profit received",fmt(v.pf))+g("Return on capital",c>0?(v.pf/c*100).toFixed(1)+"%":"-")+g("Principal returned",fmt(v.pr+v.wp))+(v.wd-v.wp>0.005?g("Profit withdrawn",fmt(v.wd-v.wp)):"")+(v.re>0.005?g("Reinvested",fmt(v.re)):"")+g("Currently invested",fmt(cur))}</div>${calc}<h4 style="margin:14px 0 6px">Step by step: investments, returns, loan payments and settlements</h4>`+mTbl([["Date / time"],["Type"],["Principal",1],["Profit / interest",1],["Effect on fund",1],["Fund balance after",1],["From → To"],["Account / method"],["Note"],["Status"]],rows));d.style.maxWidth="1120px"}
+const tg=t=>t==="inv_cap"?"cap":t==="inv_return"?"ret":t==="inv_reinv"?"rei":t==="inv_xfer"?"xfr":"oth",am=q=>q?fmt(q):'<span class="axd-z">'+fmt(0)+'</span>',nt=(e.desc||"")+(e.type==="inv_xfer"&&e.pp?" (principal "+fmt(e.pp)+")":"");if(!o)hasF=1;
+rows.push(`<tr class="${rv?"is-rev":o?"":"is-fund"}"><td class="nw"><b>${e.date}</b><small>${tm(e)}</small></td><td><span class="axd-chip ${tg(e.type)}">${esc(ILT[e.type]||e.type)}</span>${o?"":'<small>Fund movement'+(e.party?" · "+esc(e.party):"")+"</small>"}</td><td class="ra nw">${am(+e.prin||0)}</td><td class="ra nw">${am(+e.int||0)}</td><td class="ra nw">${rv?"-":sg(d)}</td><td class="ra nw">${rv?"-":fmt(bal[i])}</td><td>${esc(sd[0])} <span class="axd-ar">→</span> ${esc(sd[1])}</td><td>${meth(e)}</td><td class="axd-note">${nt?esc(nt):"-"}</td><td><span class="axd-st ${rv?"rev":"ok"}">${rv?"Reversed":"Posted"}</span></td></tr>`)});
+const g=(l,q,c,sb)=>`<div class="axd-k${c?" "+c:""}"><span>${l}</span><b>${q}</b>${sb?`<small>${sb}</small>`:""}</div>`,cr=(l,q,b)=>`<tr${b?' class="tot"':""}><td>${l}</td><td class="ra">${q}</td></tr>`;
+const calc=non?"":`<section class="axd-sec"><div class="axd-sh"><h4>How "Currently invested" is calculated</h4></div><div class="axd-card"><table class="axd-calc">${cr("Capital invested (incl. reinvested profit)",sg(c))}${cr("Profit received",sg(v.pf))}${cr("Principal returned",sg(-v.pr))}${cr("Withdrawn to personal account",sg(-v.wd))}${Math.abs(sh)>0.005?cr("Paid from fund (loan repayments, loans given, etc.)",sg(sh)):""}${cr("Currently invested",fmt(cur),1)}</table></div><p class="axd-note2">${Math.abs(sh)>0.005?"Fund-level movements (shaded rows below) are shared across refundable investments by capital share"+(capT>0?" ("+(c/capT*100).toFixed(1)+"% for this one)":"")+". ":""}Fund balance now: <b>${fmt(m.fund)}</b>.</p></section>`;
+const kp=non?g("Paid (non-refundable)",fmt(c),"hero","No profit · capital is not returned"):g("Currently invested",fmt(cur),"hero","Capital "+fmt(c)+" · Profit received "+fmt(v.pf))+g("Capital invested",fmt(c))+g("Profit received",fmt(v.pf),v.pf>0.005?"pos":"")+g("Return on capital",c>0?(v.pf/c*100).toFixed(1)+"%":"-")+g("Principal returned",fmt(v.pr+v.wp))+(v.wd-v.wp>0.005?g("Profit withdrawn",fmt(v.wd-v.wp)):"")+(v.re>0.005?g("Reinvested",fmt(v.re)):"");
+const th=[["Date / time"],["Type"],["Principal",1],["Profit / interest",1],["Effect on fund",1],["Fund balance after",1],["From → To"],["Account / method"],["Note"],["Status"]];
+const d=mdlg("dAxD",`<div class="axd-body"><div class="axd-hd"><div><div class="axd-ti"><h3>${esc(v.n)}</h3><span class="axd-b ${non?"non":"ref"}">${non?"Non-refundable":"Refundable with profit"}</span></div><p class="axd-s">${non?"Non-refundable: no profit, capital is not returned.":"Refundable with profit: capital comes back along with profit."}</p></div><button type="button" class="axd-x" aria-label="Close">&times;</button></div><div class="axd-kg">${kp}</div>${calc}<section class="axd-sec"><div class="axd-sh"><h4>Transaction history</h4><small>${rows.length} ${rows.length===1?"entry":"entries"} · investments, returns, loan payments and settlements</small></div><div class="axd-tw"><table class="axd-tb"><thead><tr>${th.map(x=>"<th"+(x[1]?' class="ra"':"")+">"+x[0]+"</th>").join("")}</tr></thead><tbody>${rows.join("")||'<tr><td colspan="'+th.length+'" class="axd-note">No entries yet.</td></tr>'}</tbody></table></div>${hasF?'<p class="axd-note2"><i class="axd-sw"></i> Shaded rows are fund-level movements, not entries of this investment.</p>':""}</section></div>`);
+d.classList.add("axd");d.querySelector(".axd-x").onclick=()=>d.close();d.style.maxWidth="1120px"}
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("#axp [data-acx=hold]")){e.preventDefault();e.target.click()}});
 document.addEventListener("click",e=>{const c=e.target.closest("#axp");if(!c)return;const b=e.target.closest("[data-acx]"),v=b&&b.dataset.v;
 if(e.target.closest("a[href='#']"))e.preventDefault();
