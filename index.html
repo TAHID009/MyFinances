@@ -1311,10 +1311,12 @@ dialog.pro table:not(.axd-tb):not(.axd-calc) td{border-bottom:1px solid #eef3f0}
 <div class="bt2 bt3">
 <div class="card"><h3><span>Category Budgets <span class="m" style="font-weight:400;font-size:calc(11px*var(--fs,1))">· spending for the selected month</span></span><span class="row" style="gap:6px"><span id="bdirty" class="bdt" hidden>Unsaved changes</span><button class="btn w" id="bauto" style="padding:5px 10px" title="Suggest limits from your last 3 months">Auto-fill</button><button class="btn w" id="bclr" style="padding:5px 10px">Clear</button><button class="btn w" id="bexp" style="padding:5px 10px">Export</button></span></h3>
 <div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th class="ra" style="width:120px">Budget (৳)</th><th class="ra">Spent</th><th class="ra">Left</th><th style="width:28%">Progress</th></tr></thead><tbody id="bb"></tbody></table></div></div>
+<div class="card" id="cw"><h3><span id="cwh">Cost watch</span><span class="cwt" id="cwt"><button type="button" data-cw="m" class="on">Month</button><button type="button" data-cw="p">Salary period</button></span></h3><div id="cwb"></div></div>
 <div class="col">
-<div class="card f"><h3><span>Monthly Plan</span></h3><label for="btot" style="margin-top:0">Total monthly budget (৳) <span class="m">· optional, otherwise the sum of categories</span></label><input id="btot" inputmode="numeric" placeholder="e.g. 30000"><label for="bgoal">Monthly savings goal (৳)</label><input id="bgoal" inputmode="numeric" placeholder="e.g. 10000"><button type="button" class="btn" id="bsave" style="margin-top:12px;padding:10px">Save budgets &amp; plan</button><div id="bgp" style="margin-top:14px"></div></div>
-<div class="card"><h3><span>Alerts</span></h3><div id="bal"></div></div>
-</div><div class="card"><h3><span>Savings Goals</span><span class="m" style="font-weight:400;font-size:calc(11px*var(--fs,1))">Targets you are saving toward</span></h3><div id="nGoal"></div></div></div></section>
+<div class="card f"><h3><span>Monthly Plan</span></h3><div class="pln"><div><label for="btot" style="margin-top:0">Total monthly budget (৳) <span class="m">· optional, otherwise the sum of categories</span></label><input id="btot" inputmode="numeric" placeholder="e.g. 30000" title="Optional. If empty, the sum of category budgets is used."></div><div><label for="bgoal">Monthly savings goal (৳)</label><input id="bgoal" inputmode="numeric" placeholder="e.g. 10000"></div></div><button type="button" class="btn" id="bsave">Save budgets &amp; plan</button><div id="bgp"></div></div>
+<div class="card" id="bal2"><h3><span>Alerts</span></h3><div id="bal"></div></div>
+<div class="card" id="gcard"><h3><span>Savings Goals</span><span class="m" style="font-weight:400;font-size:calc(11px*var(--fs,1))">Targets you are saving toward</span></h3><div id="nGoal"></div></div>
+</div></div></section>
 <section class="pg" id="p-insights" hidden>
 <div class="card"><h3><span>Highlights</span><span class="m" style="font-weight:400" id="imn"></span></h3><div class="dk" id="ik" style="margin-bottom:0"></div></div>
 <div class="bt2">
@@ -2044,7 +2046,60 @@ function renderBudget(m,eN,I,E){
  $("#bal").innerHTML=ah||(T?A("al-ok","check","<b>All good.</b> Spending is within your budget."):'<span class="m">Set budgets to get alerts when you get close to a limit.</span>');
  $("#bgp").innerHTML=G?`<div class="bmt"><span>${fmt(Math.max(S,0))} saved of ${fmt(G)}</span><b class="${S>=G?"t-ok":"m"}">${Math.round(Math.max(0,S)/G*100)}%</b></div><div class="pb"><i class="pb-${S>=G?"ok":"gl"}" style="width:${Math.min(100,Math.max(0,S)/G*100)}%"></i></div><div class="m" style="margin-top:6px;font-size:calc(11.5px*var(--fs,1))">${S>=G?"Goal reached this month.":"Save "+fmt(G-Math.max(S,0))+" more to reach your goal."}</div>`:'<span class="m" style="font-size:calc(11.5px*var(--fs,1))">Add a monthly savings goal to track your progress.</span>';
  renderIns(m,eN,E,el);
+ renderCost();
 }
+
+/* ===== Budgets & Goals: Cost watch (display only - reads existing records, writes nothing) ===== */
+const CW={mode:"m"};
+function renderCost(){try{
+ const host=$("#cwb");if(!host)return;
+ const bn=getLang()==="bn",XL=(b,e)=>bn?b:e,td=TD(),cur=td.slice(0,7),m=sel.slice(0,7),mi=+m.slice(5,7)-1;
+ $("#cwh").textContent=XL("খরচ নজরদারি","Cost watch");
+ const tb=$$("#cwt button");tb.forEach(b=>{b.classList.toggle("on",b.dataset.cw===CW.mode);b.textContent=b.dataset.cw==="m"?XL("মাস","Month"):XL("বেতন অধ্যায়","Salary period")});
+ const dt=x=>String(x.date).slice(0,10),ex=db.expenses.filter(x=>typeof x.date==="string"&&x.date.length>=10);
+ const dd=(a,b)=>Math.round((Date.UTC(+b.slice(0,4),+b.slice(5,7)-1,+b.slice(8,10))-Date.UTC(+a.slice(0,4),+a.slice(5,7)-1,+a.slice(8,10)))/864e5);
+ const tot=(arr)=>{const o={};arr.forEach(x=>{const c=x.cat||"Other";o[c]=(o[c]||0)+(+x.amount||0)});return o};
+ const fd=d=>+d.slice(8,10)+" "+(bn?BM[+d.slice(5,7)-1]:MS[+d.slice(5,7)-1]);
+ let now={},usual={},full={},k=0,n=0,rem=0,sub="",budgetOn=false,dmN=dim(m);
+ if(CW.mode==="p"){
+  const P=cyCompute(db.inc,db.ex,td).filter(p=>!p.pre);
+  if(!P.length){host.innerHTML=`<div class="m cwe">${XL("এখনো কোনো বেতনের অধ্যায় নেই। বেতন যোগ করলে অধ্যায় শুরু হবে।","No salary period yet. A period starts when you add a salary.")}</div>`;return}
+  const c=P[P.length-1];n=dd(c.s,td)+1;
+  now=tot(ex.filter(x=>dt(x)>=c.s&&dt(x)<=td&&dt(x)<c.e));
+  const prev=P.slice(-4,-1);k=prev.length;
+  prev.forEach(p=>{const a=tot(ex.filter(x=>dt(x)>=p.s&&dt(x)<p.e&&dt(x)<dAdd(p.s,n))),f=tot(ex.filter(x=>dt(x)>=p.s&&dt(x)<p.e));
+   Object.keys(a).forEach(q=>usual[q]=(usual[q]||0)+a[q]/k);Object.keys(f).forEach(q=>full[q]=(full[q]||0)+f[q]/k)});
+  const L=k?prev.reduce((t,p)=>t+dd(p.s,p.e),0)/k:0;rem=Math.max(0,Math.round(L)-n);
+  sub=XL("অধ্যায় "+c.n+" · "+fd(c.s)+" থেকে "+n+" দিন"+(k?" · আগের "+k+"টি অধ্যায়ের প্রথম "+n+" দিনের গড়ের সাথে তুলনা":""),"Period "+c.n+" · "+n+" day"+(n==1?"":"s")+" since "+fd(c.s)+(k?" · vs first "+n+" days of the previous "+k+" period"+(k==1?"":"s"):""));
+ }else{
+  n=m===cur?+td.slice(8):m<cur?dmN:0;
+  if(!n){host.innerHTML=`<div class="m cwe">${XL("এই মাসে এখনো তুলনা করার মতো খরচ নেই।","Nothing to compare yet for this month.")}</div>`;return}
+  budgetOn=true;rem=m===cur?dmN-n:0;
+  now=tot(ex.filter(x=>dt(x).startsWith(m)&&+dt(x).slice(8)<=n));
+  let pm=m;const prev=[];for(let i=0;i<3;i++){pm=pmo(pm);if(ex.some(x=>dt(x).startsWith(pm)))prev.push(pm)}
+  k=prev.length;
+  prev.forEach(p=>{const a=tot(ex.filter(x=>dt(x).startsWith(p)&&+dt(x).slice(8)<=n)),f=tot(ex.filter(x=>dt(x).startsWith(p)));
+   Object.keys(a).forEach(q=>usual[q]=(usual[q]||0)+a[q]/k);Object.keys(f).forEach(q=>full[q]=(full[q]||0)+f[q]/k)});
+  sub=XL(MN[mi]+" · ১–"+n+" তারিখ"+(k?" · গত "+k+" মাসের একই দিনের গড়ের সাথে তুলনা":""),MN[mi]+" · days 1–"+n+(k?" · vs same days of the last "+k+" month"+(k==1?"":"s"):""));
+ }
+ if(!k){host.innerHTML=`<div class="cws m">${sub}</div><div class="m cwe">${CW.mode==="p"?XL("তুলনার জন্য আগের অন্তত একটি বেতন অধ্যায় দরকার।","Needs at least one earlier salary period to compare."):XL("তুলনার জন্য আগের অন্তত একটি মাসের খরচ দরকার।","Needs at least one earlier month of spending to compare.")}</div>`;return}
+ const rows=Object.keys({...now,...usual}).map(c=>{const a=now[c]||0,b=usual[c]||0,d=a-b,pc=b?d/b*100:null;
+  let st="ok";if(!b){if(a>=300)st="new"}else if(d>=100&&a>=b*1.25)st="hi";else if(d>=50&&a>=b*1.1)st="wa";
+  let hint="";const room=(full[c]||0)-a;
+  if(st!=="ok"&&b>0&&rem>0){hint=room>0?XL("দৈনিক ≤ "+fmt(room/rem),"≤ "+fmt(room/rem)+"/day"):XL("সীমা পার","past usual")}
+  const bu=budgetOn?+BUD.cats[c]||0:0,pj=m===cur&&n?a/n*dmN:a;let bf="";if(bu&&a>bu)bf=XL("বাজেট পার","Over budget");else if(bu&&pj>bu)bf=XL("বাজেট ছাড়াবে","Will pass budget");
+  return{c,a,b,d,pc,st,hint,bf}}).filter(r=>r.a>0||r.b>0);
+ const bad=rows.filter(r=>r.st!=="ok").sort((p,q)=>q.d-p.d),extra=bad.reduce((t,r)=>t+Math.max(0,r.d),0);
+ const low=rows.filter(r=>r.d<0&&r.b>0).sort((p,q)=>p.d-q.d).slice(0,3);
+ const A=sum(Object.values(now).map(v=>({amount:v}))),B=sum(Object.values(usual).map(v=>({amount:v}))),TD_=A-B;
+ const head=bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL("স্বাভাবিকের চেয়ে <b>"+fmt(extra)+"</b> বেশি — "+bad.length+"টি ক্যাটেগরিতে। আগে <b>"+esc(bad[0].c)+"</b> কমান।","<b>"+fmt(extra)+"</b> above usual in "+bad.length+" categor"+(bad.length==1?"y":"ies")+". Start by cutting <b>"+esc(bad[0].c)+"</b>.")}</span></div>`:`<div class="cwa ok">${ico("check",15)}<span>${XL("কোনো খরচ স্বাভাবিকের চেয়ে বেশি যাচ্ছে না।","No cost is running above your usual.")}</span></div>`;
+ const bdg={hi:XL("বেশি","High"),wa:XL("নজরে রাখুন","Watch"),new:XL("নতুন","New")};
+ const row=r=>{const mx=Math.max(r.a,r.b,1),col=r.st==="hi"?"#c0392b":r.st==="wa"?"#e08a00":r.st==="new"?"#7c6bb0":"#2e9e74";
+  return`<div class="cwr"><div class="cwn">${(CAT[r.c]||FB).i}<div><b>${esc(r.c)}</b><small>${num(r.a)} ${XL("বনাম স্বাভাবিক","vs usual")} ${r.b?num(r.b):"–"}${r.hint?` · <em>${r.hint}</em>`:""}${r.bf?` · <em class="bo">${r.bf}</em>`:""}</small></div></div><div class="cwbar"><i style="width:${r.a/mx*100}%;background:${col}"></i>${r.b?`<u style="left:${r.b/mx*100}%"></u>`:""}</div><span class="cwb ${r.st}">${r.st==="ok"?(r.pc===null?"–":(r.d>0?"+":"")+Math.round(r.pc)+"%"):(bdg[r.st]+(r.pc!==null?" +"+Math.round(r.pc)+"%":""))}</span></div>`};
+ const tr=B?Math.round(TD_/B*100):null;
+ host.innerHTML=`<div class="cws m">${sub}</div>${head}<div class="cwl">${bad.map(row).join("")||""}</div>${low.length?`<div class="cwo m"><span class="g">▼ ${XL("স্বাভাবিকের চেয়ে কম","Lower than usual")}:</span> ${low.map(r=>esc(r.c)+" <b class=\"g\">−"+num(Math.abs(r.d))+"</b>").join(" · ")}</div>`:""}<div class="cwt2"><span>${XL("মোট এখন","Total now")} <b>${fmt(A)}</b></span><span>${XL("স্বাভাবিক","Usual")} <b>${fmt(B)}</b></span><span class="${TD_>0?"r":"g"}">${TD_>0?"▲ +":TD_<0?"▼ −":""}${num(Math.abs(TD_))}${tr!==null?" ("+(tr>0?"+":"")+tr+"%)":""}</span></div>`;
+}catch(e){console.error(e)}}
+document.addEventListener("click",e=>{const b=e.target.closest("#cwt [data-cw]");if(b){CW.mode=b.dataset.cw;renderCost()}});
 function renderIns(m,eN,E,el){
  const pN=mon(db.expenses,pmo(m)),n=eN.length;
  const big=eN.reduce((b,x)=>x.amount>(b?b.amount:0)?x:b,null),days=new Set(eN.map(x=>x.date)).size,ns=Math.max(0,el-days);
@@ -4215,4 +4270,59 @@ ensureX(d);new MutationObserver(function(){ensureX(d)}).observe(d,{childList:tru
 d.__dirty=0;return sm.apply(d,arguments)};
 })();
 </script>
+<style id="bgcompact">
+/* Budgets & Goals: compact layout + Cost watch */
+#p-budget{gap:8px!important}
+#p-budget #bk{gap:8px}
+#p-budget .bkc{padding:6px 12px!important;gap:0}
+#p-budget .bkc b{font-size:calc(17px*var(--fs,1));line-height:1.2}
+#p-budget .bkc .m{font-size:calc(11px*var(--fs,1));line-height:1.3}
+#p-budget .bt3{gap:8px;margin-top:0!important}
+#p-budget .bt3>.card,#p-budget .bt3>.col>.card{padding:8px 12px}
+#p-budget h3{font-size:calc(14px*var(--fs,1));margin:0 0 6px;gap:8px}
+#p-budget .tw td,#p-budget .tw th{padding:3px 8px;font-size:calc(12px*var(--fs,1))}
+#p-budget .tw th[style*="width"]{width:auto!important}
+#p-budget .bin{width:78px;padding:2px 7px;font-size:calc(12px*var(--fs,1))}
+#p-budget .pb{height:5px}
+#p-budget .pbw{gap:6px}
+#p-budget .f{gap:2px}
+#p-budget .pln{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#p-budget .pln label{font-size:calc(11px*var(--fs,1));margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+#p-budget .pln .m{display:none}
+#p-budget .pln input{padding:5px 9px;font-size:calc(13px*var(--fs,1))}
+#p-budget #bsave{margin-top:6px;padding:7px}
+#p-budget #bgp{margin-top:6px}
+#p-budget .al{padding:5px 9px;margin-bottom:4px;font-size:calc(12px*var(--fs,1));line-height:1.35}
+#p-budget #nGoal .card{padding:8px 12px}
+#p-budget .bt3>.col>.card:last-child{display:flex;flex-direction:column}
+/* Cost watch */
+#cw .cwt{display:inline-flex;gap:2px;background:#eef3f1;border-radius:8px;padding:2px}
+#cw .cwt button{border:0;background:none;padding:3px 10px;border-radius:6px;font:inherit;font-size:calc(11.5px*var(--fs,1));cursor:pointer;color:var(--mut)}
+#cw .cwt button.on{background:#fff;color:var(--pri);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+#cwb{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px}
+#cwb .cws{font-size:calc(11px*var(--fs,1))}
+#cwb .cwe{padding:10px 2px}
+.cwa{display:flex;gap:7px;align-items:flex-start;padding:6px 10px;border-radius:8px;font-size:calc(12px*var(--fs,1));line-height:1.35}
+.cwa svg{flex:none;margin-top:1px}
+.cwa.hi{background:#fff1f2;color:#9f1239}.cwa.ok{background:#ecfdf5;color:#1f5c50}
+.cwl{display:flex;flex-direction:column}
+.cwr{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,.55fr) auto;gap:8px;align-items:center;padding:5px 0;border-top:1px solid var(--line)}
+.cwr:first-child{border-top:0}
+.cwn{display:flex;align-items:center;gap:7px;min-width:0}
+.cwn>div{min-width:0}
+.cwn b{display:block;font-size:calc(12.5px*var(--fs,1));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cwn small{display:block;font-size:calc(10.5px*var(--fs,1));color:var(--mut);line-height:1.3}
+.cwn em{font-style:normal;color:#9f1239;font-weight:600}.cwn em.bo{color:#b45309}
+.cwbar{position:relative;height:6px;background:#eaf0ee;border-radius:4px}
+.cwbar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.cwbar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:#334155;border-radius:1px}
+.cwb{font-size:calc(11px*var(--fs,1));font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.cwb.hi{background:#fff1f2;color:#9f1239}.cwb.wa{background:#fffbeb;color:#92400e}.cwb.new{background:#f1edfa;color:#5b4a99}.cwb.ok{background:#ecfdf5;color:#1f5c50}
+.cwo{font-size:calc(11px*var(--fs,1));line-height:1.4}
+.cwt2{margin-top:auto;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--line);font-size:calc(11.5px*var(--fs,1));color:var(--mut)}
+.cwt2 b{color:var(--ink)}
+@media(max-width:1250px){#p-budget .bt3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-rows:auto!important}#p-budget .bt3>.card:first-child{grid-column:1/-1}}
+#p-budget .pln input{box-sizing:border-box;min-width:0}#p-budget .pln>div{min-width:0}
+@media(max-width:800px){#p-budget .bt3{grid-template-columns:1fr!important}#p-budget .pln{grid-template-columns:1fr}#p-budget .pln .m{display:inline}#p-budget .pln label{white-space:normal}}
+</style>
 </body></html>
