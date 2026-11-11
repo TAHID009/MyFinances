@@ -1478,7 +1478,9 @@ table.at{width:100%;border-collapse:collapse;font-size:calc(12.5px*var(--fs,1));
 @media(max-width:700px){.an-g{grid-template-columns:1fr}.an-g .s2,.an-g .w3{grid-column:auto}.an-k{display:flex;overflow-x:auto}.an-k .k{flex:0 0 150px}}
 
 /* --- top-bar add buttons: dashboard only --- */
-body:not([data-dash]) #addinc,body:not([data-dash]) #add2{display:none!important}
+/* Add Income / Add Expense on every page; month + search only where they matter */
+body[data-pg]:not([data-pg="dash"]):not([data-pg="log"]):not([data-pg="income"]):not([data-pg="budget"]) .top .tr .pill{display:none}
+body[data-pg]:not([data-pg="dash"]):not([data-pg="log"]) .top .tr .srch{display:none}
 /* --- chart hover --- */
 #anTip{position:fixed;z-index:9999;pointer-events:none;background:#1f2a26;color:#fff;font-size:calc(12px*var(--fs,1));line-height:1.4;padding:6px 10px;border-radius:8px;max-width:270px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .an-ch svg *{pointer-events:none}.an-ch svg [data-tip]{pointer-events:all}.an-ch svg [data-tip]:hover{fill:rgba(31,92,80,.1)}
@@ -2034,8 +2036,8 @@ function renderBudget(m,eN,I,E){
   +K("Estimated month-end",m===cur?fmt(proj):fmt(E),(m===cur?"Estimate, not actual · ":"")+(T&&m===cur?(proj>T?fmt(proj-T)+" over budget":"Within budget"):(m===cur?"":"Final total")),T&&m===cur&&proj>T?"t-ov":"");
  const af=document.activeElement,fc=af&&af.dataset?af.dataset.bc:undefined,ss=af?af.selectionStart:null;
  const names=Object.keys(CAT);
- let hid=0;$("#bb").innerHTML=names.map(c=>{const sp=sum(eN.filter(x=>x.cat===c)),b=+(c in bdraft?bdraft[c]:BUD.cats[c])||0,pc=b?sp/b*100:0;
-  if(!BSA&&!sp&&!b){hid++;return""}return`<tr><td>${CAT[c].i} <b>${esc(c)}</b></td><td class="ra"><input class="bin" inputmode="numeric" data-bc="${esc(c)}" value="${b||""}" placeholder="0"></td><td class="ra">${sp?num(sp):"–"}</td><td class="ra ${b&&sp>b?"r":""}">${b?(sp>b?"-"+num(sp-b):num(b-sp)):"–"}</td><td>${b?`<div class="pbw"><div class="pb"><i class="pb-${bCls(pc)}" style="width:${Math.min(pc,100)}%"></i></div><span class="chs t-${bCls(pc)}">${Math.round(pc)}%</span></div>`:'<span class="m">–</span>'}</td></tr>`}).join("")+(hid||BSA?`<tr class="bsa"><td colspan="5"><button type="button" class="btn w" data-bsa="1">${BSA?"− Hide unused categories":"+ Show "+hid+" unused categories"}</button></td></tr>`:"");
+ let hid=0,TB=0,TS=0;$("#bb").innerHTML=names.map(c=>{const sp=sum(eN.filter(x=>x.cat===c)),b=+(c in bdraft?bdraft[c]:BUD.cats[c])||0,pc=b?sp/b*100:0;
+  TB+=b;TS+=sp;if(!BSA&&!sp&&!b){hid++;return""}return`<tr><td>${CAT[c].i} <b>${esc(c)}</b></td><td class="ra"><input class="bin" inputmode="numeric" data-bc="${esc(c)}" value="${b||""}" placeholder="0"></td><td class="ra">${sp?num(sp):"–"}</td><td class="ra ${b&&sp>b?"r":""}">${b?(sp>b?"-"+num(sp-b):num(b-sp)):"–"}</td><td>${b?`<div class="pbw"><div class="pb"><i class="pb-${bCls(pc)}" style="width:${Math.min(pc,100)}%"></i></div><span class="chs t-${bCls(pc)}">${Math.round(pc)}%</span></div>`:'<span class="m">–</span>'}</td></tr>`}).join("")+`<tr class="btot"><td><b>Total</b></td><td class="ra"><b>${TB?num(TB):"–"}</b></td><td class="ra"><b>${num(TS)}</b></td><td class="ra ${TB&&TS>TB?"r":""}"><b>${TB?(TS>TB?"-"+num(TS-TB):num(TB-TS)):"–"}</b></td><td></td></tr>`+(hid||BSA?`<tr class="bsa"><td colspan="5"><button type="button" class="btn w" data-bsa="1">${BSA?"− Hide unused categories":"+ Show "+hid+" unused categories"}</button></td></tr>`:"");
  if(fc!==undefined){const n=[...$$("#bb [data-bc]")].find(x=>x.dataset.bc===fc);if(n){n.focus();try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
  $("#bdirty").hidden=!Object.keys(bdraft).length;
  const al=[];names.forEach(c=>{const b=+BUD.cats[c]||0;if(!b)return;const sp=sum(eN.filter(x=>x.cat===c)),pc=sp/b*100;if(pc>=80)al.push([pc,c,sp,b])});al.sort((a,b)=>b[0]-a[0]);
@@ -2138,13 +2140,17 @@ function renderCostIn(host){try{
  :`<div class="cph0 ${dif>0?"r":dif<0?"g":""}"><div>${XL("এ পর্যন্ত "+n+" দিনে <b>"+fmt(tA)+"</b> · "+UL+"র একই "+n+" দিনে <b>"+fmt(B)+"</b> → "+(dif?"<b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" বেশি":" কম")+"</b>":"প্রায় সমান"),n+" days: <b>"+fmt(tA)+"</b> · "+UL+", same days: <b>"+fmt(B)+"</b> → "+(dif?"<b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" higher":" lower")+"</b>":"about the same"))}</div>${pend?`<div class="cpl2">⏳ ${XL("এখনো হয়নি (গত সময়ে ছিল): "+pdTxt,"Not yet this time: "+pdTxt)}</div>`:""}</div>`;
  host.innerHTML=`<div class="cws m">${sub}${proj!=null?XL(" · শেষে আনুমানিক "+fmt(proj)," · projected end "+fmt(proj)):""}</div>
  ${head}
- <div class="cwsrt"><b style="font-size:13px">${XL("ক্যাটেগরি ভিত্তিক তুলনা","Category comparison")}</b><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising")}</button><button type="button" data-cd="1" class="cwdb">${XL("বিস্তারিত","Details")}</button></span></div>
+ <div class="cwcols"><div class="cwc1"><div class="cwsrt"><b style="font-size:13px">${XL("ক্যাটেগরি ভিত্তিক তুলনা","Category comparison")}</b><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising")}</button><button type="button" data-cd="1" class="cwdb">${XL("বিস্তারিত","Details")}</button></span></div>
  <div class="cptw"><table class="cpt3"><thead><tr><th>${XL("ক্যাটেগরি","Category")}</th><th class="ra">${XL("এখন","Now")}</th>${k?`<th class="ra">${UL}<br><small>${XL("একই দিন","same days")}</small></th><th class="ra">${XL("পরিবর্তন","Change")}</th>`:""}</tr></thead><tbody>${tb.map(tr).join("")||`<tr><td colspan="4" class="m">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</td></tr>`}</tbody>
  <tfoot><tr><td>${XL("মোট","Total")}</td><td class="ra">${num(tA)}</td>${k?`<td class="ra">${num(B)}</td><td class="ra"><span class="cwb ${dif>0?"hi":"ok"}">${dif>0?"▲ +":"▼ −"}${num(Math.abs(Math.round(dif)))}</span></td>`:""}</tr></tfoot></table></div>
- <div class="m cpn">${XL("কোনো ক্যাটেগরিতে ট্যাপ করলে নিচে সেটির মাসভিত্তিক তুলনা ও গ্রাফ দেখাবে।","Tap a category to see its month-by-month comparison and chart below.")}</div>
- ${hist}
+ <div class="m cpn">${XL("কোনো ক্যাটেগরিতে ট্যাপ করলে নিচে সেটির মাসভিত্তিক তুলনা ও গ্রাফ দেখাবে।","Tap a category to see its month-by-month comparison and chart below.")}</div></div><div class="cwc2">${hist}
  <div class="cwg"><div class="cwgh"><b>${CW.cat?(CAT[CW.cat]||FB).i+" "+esc(CW.cat):XL("খরচ কেমন করে জমছে","How spending builds up")}</b>${CW.cat?`<button type="button" class="cwx" data-cc="">✕ ${XL("সব","All")}</button>`:`<span class="m">${fmt(cN)}</span>`}</div>${svg}<div class="cwtip" id="cwtip" hidden></div>
- <div class="cwk"><span><i style="background:${col}"></i>${XL("এখন","Now")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")}</span>`:""}</div></div>`;
+ <div class="cwk"><span><i style="background:${col}"></i>${XL("এখন","Now")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")}</span>`:""}</div></div></div></div>`;
+ 
+ {const bk=document.getElementById("bk");if(bk){bk.querySelectorAll(".cpx").forEach(e=>e.remove());const kc=(a,v,c,cl)=>`<div class="card bkc cpx"><span class="m">${a}</span><b class="${cl||""}">${v}</b><span class="m">${c||"&nbsp;"}</span></div>`,tc=all.reduce((x,r)=>r.a>(x?x.a:0)?r:x,null);
+  let h="";if(k)h+=kc(XL("আগের তুলনায় (একই "+n+" দিন)","vs "+UL+" (same "+n+" days)"),(dif>0?"▲ +":dif<0?"▼ −":"")+fmt(Math.abs(dif)),(tp!==null?Math.abs(tp)+"% ":"")+(dif>0?XL("বেশি","higher"):dif<0?XL("কম","lower"):XL("সমান","same"))+" · "+UL+" "+fmt(B),dif>0?"t-ov":"t-ok");
+  if(tc)h+=kc(XL("সবচেয়ে বড় ক্যাটেগরি","Top category"),esc(tc.c),fmt(tc.a)+(tA?" · "+Math.round(tc.a/tA*100)+"%":""));
+  bk.insertAdjacentHTML("beforeend",h)}}
  CW.last={all,UL,UB,sub:sub+(k?XL(" · "+UL+"র সাথে"," · vs "+UL):""),k,n,len,mode:CW.mode,budgetOn,tA,L0};
  if(CW.open)cwDetail();
  /* ---- hover ---- */
@@ -3034,7 +3040,7 @@ function dashExtra(){
  const A=((typeof ND!=="undefined"&&ND.accounts)||[]).filter(a=>a.status!=="Inactive").map(a=>({a,b:accBal(a)})).sort((x,y)=>y.b-x.b);
  document.getElementById("acxl").innerHTML=A.length?`<div class="dbm"><span>${X("মোট ব্যালেন্স","Total balance")}</span><b>${sg(sum(A,x=>x.b))}</b></div>`+A.slice(0,5).map(({a,b})=>`<div class="dbr2"><span>${esc(a.name)}<small>${esc(a.type||"")}</small></span><b class="${b<0?"t-ov":""}">${sg(b)}</b></div>`).join("")+(A.length>5?`<div class="m">+${A.length-5} ${X("আরও","more")}</div>`:""):`<div class="m">${X("কোনো অ্যাকাউন্ট নেই।","No accounts yet.")}</div>`}
 {const _r3=render;render=function(){_r3.apply(this,arguments);try{dashExtra()}catch(e){console.error(e)}}}
-{const _g3=go;go=function(p){_g3.apply(this,arguments);document.body.toggleAttribute("data-dash",!PGS[p]||p==="dash")}}
+{const _g3=go;go=function(p){_g3.apply(this,arguments);document.body.dataset.pg=PGS[p]?p:"dash";document.body.toggleAttribute("data-dash",!PGS[p]||p==="dash")}}
 /* ===== Fund Ledger engine (pure, no Firebase) =====
    Entry: {id,inv,type,amount,date,ts,bucket,status}
    Types: initial, additional, profit, principal_returned, reinvest, withdrawal, transfer,
@@ -4498,5 +4504,16 @@ d.__dirty=0;return sm.apply(d,arguments)};
 #p-budget #bb td{padding:3px 8px}#p-budget .tw th{padding:5px 8px}
 #p-budget #bb .bin{width:68px;padding:1px 6px}#p-budget #bb .pb{height:5px}
 #p-budget #bb tr.bsa td{text-align:center;padding:6px}
+#cwb{overflow:auto;container-type:inline-size}#cwb>*{flex:none}
+.cwcols{display:flex;flex-direction:column;gap:6px}.cwc1,.cwc2{display:flex;flex-direction:column;gap:6px;min-width:0}.cwc1>*,.cwc2>*{flex:none}
+.cptw{max-height:min(300px,45vh)}
+@container (min-width:640px){
+ #cwb>.cwcols{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px}
+ .cwc1{min-height:0;overflow:hidden}.cwc1>.cptw{flex:1 1 0;min-height:0;max-height:none}
+ .cwc2{min-height:0;overflow:auto}
+}
+#p-budget #bk{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+#p-budget #bb tr.btot td{position:sticky;bottom:0;background:#f4f8f6;border-top:2px solid var(--line)}
+@media(min-width:1251px){#p-budget .bt3{grid-template-columns:minmax(0,1fr) minmax(0,1.75fr) minmax(0,.85fr)!important}}
 </style>
 </body></html>
