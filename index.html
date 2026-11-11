@@ -1311,7 +1311,7 @@ dialog.pro table:not(.axd-tb):not(.axd-calc) td{border-bottom:1px solid #eef3f0}
 <div class="bt2 bt3">
 <div class="card"><h3><span>Category Budgets <span class="m" style="font-weight:400;font-size:calc(11px*var(--fs,1))">· spending for the selected month</span></span><span class="row" style="gap:6px"><span id="bdirty" class="bdt" hidden>Unsaved changes</span><button class="btn w" id="bauto" style="padding:5px 10px" title="Suggest limits from your last 3 months">Auto-fill</button><button class="btn w" id="bclr" style="padding:5px 10px">Clear</button><button class="btn w" id="bexp" style="padding:5px 10px">Export</button></span></h3>
 <div class="tw"><table style="min-width:560px"><thead><tr><th>Category</th><th class="ra" style="width:120px">Budget (৳)</th><th class="ra">Spent</th><th class="ra">Left</th><th style="width:28%">Progress</th></tr></thead><tbody id="bb"></tbody></table></div></div>
-<div class="card" id="cw"><h3><span id="cwh">Cost watch</span><span class="cwt" id="cwt"><button type="button" data-cw="m" class="on">Month</button><button type="button" data-cw="p">Salary period</button></span></h3><div id="cwb"></div></div>
+<div class="card" id="cw"><h3><span id="cwh" class="cwhd">Cost watch</span><span class="cwt" id="cwt"><button type="button" data-cw="m" class="on">Month</button><button type="button" data-cw="p">Salary period</button></span></h3><div id="cwb" class="cwhost"></div></div>
 <div class="col">
 <div class="card f"><h3><span>Monthly Plan</span></h3><div class="pln"><div><label for="btot" style="margin-top:0">Total monthly budget (৳) <span class="m">· optional, otherwise the sum of categories</span></label><input id="btot" inputmode="numeric" placeholder="e.g. 30000" title="Optional. If empty, the sum of category budgets is used."></div><div><label for="bgoal">Monthly savings goal (৳)</label><input id="bgoal" inputmode="numeric" placeholder="e.g. 10000"></div></div><button type="button" class="btn" id="bsave">Save budgets &amp; plan</button><div id="bgp"></div></div>
 <div class="card" id="bal2"><h3><span>Alerts</span></h3><div id="bal"></div></div>
@@ -2051,21 +2051,22 @@ function renderBudget(m,eN,I,E){
 
 /* ===== Budgets & Goals: Cost watch (display only - reads existing records, writes nothing) ===== */
 const CW={mode:"m",cat:null,sort:"a"};
-function renderCost(){try{
- const host=$("#cwb");if(!host)return;
+function renderCost(){document.querySelectorAll(".cwhost").forEach(renderCostIn)}
+function renderCostIn(host){try{
+ if(!host)return;
  const bn=getLang()==="bn",XL=(b,e)=>bn?b:e,td=TD(),cur=td.slice(0,7),m=sel.slice(0,7),mi=+m.slice(5,7)-1,dmN=dim(m);
- $("#cwh").textContent=XL("খরচ নজরদারি","Cost watch");
- $$("#cwt button").forEach(b=>{b.classList.toggle("on",b.dataset.cw===CW.mode);b.textContent=b.dataset.cw==="m"?XL("মাস","Month"):XL("বেতন অধ্যায়","Salary period")});
+ $$(".cwhd").forEach(e=>e.textContent=XL("খরচ নজরদারি","Cost watch"));
+ $$("[data-cw]").forEach(b=>{b.classList.toggle("on",b.dataset.cw===CW.mode);b.textContent=b.dataset.cw==="m"?XL("মাস","Month"):XL("বেতন অধ্যায়","Salary period")});
  const dt=x=>String(x.date).slice(0,10),ex=db.expenses.filter(x=>typeof x.date==="string"&&x.date.length>=10);
  const dd=(a,b)=>Math.round((Date.UTC(+b.slice(0,4),+b.slice(5,7)-1,+b.slice(8,10))-Date.UTC(+a.slice(0,4),+a.slice(5,7)-1,+a.slice(8,10)))/864e5);
  const fd=d=>+d.slice(8,10)+" "+(bn?BM[+d.slice(5,7)-1]:MS[+d.slice(5,7)-1]);
  const K=v=>v>=1e5?Math.round(v/1e3)+"k":v>=1e3?(Math.round(v/100)/10)+"k":String(Math.round(v));
- let start,len,n,prevs=[],rem=0,sub="",budgetOn=false;
+ let start,len,n,prevs=[],rem=0,sub="",budgetOn=false,PL=[];
  if(CW.mode==="p"){
   const P=cyCompute(db.inc,db.ex,td).filter(p=>!p.pre);
   if(!P.length){host.innerHTML=`<div class="m cwe">${XL("এখনো কোনো বেতনের অধ্যায় নেই। বেতন যোগ করলে অধ্যায় শুরু হবে।","No salary period yet. A period starts when you add a salary.")}</div>`;return}
   const c=P[P.length-1];start=c.s;n=dd(c.s,td)+1;
-  prevs=P.slice(-2,-1).map(p=>({s:p.s,len:dd(p.s,p.e)}));
+  prevs=P.slice(-2,-1).map(p=>({s:p.s,len:dd(p.s,p.e)}));PL=P.slice(-6).map((p,i,A)=>({s:p.s,L:i===A.length-1?0:dd(p.s,p.e),lb:XL("অধ্যায় "+p.n,"P"+p.n)}));
   const L=prevs.length?Math.round(prevs.reduce((t,p)=>t+p.len,0)/prevs.length):0;len=Math.max(L,n);rem=len-n;
   sub=XL("অধ্যায় "+c.n+" · "+fd(c.s)+" থেকে "+n+" দিন","Period "+c.n+" · "+n+" day"+(n==1?"":"s")+" since "+fd(c.s));
  }else{
@@ -2083,7 +2084,7 @@ function renderCost(){try{
   return{cur:cu,usual:us}};
  const cname=x=>x.cat||"Other",cats=[...new Set([...Object.keys(CAT),...ex.map(cname)])];
  const all=cats.map(c=>{const s=series(x=>cname(x)===c),a=s.cur[n-1]||0,b=k?s.usual[n-1]:0,fu=k?s.usual[len-1]:0,d=a-b;
-  let st="ok";if(!k||!b)st=a>0?"nh":"ok";else if(d>=100&&a>=b*1.25)st="hi";else if(d>=50&&a>=b*1.1)st="wa";
+  let st="ok";if(!k||!b)st=a>0?"nh":"ok";else if(d>=100&&a>=b*1.25)st="hi";else if(d>=50&&a>=b*1.1)st="wa";if(k&&b>0&&!a)st="pd";
   const room=fu-a;let hint="";if((st==="hi"||st==="wa")&&rem>0)hint=room>0?XL("দৈনিক ≤ "+fmt(room/rem),"≤ "+fmt(room/rem)+"/day"):XL("সীমা পার","past "+UL);
   const bu=budgetOn?+BUD.cats[c]||0:0,pj=m===cur&&n?a/n*len:a;let bf="";if(bu&&a>bu)bf=XL("বাজেট পার","Over budget");else if(bu&&pj>bu)bf=XL("বাজেট ছাড়াবে","Will pass budget");
   return{c,a,b,d,fu,pc:b?d/b*100:null,st,hint,bf,bu}});
@@ -2111,25 +2112,35 @@ function renderCost(){try{
   <text x="${X(1)}" y="${H-4}" font-size="8.5" fill="#7a8883">${xl(1)}</text><text x="${X(n)}" y="${H-4}" font-size="8.5" text-anchor="middle" fill="#7a8883">${xl(n)}</text><text x="${X(len)}" y="${H-4}" font-size="8.5" text-anchor="end" fill="#7a8883">${xl(len)}</text>
   <line id="cwvl" x1="0" x2="0" y1="${pt}" y2="${H-pb}" stroke="#334155" stroke-width="1" visibility="hidden"/><rect id="cwov" x="${pl}" y="0" width="${pw}" height="${H-pb}" fill="transparent"/></svg>`;
  /* ---- summary ---- */
- const bad=rows.filter(r=>r.st==="hi"||r.st==="wa").sort((p,q)=>q.d-p.d),extra=bad.reduce((t,r)=>t+Math.max(0,r.d),0);
- const low=all.filter(r=>r.b>0&&r.d<0).sort((p,q)=>p.d-q.d).slice(0,3);
- const cmp=rows.filter(r=>r.b>0),Ac=sum(cmp.map(r=>({amount:r.a}))),B=sum(all.map(r=>({amount:r.b}))),nh=sum(rows.filter(r=>r.st==="nh").map(r=>({amount:r.a})));
- const head=!k?`<div class="cwa nh">${ico("info",15)}<span>${XL("তুলনার মতো আগের ডেটা এখনো নেই — শুধু আসল খরচ দেখানো হচ্ছে।","Not enough earlier data to compare yet — showing actual spending only.")}</span></div>`
-  :bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL(UB+" <b>"+fmt(extra)+"</b> বেশি — "+bad.length+"টি ক্যাটেগরিতে। আগে <b>"+esc(bad[0].c)+"</b> কমান।","<b>"+fmt(extra)+"</b> above "+UL+" in "+bad.length+" categor"+(bad.length==1?"y":"ies")+". Cut <b>"+esc(bad[0].c)+"</b> first.")}</span></div>`
-  :`<div class="cwa ok">${ico("check",15)}<span>${XL("তুলনাযোগ্য কোনো খরচ "+UB+" বেশি নয়।","No comparable cost is above "+UL+".")}</span></div>`;
- const chipOf=r=>r.st==="nh"?`<span class="cwb nh">${XL("আগের ডেটা নেই","no history")}</span>`:r.pc===null?"":`<span class="cwb ${r.st}">${r.d>0?"▲ +":r.d<0?"▼ −":""}${Math.abs(Math.round(r.pc))}%</span>`;
- const bdg={hi:"#c0392b",wa:"#e08a00",ok:"#2e9e74",nh:"#8aa0b8"};
- const row=r=>`<div class="cwr${CW.cat===r.c?" sel":""}" data-cc="${esc(r.c)}"><div class="cwn">${(CAT[r.c]||FB).i}<div><b>${esc(r.c)}</b><small>${r.b?UL+" "+num(r.b)+" ":""}${chipOf(r)}${r.hint?` <em>${r.hint}</em>`:""}${r.bf?` <em class="bo">${r.bf}</em>`:""}</small></div></div><div class="cwbar"><i style="width:${r.a/mxA*100}%;background:${bdg[r.st]}"></i>${r.b?`<u style="left:${Math.min(100,r.b/mxA*100)}%"></u>`:""}</div><div class="cwv"><b>${num(r.a)}</b><small>${tA?Math.round(r.a/tA*100):0}%</small></div></div>`;
- const tr=B?Math.round((Ac-B)/B*100):null,dif=Ac-B;
- host.innerHTML=`<div class="cws m">${sub}${k?XL(" · "+(P_?"আগের অধ্যায়ের":"গত মাসের")+" একই দিনের সাথে তুলনা"," · vs same days of "+UL):""}</div>
- <div class="cwg"><div class="cwgh"><b>${CW.cat?(CAT[CW.cat]||FB).i+" "+esc(CW.cat):XL("মোট খরচ — জমা হওয়ার গতি","Total spending — running total")}</b>${CW.cat?`<button type="button" class="cwx" data-cc="">✕ ${XL("সব","All")}</button>`:`<span class="m">${fmt(cN)}</span>`}</div>${svg}<div class="cwtip" id="cwtip" hidden></div>
- <div class="cwk"><span><i style="background:${col}"></i>${XL("আসল","Actual")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")} ${fmt(proj)}</span>`:""}</div></div>
- ${head}
- <div class="cwsrt"><span class="m">${XL("ক্যাটেগরি ধরে ট্যাপ করুন → গ্রাফে দেখুন","Tap a category to chart it")}</span><span class="cwt"><button type="button" data-cd="1" class="cwdb">${XL("বিস্তারিত","Details")}</button><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising first")}</button></span></div>
- <div class="cwl">${rows.map(row).join("")||`<div class="m cwe">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</div>`}</div>
- ${low.length?`<div class="cwo m"><span class="g">▼ ${XL(UB+" কম","Lower than "+UL)}:</span> ${low.map(r=>esc(r.c)+" <b class=\"g\">−"+num(Math.abs(r.d))+"</b>").join(" · ")}</div>`:""}
- <div class="cwt2"><span>${XL("মোট এখন","Total now")} <b>${fmt(tA)}</b></span>${k?`<span>${XL("তুলনাযোগ্য","Like-for-like")} <b>${fmt(Ac)}</b> ${XL("বনাম","vs")} <b>${fmt(B)}</b> <b class="${dif>0?"r":"g"}">${dif>0?"▲ +":dif<0?"▼ −":""}${num(Math.abs(dif))}${tr!==null?" ("+(tr>0?"+":"")+tr+"%)":""}</b></span>`:""}${nh?`<span>${XL("ইতিহাসহীন","No history")} <b>${fmt(nh)}</b></span>`:""}</div>`;
- CW.last={all,UL,UB,sub:sub+(k?XL(" · "+UL+"র সাথে"," · vs "+UL):""),k,n,len,mode:CW.mode,budgetOn,tA};
+ const B=sum(all.map(r=>({amount:r.b}))),dif=tA-B,tp=B?Math.round(dif/B*100):null;
+ const AB=f=>sum(rows.filter(f).map(r=>({amount:Math.abs(r.d)})));
+ const up=AB(r=>r.b>0&&r.d>0),dn=AB(r=>r.b>0&&r.d<0),nw=sum(rows.filter(r=>r.st==="nh").map(r=>({amount:r.a})));
+ const pdR=all.filter(r=>r.st==="pd").sort((p,q)=>q.b-p.b),pend=sum(pdR.map(r=>({amount:r.b})));
+ const bad=rows.filter(r=>r.st==="hi"||r.st==="wa").sort((p,q)=>q.d-p.d);
+ const L0={k,tA,B,dif,tp,proj,up,dn,nw,pend,n,UL,P_};
+ const verdict=!k?`<div class="cwa nh">${ico("info",15)}<span>${XL("তুলনার মতো আগের ডেটা এখনো নেই — শুধু আসল খরচ দেখানো হচ্ছে।","Not enough earlier data to compare yet — showing actual spending only.")}</span></div>`
+  :bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL("সবচেয়ে বেশি বেড়েছে <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")। মোট "+bad.length+"টি ক্যাটেগরি "+UB+" বেশি।","Biggest rise: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+"). "+bad.length+" categor"+(bad.length==1?"y is":"ies are")+" above "+UL+".")}</span></div>`
+  :`<div class="cwa ok">${ico("check",15)}<span>${XL("কোনো ক্যাটেগরি "+UB+" উল্লেখযোগ্য বেশি নয়।","No category is noticeably above "+UL+".")}</span></div>`;
+ /* ---- period-by-period history ---- */
+ const rs=(s,Ln)=>ex.reduce((t,x)=>{const i=dd(s,dt(x));return i>=0&&i<Ln?t+(+x.amount||0):t},0);
+ let items=PL;if(CW.mode!=="p"){items=[];let x=m;for(let i=0;i<6;i++){items.unshift({s:x+"-01",L:dim(x),lb:(bn?BM:MS)[+x.slice(5,7)-1]});x=pmo(x)}}
+ const hs=items.map((p,i)=>{const cu=i===items.length-1,Ln=cu?len:p.L;return{lb:p.lb,cu,same:cu?cN:rs(p.s,Math.min(n,Ln)),full:cu?(proj||cN):rs(p.s,Ln)}}).filter((h,i,a)=>h.cu||h.full>0);
+ const hmx=Math.max(1,...hs.map(h=>Math.max(h.full,h.same)));
+ const hist=hs.length>1?`<div class="cph"><div class="cpt"><b>${XL(CW.mode==="p"?"অধ্যায় ধরে তুলনা":"মাস ধরে তুলনা","Compare "+(CW.mode==="p"?"periods":"months"))}</b><span class="m">${XL("প্রথম "+n+" দিন বনাম পুরো সময়","First "+n+" days vs full period")}</span></div><div class="cpc">${hs.map(h=>`<div class="cpcol${h.cu?" cu":""}"><b>${K(h.same)}</b><div class="cpbars"><i class="f" style="height:${h.full/hmx*100}%"></i><i class="s" style="height:${h.same/hmx*100}%"></i></div><small>${h.lb}</small></div>`).join("")}</div><div class="cwk"><span><i style="background:#2e9e74"></i>${XL("প্রথম "+n+" দিনের খরচ","Spent in first "+n+" days")}</span><span><i style="background:#d5dfdb"></i>${XL("পুরো সময়ের মোট"+(proj?" (চলমানটি আনুমানিক)":""),"Full-period total"+(proj?" (current = projected)":""))}</span></div></div>`:"";
+ const chipOf=r=>r.st==="nh"?`<span class="cwb new">${XL("নতুন","New")}</span>`:r.pc===null?"":`<span class="cwb ${r.st}">${r.d>0?"▲ +":r.d<0?"▼ −":""}${num(Math.abs(Math.round(r.d)))}</span>`;
+ const bdg={hi:"#c0392b",wa:"#e08a00",ok:"#2e9e74",nh:"#8aa0b8"},mxr=Math.max(1,...rows.map(r=>Math.max(r.a,r.b)));
+ const row=r=>`<div class="cps${CW.cat===r.c?" sel":""}" data-cc="${esc(r.c)}"><div class="cpsh"><span>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></span>${chipOf(r)}</div><div class="cpsb"><em>${XL("এখন","Now")}</em><span class="cpbar"><i style="width:${r.a/mxr*100}%;background:${bdg[r.st]}"></i></span><b>${num(r.a)}</b></div>${k?`<div class="cpsb"><em>${XL("আগে","Before")}</em><span class="cpbar"><i style="width:${r.b/mxr*100}%;background:#b6c2cc"></i></span><b>${r.b?num(r.b):"–"}</b></div>`:""}</div>`;
+ const pdTxt=pdR.slice(0,3).map(r=>esc(r.c)+" "+num(r.b)).join(", ");
+ const head=!k?`<div class="cph0">${XL("এ পর্যন্ত "+n+" দিনে মোট <b>"+fmt(tA)+"</b> খরচ হয়েছে। তুলনার মতো আগের ডেটা এখনো নেই।","Spent <b>"+fmt(tA)+"</b> in "+n+" days. No earlier data to compare yet.")}</div>`
+ :`<div class="cph0 ${dif>0?"r":dif<0?"g":""}"><div>${XL("এ পর্যন্ত "+n+" দিনে মোট <b>"+fmt(tA)+"</b> খরচ। "+UL+"র একই "+n+" দিনে ছিল <b>"+fmt(B)+"</b> — "+(dif?"তাই <b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" বেশি":" কম")+"</b>।":"প্রায় সমান।"),"Spent <b>"+fmt(tA)+"</b> in "+n+" days. In the same "+n+" days of "+UL+" it was <b>"+fmt(B)+"</b> — "+(dif?"so <b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" higher":" lower")+"</b>.":"about the same."))}</div>${bad.length?`<div class="cpl2">▲ ${XL("সবচেয়ে বেশি বেড়েছে: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")","Biggest rise: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")")}</div>`:""}${pend?`<div class="cpl2">⏳ ${XL("গত সময়ের এই খরচ এবার এখনো হয়নি: "+pdTxt+" — দিলে মোট আরও বাড়বে।","Not spent yet this time: "+pdTxt+" — total will rise once paid.")}</div>`:""}</div>`;
+ host.innerHTML=`<div class="cws m">${sub}</div>
+ ${head}${cwSum(L0,XL,1)}${hist}
+ <div class="cwg"><div class="cwgh"><b>${CW.cat?(CAT[CW.cat]||FB).i+" "+esc(CW.cat):XL("খরচ কেমন করে জমছে","How spending builds up")}</b>${CW.cat?`<button type="button" class="cwx" data-cc="">✕ ${XL("সব","All")}</button>`:`<span class="m">${fmt(cN)}</span>`}</div>${svg}<div class="cwtip" id="cwtip" hidden></div>
+ <div class="cwk"><span><i style="background:${col}"></i>${XL("এখন","Now")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")}</span>`:""}</div></div>
+ <div class="cwsrt"><b style="font-size:13px">${XL("ক্যাটেগরি অনুযায়ী","By category")}</b><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising first")}</button></span></div>
+ <div class="cwl">${rows.slice(0,6).map(row).join("")||`<div class="m cwe">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</div>`}</div>
+ <button type="button" class="btn w cps-all" data-cd="1">${XL("সব ক্যাটেগরির পূর্ণ তুলনা দেখুন ("+all.filter(r=>r.a||r.b).length+")","See full comparison of all categories ("+all.filter(r=>r.a||r.b).length+")")}</button>`;
+ CW.last={all,UL,UB,sub:sub+(k?XL(" · "+UL+"র সাথে"," · vs "+UL):""),k,n,len,mode:CW.mode,budgetOn,tA,L0};
  if(CW.open)cwDetail();
  /* ---- hover ---- */
  const sv=host.querySelector("svg"),ov=host.querySelector("#cwov"),vl=host.querySelector("#cwvl"),tip=host.querySelector("#cwtip");
@@ -2143,26 +2154,43 @@ function renderCost(){try{
   ov.addEventListener("mouseleave",()=>{vl.setAttribute("visibility","hidden");tip.hidden=true})}
 }catch(e){console.error(e)}}
 
+function cwSum(L,XL,simple){const{k,tA,B,dif,tp,proj,up,dn,nw,pend,n,UL}=L,c=dif>0?"r":dif<0?"g":"m";
+ const t=(l,v,s,cl)=>`<div class="cpk"><span>${l}</span><b class="${cl||""}">${v}</b><small>${s||"&nbsp;"}</small></div>`;
+ let h=`<div class="cpks">`+t(XL("এখন (এ পর্যন্ত)","Now (so far)"),fmt(tA),XL(n+" দিনে","in "+n+" day"+(n==1?"":"s")));
+ if(k)h+=t(UL+XL(" (একই "+n+" দিন)"," (same "+n+" days)"),fmt(B),XL("তুলনার ভিত্তি","baseline"))
+  +t(XL("পার্থক্য","Difference"),(dif>0?"▲ +":dif<0?"▼ −":"")+fmt(Math.abs(dif)),(tp!==null?Math.abs(tp)+"% · ":"")+(dif>0?XL("বেশি","higher"):dif<0?XL("কম","lower"):XL("সমান","same")),c);
+ if(proj!=null)h+=t(XL("শেষে আনুমানিক","Projected end"),fmt(proj),XL("এই গতিতে চললে","at this pace"));
+ h+="</div>";
+ if(!simple&&k&&(up||dn||nw||pend)){const p=(cl,ic,l,v)=>v?`<span class="cpbr ${cl}">${ic} ${l} <b>${cl==="r"||cl==="n"?"+":"−"}${num(Math.round(v))}</b></span>`:"";
+  h+=`<div class="cpbd"><div class="cpbh">${XL("পার্থক্য কোথা থেকে এল?","Where does the difference come from?")}</div><div class="cpbl">`+p("r","▲",XL("বেড়েছে","Increased"),up)+p("n","＋",XL("নতুন খরচ","New spending"),nw)+p("g","▼",XL("কমেছে","Decreased"),dn)+p("w","⏳",XL("এখনো হয়নি","Not yet spent"),pend)+`</div>`+(pend?`<div class="m cpnote">${XL("‘এখনো হয়নি’ মানে গত সময়ে এই খরচ ছিল, এবার এখনো হয়নি (যেমন ভাড়া/বিল)। এটি সঞ্চয় নাও হতে পারে — শুধু সময়ের পার্থক্য।","“Not yet spent” = it existed in the earlier period but hasn’t happened yet (e.g. rent or bills). That’s timing, not necessarily savings.")}</div>`:"")+`</div>`}
+ return h}
 function cwDetail(){try{
  const L=CW.last;let md=document.getElementById("cwm");
  if(!CW.open||!L){if(md)md.remove();return}
  const bn=getLang()==="bn",XL=(b,e)=>bn?b:e,{all,UL,sub,k,budgetOn}=L,P_=L.mode==="p";
  if(!md){md=document.createElement("div");md.id="cwm";md.className="cwm";document.body.appendChild(md)}
- const order=Object.keys(CAT),rows=all.slice().sort((p,q)=>{const i=order.indexOf(p.c),j=order.indexOf(q.c);return(i<0?999:i)-(j<0?999:j)||q.a-p.a});
+ const base=all.filter(r=>r.a||r.b),isUp=r=>r.a>0&&r.b>0&&r.d>0,isDn=r=>r.a>0&&r.b>0&&r.d<0;
+ const F={all:[XL("সব","All"),()=>1],up:[XL("▲ বেড়েছে","▲ Rising"),isUp],dn:[XL("▼ কমেছে","▼ Lower"),isDn],pd:[XL("⏳ এখনো হয়নি","⏳ Not yet"),r=>r.st==="pd"],nh:[XL("＋ নতুন","＋ New"),r=>r.st==="nh"]};
+ let f=CW.df||"all";if(!k||!F[f])f="all";
+ const rows=base.filter(F[f][1]).sort((p,q)=>q.a-p.a||q.b-p.b),empty=all.filter(r=>!r.a&&!r.b).map(r=>r.c);
  const mx=Math.max(1,...rows.map(r=>Math.max(r.a,r.b)));
- const tN=sum(rows.map(r=>({amount:r.a}))),tB=sum(rows.map(r=>({amount:r.b}))),tF=sum(rows.map(r=>({amount:r.fu}))),tBu=sum(rows.map(r=>({amount:r.bu})));
- const chg=(a,b)=>{if(!k)return"–";const d=a-b;if(!d)return"–";return`<span class="${d>0?"r":"g"}">${d>0?"▲ +":"▼ −"}${num(Math.abs(d))}${b?" ("+(d>0?"+":"−")+Math.abs(Math.round(d/b*100))+"%)":""}</span>`};
- const tr=r=>`<tr class="${r.a||r.b?"":"z"}"><td>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></td><td class="ra"><b>${r.a?num(r.a):"–"}</b><div class="cwmb"><i style="width:${r.a/mx*100}%;background:${r.st==="hi"?"#c0392b":r.st==="wa"?"#e08a00":"#2e9e74"}"></i></div></td><td class="ra">${k&&r.b?num(r.b):"–"}<div class="cwmb"><i style="width:${r.b/mx*100}%;background:#94a3b8"></i></div></td><td class="ra">${k&&r.fu?num(r.fu):"–"}</td><td class="ra">${chg(r.a,r.b)}</td>${P_?"":`<td class="ra">${r.bu?num(r.bu)+" <span class=\"m\">("+Math.round(r.a/r.bu*100)+"%)</span>":"–"}</td>`}</tr>`;
- md.innerHTML=`<div class="cwmc"><div class="cwmh"><div><b>${XL("খরচের বিস্তারিত — সব ক্যাটেগরি","Spending details — all categories")}</b><div class="m" style="font-size:12px">${sub}</div></div><button type="button" class="cwx" data-cdx="1">✕</button></div>
- <div class="cwmt"><table><thead><tr><th>${XL("ক্যাটেগরি","Category")}</th><th class="ra">${XL("এখন (এ পর্যন্ত)","Now (so far)")}</th><th class="ra">${UL} ${XL("(একই দিন)","(same days)")}</th><th class="ra">${UL} ${XL("(পুরো)","(full)")}</th><th class="ra">${XL("পরিবর্তন","Change")}</th>${P_?"":`<th class="ra">${XL("বাজেট (ব্যবহৃত)","Budget (used)")}</th>`}</tr></thead><tbody>${rows.map(tr).join("")}</tbody>
- <tfoot><tr><td><b>${XL("মোট","Total")}</b></td><td class="ra"><b>${num(tN)}</b></td><td class="ra"><b>${k?num(tB):"–"}</b></td><td class="ra"><b>${k?num(tF):"–"}</b></td><td class="ra">${chg(tN,tB)}</td>${P_?"":`<td class="ra"><b>${tBu?num(tBu):"–"}</b></td>`}</tr></tfoot></table></div></div>`;
+ const tN=L.tA,tB=sum(all.map(r=>({amount:r.b}))),tF=sum(all.map(r=>({amount:r.fu}))),tBu=sum(all.map(r=>({amount:r.bu})));
+ const chg=r=>!k?"–":r.st==="pd"?`<span class="cwb wa">⏳ ${XL("এখনো হয়নি","Not yet")}</span>`:r.st==="nh"?`<span class="cwb new">＋ ${XL("নতুন","New")}</span>`:!r.d?"–":`<span class="${r.d>0?"r":"g"}"><b>${r.d>0?"▲ +":"▼ −"}${num(Math.abs(Math.round(r.d)))}</b><small class="cpsm">${Math.abs(Math.round(r.pc))}%</small></span>`;
+ const tr=r=>`<tr><td>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></td><td class="ra"><b>${r.a?num(r.a):"–"}</b><div class="cwmb"><i style="width:${r.a/mx*100}%;background:${r.st==="hi"?"#c0392b":r.st==="wa"?"#e08a00":"#2e9e74"}"></i></div></td><td class="ra">${k&&r.b?num(r.b):"–"}<div class="cwmb"><i style="width:${r.b/mx*100}%;background:#94a3b8"></i></div></td><td class="ra">${chg(r)}</td><td class="ra m">${k&&r.fu?num(r.fu):"–"}</td>${P_?"":`<td class="ra">${r.bu?num(r.bu)+` <small class="${r.a>r.bu?"r":"m"}">${Math.round(r.a/r.bu*100)}%</small>`:"–"}</td>`}</tr>`;
+ md.innerHTML=`<div class="cwmc"><div class="cwmh"><div><b style="font-size:16px">${XL("খরচের বিস্তারিত — সব ক্যাটেগরি","Spending details — all categories")}</b><div class="m" style="font-size:12px">${sub}</div></div><button type="button" class="cwx" data-cdx="1">✕</button></div>
+ <div class="cwmt">${cwSum(L.L0,XL)}
+ ${k?`<div class="cpf">${Object.keys(F).map(x=>`<button type="button" data-df="${x}" class="${x===f?"on":""}">${F[x][0]} <span>${base.filter(F[x][1]).length}</span></button>`).join("")}</div>`:""}
+ <table class="cpt2"><thead><tr><th>${XL("ক্যাটেগরি","Category")}</th><th class="ra">${XL("এখন (এ পর্যন্ত)","Now (so far)")}</th><th class="ra">${UL}<br><small>${XL("একই দিন","same days")}</small></th><th class="ra">${XL("পরিবর্তন","Change")}</th><th class="ra">${UL}<br><small>${XL("পুরো সময়","full period")}</small></th>${P_?"":`<th class="ra">${XL("বাজেট (ব্যবহৃত)","Budget (used)")}</th>`}</tr></thead><tbody>${rows.map(tr).join("")||`<tr><td colspan="6" class="m">${XL("এই ফিল্টারে কিছু নেই।","Nothing in this filter.")}</td></tr>`}</tbody>
+ <tfoot><tr><td><b>${XL("মোট","Total")}</b></td><td class="ra"><b>${num(tN)}</b></td><td class="ra"><b>${k?num(tB):"–"}</b></td><td class="ra">${k?`<b class="${L.L0.dif>0?"r":"g"}">${L.L0.dif>0?"▲ +":"▼ −"}${num(Math.abs(Math.round(L.L0.dif)))}</b>`:"–"}</td><td class="ra m"><b>${k?num(tF):"–"}</b></td>${P_?"":`<td class="ra"><b>${tBu?num(tBu):"–"}</b></td>`}</tr></tfoot></table>
+ ${empty.length?`<div class="m cpnote">${XL("এই সময়ে খরচ নেই: ","No spending in: ")}${empty.map(esc).join(", ")}</div>`:""}</div></div>`;
 }catch(e){console.error(e)}}
-document.addEventListener("click",e=>{if(e.target.closest("#cwb [data-cd]")){CW.open=true;cwDetail();return}
+document.addEventListener("click",e=>{if(e.target.closest(".cwhost [data-cd]")){CW.open=true;cwDetail();return}
  if(e.target.closest("[data-cdx]")||e.target.id==="cwm"){CW.open=false;cwDetail()}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CW.open){CW.open=false;cwDetail()}});
-document.addEventListener("click",e=>{let b=e.target.closest("#cwt [data-cw]");if(b){CW.mode=b.dataset.cw;CW.cat=null;renderCost();return}
- b=e.target.closest("#cwb [data-cs]");if(b){CW.sort=b.dataset.cs;renderCost();return}
- b=e.target.closest("#cwb [data-cc]");if(b){const c=b.dataset.cc;CW.cat=c&&CW.cat!==c?c:null;renderCost()}});
+document.addEventListener("click",e=>{let b=e.target.closest("[data-cw]");if(b){CW.mode=b.dataset.cw;CW.cat=null;renderCost();return}
+ b=e.target.closest("#cwm [data-df]");if(b){CW.df=b.dataset.df;cwDetail();return}
+ b=e.target.closest(".cwhost [data-cs]");if(b){CW.sort=b.dataset.cs;renderCost();return}
+ b=e.target.closest(".cwhost [data-cc]");if(b){const c=b.dataset.cc;CW.cat=c&&CW.cat!==c?c:null;renderCost()}});
 function renderIns(m,eN,E,el){
  const pN=mon(db.expenses,pmo(m)),n=eN.length;
  const big=eN.reduce((b,x)=>x.amount>(b?b.amount:0)?x:b,null),days=new Set(eN.map(x=>x.date)).size,ns=Math.max(0,el-days);
@@ -2959,7 +2987,7 @@ function drawPage(){
   card(P("ov",0),"s2",R.ov&&R.ov.bar)+card(P("ov",1))+card(P("day",0),"s2")+card(P("day",1))+card(P("cat",0),"s2 rs3")+`<div id="an-cdslot"></div>`+card(P("cat",1))+card(P("cat",2))+
   card(P("cyc",0),"s2",R.cyc&&R.cyc.bar)+card(P("cyc",1))+card(P("ov",2),"w3")+card(P("cyc",2),"w3")+`</div></div>`;
  {const sl=document.getElementById("an-cdslot");if(sl&&typeof cdCard!=="undefined")sl.replaceWith(cdCard)}
- Object.keys(POST).forEach(k=>{if(POST[k])try{POST[k]()}catch(e){console.error(e)}})}
+ Object.keys(POST).forEach(k=>{if(POST[k])try{POST[k]()}catch(e){console.error(e)}});renderCost()}
 document.addEventListener("click",e=>{if(!e.target.closest("#p-an-ov"))return;let t;
  if(t=e.target.closest("[data-gr]")){GR=t.dataset.gr;drawPage()}
  else if(t=e.target.closest("[data-mv]")){const y=+sel.slice(0,4),m=+sel.slice(5,7)-1+(+t.dataset.mv),d=new Date(y,m,1),key=d.getFullYear()+"-"+pad(d.getMonth()+1),td=tdS();sel=td.startsWith(key)?td:key+"-01";render()}
@@ -4410,5 +4438,50 @@ d.__dirty=0;return sm.apply(d,arguments)};
 .cwmt tr.z td{color:#94a3b8}.cwmt tr.z b{font-weight:400}
 .cwmt tfoot td{position:sticky;bottom:0;background:#f4f8f6;border-top:2px solid var(--line)}
 .cwmb{height:4px;background:#eaf0ee;border-radius:3px;margin-top:3px}.cwmb i{display:block;height:100%;border-radius:3px}
+/* Cost watch v2 */
+.cpks{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin:6px 0 8px}
+.cpk{background:#f6f9f8;border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:1px;min-width:0}
+.cpk span{font-size:calc(11px*var(--fs,1));color:var(--mut);line-height:1.25}
+.cpk b{font-size:calc(17px*var(--fs,1));line-height:1.2}.cpk small{font-size:calc(10.5px*var(--fs,1));color:var(--mut)}
+.cpk b.r,.cpbr.r{color:#b42318}.cpk b.g{color:#1f7a55}
+.cpbd{background:#fafcfb;border:1px dashed #cfdcd7;border-radius:10px;padding:7px 10px;margin-bottom:8px}
+.cpbh{font-size:calc(11.5px*var(--fs,1));font-weight:700;margin-bottom:4px}
+.cpbl{display:flex;flex-wrap:wrap;gap:6px}
+.cpbr{font-size:calc(11.5px*var(--fs,1));padding:3px 9px;border-radius:12px;background:#eef3f1;white-space:nowrap}
+.cpbr.r{background:#fff1f2}.cpbr.n{background:#f1edfa;color:#5b4a99}.cpbr.g{background:#ecfdf5;color:#1f5c50}.cpbr.w{background:#fffbeb;color:#92400e}
+.cpnote{font-size:calc(11px*var(--fs,1));line-height:1.4;margin-top:5px}
+.cph{margin:8px 0;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
+.cpt{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;font-size:calc(12px*var(--fs,1));margin-bottom:6px}
+.cpc{display:flex;gap:6px;align-items:flex-end}
+.cpcol{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;padding:3px 0;border-radius:8px}
+.cpcol.cu{background:#eaf6f1}.cpcol b{font-size:calc(11px*var(--fs,1))}.cpcol small{font-size:calc(10.5px*var(--fs,1));color:var(--mut)}
+.cpbars{position:relative;height:64px;width:80%}
+.cpbars i{position:absolute;bottom:0;border-radius:4px 4px 0 0}
+.cpbars .f{left:0;right:0;background:#d5dfdb}.cpbars .s{left:22%;right:22%;background:#2e9e74}
+.cpl{margin:2px 0 4px}.cpl i{display:inline-block;border-radius:1px}
+.cpp{margin-top:8px;padding:8px 10px;background:#fffbeb;border-radius:10px;font-size:calc(11.5px*var(--fs,1))}
+.cpch{display:inline-block;margin:4px 6px 0 0;padding:2px 8px;background:#fff;border:1px solid #f3dfa8;border-radius:12px}
+.cwb.new{background:#f1edfa;color:#5b4a99}
+.cpf{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.cpf button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:4px 11px;font:inherit;font-size:12px;cursor:pointer}
+.cpf button.on{background:var(--pri,#0f766e);color:#fff;border-color:transparent}.cpf button span{opacity:.7}
+.cpt2{width:100%;min-width:540px;border-collapse:collapse;font-size:13px}
+.cpt2 th{position:sticky;top:0;background:#f4f8f6;padding:7px 8px;font-size:12px;z-index:2;line-height:1.25}
+.cpt2 th small{font-weight:400;color:var(--mut)}
+.cpt2 td{padding:7px 8px;border-top:1px solid var(--line);vertical-align:middle}
+.cpt2 td:first-child,.cpt2 th:first-child{position:sticky;left:0;background:#fff;z-index:1}.cpt2 th:first-child{background:#f4f8f6;z-index:3}
+.cpt2 tfoot td{position:sticky;bottom:0;background:#f4f8f6;border-top:2px solid var(--line);z-index:2}
+.cpsm{display:block;font-size:11px;font-weight:400}
+.cwmt .cpks{margin-top:0}
+.an-g .cwhost .cwg svg{max-height:260px}.an-g .cwhost .cpks{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))}
+.cph0{padding:10px 12px;border-radius:10px;background:#f6f9f8;border:1px solid var(--line);font-size:calc(13.5px*var(--fs,1));line-height:1.5;margin:6px 0 8px}
+.cph0.r{background:#fff6f5;border-color:#f3cfcb}.cph0.g{background:#f0fbf6;border-color:#bfe5d3}.cph0 b{font-weight:700}
+.cpl2{margin-top:5px;font-size:calc(12px*var(--fs,1));color:#475569}
+.cps{padding:8px 4px;border-top:1px solid var(--line);cursor:pointer}.cps.sel{background:#eef7f3}
+.cpsh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.cpsb{display:flex;align-items:center;gap:8px;font-size:calc(12px*var(--fs,1));margin-top:2px}
+.cpsb em{width:34px;font-style:normal;color:var(--mut)}.cpsb b{min-width:52px;text-align:right}
+.cpbar{flex:1;height:7px;background:#edf1ef;border-radius:4px;overflow:hidden}.cpbar i{display:block;height:100%;border-radius:4px}
+.cps-all{width:100%;margin-top:8px}
 </style>
 </body></html>
