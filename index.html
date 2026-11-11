@@ -2034,8 +2034,8 @@ function renderBudget(m,eN,I,E){
   +K("Estimated month-end",m===cur?fmt(proj):fmt(E),(m===cur?"Estimate, not actual · ":"")+(T&&m===cur?(proj>T?fmt(proj-T)+" over budget":"Within budget"):(m===cur?"":"Final total")),T&&m===cur&&proj>T?"t-ov":"");
  const af=document.activeElement,fc=af&&af.dataset?af.dataset.bc:undefined,ss=af?af.selectionStart:null;
  const names=Object.keys(CAT);
- $("#bb").innerHTML=names.map(c=>{const sp=sum(eN.filter(x=>x.cat===c)),b=+(c in bdraft?bdraft[c]:BUD.cats[c])||0,pc=b?sp/b*100:0;
-  return`<tr><td>${CAT[c].i} <b>${esc(c)}</b></td><td class="ra"><input class="bin" inputmode="numeric" data-bc="${esc(c)}" value="${b||""}" placeholder="0"></td><td class="ra">${sp?num(sp):"–"}</td><td class="ra ${b&&sp>b?"r":""}">${b?(sp>b?"-"+num(sp-b):num(b-sp)):"–"}</td><td>${b?`<div class="pbw"><div class="pb"><i class="pb-${bCls(pc)}" style="width:${Math.min(pc,100)}%"></i></div><span class="chs t-${bCls(pc)}">${Math.round(pc)}%</span></div>`:'<span class="m">No limit</span>'}</td></tr>`}).join("");
+ let hid=0;$("#bb").innerHTML=names.map(c=>{const sp=sum(eN.filter(x=>x.cat===c)),b=+(c in bdraft?bdraft[c]:BUD.cats[c])||0,pc=b?sp/b*100:0;
+  if(!BSA&&!sp&&!b){hid++;return""}return`<tr><td>${CAT[c].i} <b>${esc(c)}</b></td><td class="ra"><input class="bin" inputmode="numeric" data-bc="${esc(c)}" value="${b||""}" placeholder="0"></td><td class="ra">${sp?num(sp):"–"}</td><td class="ra ${b&&sp>b?"r":""}">${b?(sp>b?"-"+num(sp-b):num(b-sp)):"–"}</td><td>${b?`<div class="pbw"><div class="pb"><i class="pb-${bCls(pc)}" style="width:${Math.min(pc,100)}%"></i></div><span class="chs t-${bCls(pc)}">${Math.round(pc)}%</span></div>`:'<span class="m">–</span>'}</td></tr>`}).join("")+(hid||BSA?`<tr class="bsa"><td colspan="5"><button type="button" class="btn w" data-bsa="1">${BSA?"− Hide unused categories":"+ Show "+hid+" unused categories"}</button></td></tr>`:"");
  if(fc!==undefined){const n=[...$$("#bb [data-bc]")].find(x=>x.dataset.bc===fc);if(n){n.focus();try{if(ss!=null)n.setSelectionRange(ss,ss)}catch(e){}}}
  $("#bdirty").hidden=!Object.keys(bdraft).length;
  const al=[];names.forEach(c=>{const b=+BUD.cats[c]||0;if(!b)return;const sp=sum(eN.filter(x=>x.cat===c)),pc=sp/b*100;if(pc>=80)al.push([pc,c,sp,b])});al.sort((a,b)=>b[0]-a[0]);
@@ -2050,6 +2050,7 @@ function renderBudget(m,eN,I,E){
 }
 
 /* ===== Budgets & Goals: Cost watch (display only - reads existing records, writes nothing) ===== */
+var BSA=false;
 const CW={mode:"m",cat:null,sort:"a"};
 function renderCost(){document.querySelectorAll(".cwhost").forEach(renderCostIn)}
 function renderCostIn(host){try{
@@ -2122,24 +2123,28 @@ function renderCostIn(host){try{
   :bad.length?`<div class="cwa hi">${ico("alert",15)}<span>${XL("সবচেয়ে বেশি বেড়েছে <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")। মোট "+bad.length+"টি ক্যাটেগরি "+UB+" বেশি।","Biggest rise: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+"). "+bad.length+" categor"+(bad.length==1?"y is":"ies are")+" above "+UL+".")}</span></div>`
   :`<div class="cwa ok">${ico("check",15)}<span>${XL("কোনো ক্যাটেগরি "+UB+" উল্লেখযোগ্য বেশি নয়।","No category is noticeably above "+UL+".")}</span></div>`;
  /* ---- period-by-period history ---- */
- const rs=(s,Ln)=>ex.reduce((t,x)=>{const i=dd(s,dt(x));return i>=0&&i<Ln?t+(+x.amount||0):t},0);
+ const rs=(s,Ln)=>ex.reduce((t,x)=>{if(CW.cat&&x.cat!==CW.cat)return t;const i=dd(s,dt(x));return i>=0&&i<Ln?t+(+x.amount||0):t},0);
  let items=PL;if(CW.mode!=="p"){items=[];let x=m;for(let i=0;i<6;i++){items.unshift({s:x+"-01",L:dim(x),lb:(bn?BM:MS)[+x.slice(5,7)-1]});x=pmo(x)}}
- const hs=items.map((p,i)=>{const cu=i===items.length-1,Ln=cu?len:p.L;return{lb:p.lb,cu,same:cu?cN:rs(p.s,Math.min(n,Ln)),full:cu?(proj||cN):rs(p.s,Ln)}}).filter((h,i,a)=>h.cu||h.full>0);
+ const hs=items.map((p,i)=>{const cu=i===items.length-1,Ln=cu?len:p.L;const sc=rs(p.s,Math.min(n,Ln));return{lb:p.lb,cu,same:sc,full:cu?(proj!=null?(CW.cat?sc*len/Math.max(1,n):proj):sc):rs(p.s,Ln)}}).filter((h,i,a)=>h.cu||h.full>0);
  const hmx=Math.max(1,...hs.map(h=>Math.max(h.full,h.same)));
- const hist=hs.length>1?`<div class="cph"><div class="cpt"><b>${XL(CW.mode==="p"?"অধ্যায় ধরে তুলনা":"মাস ধরে তুলনা","Compare "+(CW.mode==="p"?"periods":"months"))}</b><span class="m">${XL("প্রথম "+n+" দিন বনাম পুরো সময়","First "+n+" days vs full period")}</span></div><div class="cpc">${hs.map(h=>`<div class="cpcol${h.cu?" cu":""}"><b>${K(h.same)}</b><div class="cpbars"><i class="f" style="height:${h.full/hmx*100}%"></i><i class="s" style="height:${h.same/hmx*100}%"></i></div><small>${h.lb}</small></div>`).join("")}</div><div class="cwk"><span><i style="background:#2e9e74"></i>${XL("প্রথম "+n+" দিনের খরচ","Spent in first "+n+" days")}</span><span><i style="background:#d5dfdb"></i>${XL("পুরো সময়ের মোট"+(proj?" (চলমানটি আনুমানিক)":""),"Full-period total"+(proj?" (current = projected)":""))}</span></div></div>`:"";
+ const hist=hs.length>1?`<div class="cph"><div class="cpt"><b>${XL(CW.mode==="p"?"অধ্যায় ধরে তুলনা":"মাস ধরে তুলনা","Compare "+(CW.mode==="p"?"periods":"months"))}${CW.cat?" · "+esc(CW.cat):""}</b><span class="m">${XL("প্রথম "+n+" দিন বনাম পুরো সময়","First "+n+" days vs full period")}</span></div><div class="cpc">${hs.map(h=>`<div class="cpcol${h.cu?" cu":""}"><b>${K(h.same)}</b><div class="cpbars"><i class="f" style="height:${h.full/hmx*100}%"></i><i class="s" style="height:${h.same/hmx*100}%"></i></div><small>${h.lb}</small></div>`).join("")}</div><div class="cwk"><span><i style="background:#2e9e74"></i>${XL("প্রথম "+n+" দিনের খরচ","Spent in first "+n+" days")}</span><span><i style="background:#d5dfdb"></i>${XL("পুরো সময়ের মোট"+(proj?" (চলমানটি আনুমানিক)":""),"Full-period total"+(proj?" (current = projected)":""))}</span></div></div>`:"";
  const chipOf=r=>r.st==="nh"?`<span class="cwb new">${XL("নতুন","New")}</span>`:r.pc===null?"":`<span class="cwb ${r.st}">${r.d>0?"▲ +":r.d<0?"▼ −":""}${num(Math.abs(Math.round(r.d)))}</span>`;
  const bdg={hi:"#c0392b",wa:"#e08a00",ok:"#2e9e74",nh:"#8aa0b8"},mxr=Math.max(1,...rows.map(r=>Math.max(r.a,r.b)));
- const row=r=>`<div class="cps${CW.cat===r.c?" sel":""}" data-cc="${esc(r.c)}"><div class="cpsh"><span>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></span>${chipOf(r)}</div><div class="cpsb"><em>${XL("এখন","Now")}</em><span class="cpbar"><i style="width:${r.a/mxr*100}%;background:${bdg[r.st]}"></i></span><b>${num(r.a)}</b></div>${k?`<div class="cpsb"><em>${XL("আগে","Before")}</em><span class="cpbar"><i style="width:${r.b/mxr*100}%;background:#b6c2cc"></i></span><b>${r.b?num(r.b):"–"}</b></div>`:""}</div>`;
+ const tb=all.filter(r=>r.a||r.b).sort((p,q)=>CW.sort==="r"?(q.d-p.d)||(q.a-p.a):(q.a-p.a)||(q.b-p.b));
+ const chg=r=>!k?"":r.st==="pd"?`<span class="cwb wa">⏳ ${XL("বাকি","Due")}</span>`:r.st==="nh"?`<span class="cwb new">${XL("নতুন","New")}</span>`:!r.d?"<span class='m'>–</span>":`<span class="cwb ${r.st}">${r.d>0?"▲ +":"▼ −"}${num(Math.abs(Math.round(r.d)))} · ${Math.abs(Math.round(r.pc))}%</span>`;
+ const tr=r=>`<tr class="${CW.cat===r.c?"sel":""}" data-cc="${esc(r.c)}"><td>${(CAT[r.c]||FB).i} <b>${esc(r.c)}</b></td><td class="ra"><b>${r.a?num(r.a):"–"}</b></td>${k?`<td class="ra m">${r.b?num(r.b):"–"}</td><td class="ra">${chg(r)}</td>`:""}</tr>`;
  const pdTxt=pdR.slice(0,3).map(r=>esc(r.c)+" "+num(r.b)).join(", ");
- const head=!k?`<div class="cph0">${XL("এ পর্যন্ত "+n+" দিনে মোট <b>"+fmt(tA)+"</b> খরচ হয়েছে। তুলনার মতো আগের ডেটা এখনো নেই।","Spent <b>"+fmt(tA)+"</b> in "+n+" days. No earlier data to compare yet.")}</div>`
- :`<div class="cph0 ${dif>0?"r":dif<0?"g":""}"><div>${XL("এ পর্যন্ত "+n+" দিনে মোট <b>"+fmt(tA)+"</b> খরচ। "+UL+"র একই "+n+" দিনে ছিল <b>"+fmt(B)+"</b> — "+(dif?"তাই <b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" বেশি":" কম")+"</b>।":"প্রায় সমান।"),"Spent <b>"+fmt(tA)+"</b> in "+n+" days. In the same "+n+" days of "+UL+" it was <b>"+fmt(B)+"</b> — "+(dif?"so <b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" higher":" lower")+"</b>.":"about the same."))}</div>${bad.length?`<div class="cpl2">▲ ${XL("সবচেয়ে বেশি বেড়েছে: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")","Biggest rise: <b>"+esc(bad[0].c)+"</b> (+"+num(Math.round(bad[0].d))+")")}</div>`:""}${pend?`<div class="cpl2">⏳ ${XL("গত সময়ের এই খরচ এবার এখনো হয়নি: "+pdTxt+" — দিলে মোট আরও বাড়বে।","Not spent yet this time: "+pdTxt+" — total will rise once paid.")}</div>`:""}</div>`;
- host.innerHTML=`<div class="cws m">${sub}</div>
- ${head}${cwSum(L0,XL,1)}${hist}
+ const head=!k?`<div class="cph0">${XL("এ পর্যন্ত "+n+" দিনে মোট <b>"+fmt(tA)+"</b> খরচ। তুলনার মতো আগের ডেটা এখনো নেই।","Spent <b>"+fmt(tA)+"</b> in "+n+" days. No earlier data to compare yet.")}</div>`
+ :`<div class="cph0 ${dif>0?"r":dif<0?"g":""}"><div>${XL("এ পর্যন্ত "+n+" দিনে <b>"+fmt(tA)+"</b> · "+UL+"র একই "+n+" দিনে <b>"+fmt(B)+"</b> → "+(dif?"<b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" বেশি":" কম")+"</b>":"প্রায় সমান"),n+" days: <b>"+fmt(tA)+"</b> · "+UL+", same days: <b>"+fmt(B)+"</b> → "+(dif?"<b>"+fmt(Math.abs(dif))+(tp!==null?" ("+Math.abs(tp)+"%)":"")+(dif>0?" higher":" lower")+"</b>":"about the same"))}</div>${pend?`<div class="cpl2">⏳ ${XL("এখনো হয়নি (গত সময়ে ছিল): "+pdTxt,"Not yet this time: "+pdTxt)}</div>`:""}</div>`;
+ host.innerHTML=`<div class="cws m">${sub}${proj!=null?XL(" · শেষে আনুমানিক "+fmt(proj)," · projected end "+fmt(proj)):""}</div>
+ ${head}
+ <div class="cwsrt"><b style="font-size:13px">${XL("ক্যাটেগরি ভিত্তিক তুলনা","Category comparison")}</b><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising")}</button><button type="button" data-cd="1" class="cwdb">${XL("বিস্তারিত","Details")}</button></span></div>
+ <div class="cptw"><table class="cpt3"><thead><tr><th>${XL("ক্যাটেগরি","Category")}</th><th class="ra">${XL("এখন","Now")}</th>${k?`<th class="ra">${UL}<br><small>${XL("একই দিন","same days")}</small></th><th class="ra">${XL("পরিবর্তন","Change")}</th>`:""}</tr></thead><tbody>${tb.map(tr).join("")||`<tr><td colspan="4" class="m">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</td></tr>`}</tbody>
+ <tfoot><tr><td>${XL("মোট","Total")}</td><td class="ra">${num(tA)}</td>${k?`<td class="ra">${num(B)}</td><td class="ra"><span class="cwb ${dif>0?"hi":"ok"}">${dif>0?"▲ +":"▼ −"}${num(Math.abs(Math.round(dif)))}</span></td>`:""}</tr></tfoot></table></div>
+ <div class="m cpn">${XL("কোনো ক্যাটেগরিতে ট্যাপ করলে নিচে সেটির মাসভিত্তিক তুলনা ও গ্রাফ দেখাবে।","Tap a category to see its month-by-month comparison and chart below.")}</div>
+ ${hist}
  <div class="cwg"><div class="cwgh"><b>${CW.cat?(CAT[CW.cat]||FB).i+" "+esc(CW.cat):XL("খরচ কেমন করে জমছে","How spending builds up")}</b>${CW.cat?`<button type="button" class="cwx" data-cc="">✕ ${XL("সব","All")}</button>`:`<span class="m">${fmt(cN)}</span>`}</div>${svg}<div class="cwtip" id="cwtip" hidden></div>
- <div class="cwk"><span><i style="background:${col}"></i>${XL("এখন","Now")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")}</span>`:""}</div></div>
- <div class="cwsrt"><b style="font-size:13px">${XL("ক্যাটেগরি অনুযায়ী","By category")}</b><span class="cwt"><button type="button" data-cs="a" class="${CW.sort==="a"?"on":""}">${XL("বেশি খরচ","Largest")}</button><button type="button" data-cs="r" class="${CW.sort==="r"?"on":""}">${XL("বাড়ছে আগে","Rising first")}</button></span></div>
- <div class="cwl">${rows.slice(0,6).map(row).join("")||`<div class="m cwe">${XL("এখনো কোনো খরচ নেই।","No spending yet.")}</div>`}</div>
- <button type="button" class="btn w cps-all" data-cd="1">${XL("সব ক্যাটেগরির পূর্ণ তুলনা দেখুন ("+all.filter(r=>r.a||r.b).length+")","See full comparison of all categories ("+all.filter(r=>r.a||r.b).length+")")}</button>`;
+ <div class="cwk"><span><i style="background:${col}"></i>${XL("এখন","Now")}</span>${k?`<span><i class="d" style="border-color:#64748b"></i>${UL}</span>`:""}${proj!=null?`<span><i class="d" style="border-color:${col}"></i>${XL("আনুমানিক","Projected")}</span>`:""}</div></div>`;
  CW.last={all,UL,UB,sub:sub+(k?XL(" · "+UL+"র সাথে"," · vs "+UL):""),k,n,len,mode:CW.mode,budgetOn,tA,L0};
  if(CW.open)cwDetail();
  /* ---- hover ---- */
@@ -2187,7 +2192,8 @@ function cwDetail(){try{
 document.addEventListener("click",e=>{if(e.target.closest(".cwhost [data-cd]")){CW.open=true;cwDetail();return}
  if(e.target.closest("[data-cdx]")||e.target.id==="cwm"){CW.open=false;cwDetail()}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&CW.open){CW.open=false;cwDetail()}});
-document.addEventListener("click",e=>{let b=e.target.closest("[data-cw]");if(b){CW.mode=b.dataset.cw;CW.cat=null;renderCost();return}
+document.addEventListener("click",e=>{if(e.target.closest("[data-bsa]")){BSA=!BSA;render();return}
+let b=e.target.closest("[data-cw]");if(b){CW.mode=b.dataset.cw;CW.cat=null;renderCost();return}
  b=e.target.closest("#cwm [data-df]");if(b){CW.df=b.dataset.df;cwDetail();return}
  b=e.target.closest(".cwhost [data-cs]");if(b){CW.sort=b.dataset.cs;renderCost();return}
  b=e.target.closest(".cwhost [data-cc]");if(b){const c=b.dataset.cc;CW.cat=c&&CW.cat!==c?c:null;renderCost()}});
@@ -4483,5 +4489,14 @@ d.__dirty=0;return sm.apply(d,arguments)};
 .cpsb em{width:34px;font-style:normal;color:var(--mut)}.cpsb b{min-width:52px;text-align:right}
 .cpbar{flex:1;height:7px;background:#edf1ef;border-radius:4px;overflow:hidden}.cpbar i{display:block;height:100%;border-radius:4px}
 .cps-all{width:100%;margin-top:8px}
+.cptw{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:10px}
+.cpt3{width:100%;border-collapse:collapse;font-size:calc(12.5px*var(--fs,1))}
+.cpt3 th{position:sticky;top:0;background:#f4f8f6;padding:5px 8px;font-size:calc(11.5px*var(--fs,1));line-height:1.2;z-index:1}.cpt3 th small{font-weight:400;color:var(--mut)}
+.cpt3 td{padding:5px 8px;border-top:1px solid var(--line);cursor:pointer}.cpt3 tr.sel td{background:#eef7f3}
+.cpt3 tfoot td{position:sticky;bottom:0;background:#f4f8f6;font-weight:700;border-top:2px solid var(--line);cursor:default}
+.cpn{font-size:calc(11px*var(--fs,1));margin:4px 0}
+#p-budget #bb td{padding:3px 8px}#p-budget .tw th{padding:5px 8px}
+#p-budget #bb .bin{width:68px;padding:1px 6px}#p-budget #bb .pb{height:5px}
+#p-budget #bb tr.bsa td{text-align:center;padding:6px}
 </style>
 </body></html>
