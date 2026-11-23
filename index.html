@@ -1561,7 +1561,7 @@ let _rq=0,_full=false,_light=false;const _got={};
 function flushRender(){if(_rq){clearTimeout(_rq);_rq=0}const f=_full,l=_light;_full=_light=false;
  try{if(f)render();else if(l){renderNew();fillInc()}if(l)drawOv()}catch(e){console.error(e)}
  if(_got.income&&_got.expenses&&window.__ready)window.__ready()}
-function renderSoon(full){if(full)_full=true;else _light=true;if(!_rq)_rq=setTimeout(flushRender,40)}
+function renderSoon(full){if(full)_full=true;else _light=true;if(!_rq)_rq=setTimeout(flushRender,90)}
 async function boot(){
  const c=FIREBASE_CONFIG;
  if(!c.apiKey||/PASTE_/.test(c.apiKey)){op("#dL");window.bootErr="Firebase config not filled in index.html (FIREBASE_CONFIG)";toast(window.bootErr);return}
@@ -2287,7 +2287,7 @@ function renderIns(m,eN,E,el){
  $("#itop").innerHTML=[...eN].sort((a,b)=>b.amount-a.amount).slice(0,5).map(x=>{const c=CAT[x.cat]||FB;return`<div class="tx"><div class="ic" style="background:${c.bg}">${c.i}</div><div><b>${esc(x.item.split(",")[0])}</b> <span class="m">(${esc(x.cat)})</span><br><span class="m" style="font-size:calc(11px*var(--fs,1))">${fs(x.date)} · ${x.method}</span></div><b>${fmt(x.amount)}</b></div>`}).join("")||'<span class="m">No expenses this month.</span>';
  $("#imn").textContent=MN[+m.slice(5)-1]+" "+m.slice(0,4);
 }
-$("#bb").addEventListener("input",e=>{const c=e.target.dataset.bc;if(c===undefined)return;bdraft[c]=e.target.value.replace(/[^\d]/g,"");render()});
+$("#bb").addEventListener("input",e=>{const c=e.target.dataset.bc;if(c===undefined)return;bdraft[c]=e.target.value.replace(/[^\d]/g,"");clearTimeout(window._bdT);window._bdT=setTimeout(render,160)});
 $("#p-budget").addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.tagName==="INPUT"){e.preventDefault();$("#bsave").click()}});
 $("#bsave").onclick=async()=>{if(!user)return toast("Sign in first");const cats={...BUD.cats};
  Object.entries(bdraft).forEach(([c,v])=>{const n=Math.round(+v)||0;if(n>0)cats[c]=n;else delete cats[c]});
@@ -2306,7 +2306,8 @@ async function migBud(L){const ren=L.filter(x=>x.o&&x.o!==x.n);if(!ren.length||!
 /* ===== Salary cycle, month-end carry-over, auto loan + settlements ===== */
 const SW=[25,27],mAdd=(m,k)=>new Date(Date.UTC(+m.slice(0,4),+m.slice(5,7)-1+k,1)).toISOString().slice(0,7);
 /* Cumulative result = sum of (income - eligible expenses) month by month. It is a calculation: NOT a balance, NOT borrowing. */
-function loanInfo(m){const all=[...db.income,...db.expenses].map(x=>x.date.slice(0,7)).sort();let p=0,o=0,n=0;
+let _liM=null;function loanInfo(m){if(_liM&&_liM.a===db.income&&_liM.b===db.expenses&&_liM.m===m)return _liM.r;const r=loanInfo0(m);_liM={a:db.income,b:db.expenses,m,r};return r}
+function loanInfo0(m){const all=[...db.income,...db.expenses].map(x=>x.date.slice(0,7)).sort();let p=0,o=0,n=0;
  if(all.length)for(let k=all[0];k<=m;k=mAdd(k,1)){o=p;n=sum(mon(db.income,k))-sum(mon(db.expenses,k));p=o+n}
  return{open:o,net:n,close:p,inc:sum(mon(db.income,m)),exp:sum(mon(db.expenses,m))}}
 const rLab=v=>v>0?["Surplus","g"]:v<0?["Shortfall","r"]:["Balanced","m"];
@@ -2736,7 +2737,8 @@ $("#ca").onclick=e=>{e.preventDefault();const le=$("#le");le.classList.remove("g
 
 /* ===== Salary chapters: a new chapter opens on each Salary date (display-only; no writes) ===== */
 const BM=["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"],bd=d=>+d.slice(8,10)+" "+BM[+d.slice(5,7)-1]+" "+d.slice(0,4),CY={sel:null};
-function cyCompute(I,E,today){
+let _cyM=null;function cyCompute(I,E,today){if(_cyM&&_cyM.I===I&&_cyM.E===E&&_cyM.t===today)return _cyM.r;const r=cyCompute0(I,E,today);_cyM={I,E,t:today,r};return r}
+function cyCompute0(I,E,today){
  const ok=x=>typeof x.date==="string"&&x.date.length>=10&&x.date.slice(0,10)<=today,dt=x=>x.date.slice(0,10),sm=a=>a.reduce((t,x)=>t+(+x.amount||0),0);
  const sal=[...new Set(I.filter(x=>ok(x)&&x.type==="Salary"&&!x.bor).map(dt))].sort(),
   pre=[...I,...E].some(x=>ok(x)&&(!sal.length||dt(x)<sal[0])),B=[];
@@ -2838,7 +2840,8 @@ const PT=[[/^Over budget by (৳.+)$/,"বাজেট ছাড়িয়ে�
 PT.push([/^Money in (.+)$/,"জমা $1"],[/^Loan paid (.+)$/,"ঋণ পরিশোধ $1"],[/^(\u09f3 ?[\d,]+) saved of (\u09f3 ?[\d,]+)$/,"$2 এর মধ্যে $1 জমেছে"],[/^(\d+) days left \xb7 (\u09f3 ?[\d,]+) per day$/,"$1 দিন বাকি · দিনে $2"],[/^(\d+)% of budget$/,"বাজেটের $1%"],[/^Save (\u09f3 ?[\d,]+) more to reach your goal\.?$/,"লক্ষ্যে পৌঁছাতে আরও $1 জমান।"],[/^saved (\d{4}-\d\d-\d\d)$/,"সংরক্ষিত $1"],[/^(\u09f3 ?[\d,]+) (less|more) than yesterday$/,(m,a,b)=>"গতকালের চেয়ে "+a+(b==="less"?" কম":" বেশি")]);
 function trSeg(t){if(!/[A-Za-z]/.test(t))return t;const k=t.trim();for(const[re,to]of PT)if(re.test(k))return t.replace(k,k.replace(re,to));
  if(/[•·()]/.test(t)){const o=t.replace(/([^•·()]+)/g,x=>{const y=x.trim();if(!y||!/[A-Za-z]/.test(y))return x;const q=tr0(y);return q===y?x:x.replace(y,q)});if(o!==t)return o}return t}
-function tr(t){let r=tr0(t);if(r===t)r=trSeg(t);if(r===t){const m=t.match(/^(\s*[^\w\u0980-\u09FF]+\s*)([A-Za-z].*?)(\s*)$/);if(m){const q=tr0(m[2]);if(q!==m[2])r=m[1]+q+m[3]}}return LANG==="bl"?bl(r):r}
+const _trc=new Map();function tr(t){if(_trc.has(t))return _trc.get(t);const v=tr1(t);if(_trc.size>8000)_trc.clear();_trc.set(t,v);return v}
+function tr1(t){let r=tr0(t);if(r===t)r=trSeg(t);if(r===t){const m=t.match(/^(\s*[^\w\u0980-\u09FF]+\s*)([A-Za-z].*?)(\s*)$/);if(m){const q=tr0(m[2]);if(q!==m[2])r=m[1]+q+m[3]}}return LANG==="bl"?bl(r):r}
 document.addEventListener("change",e=>{if(e.target.id==="prefLang"){try{localStorage.setItem("mf_lang",e.target.value)}catch(x){}location.reload()}});
 /* ===== Search bar: language-aware label, live filter, clear button, empty state ===== */
 {const T={bn:{ph:"লেনদেন ও ক্যাটাগরি খুঁজুন...",none:"কোনো লেনদেন মেলেনি।",clr:"মুছুন"},en:{ph:"Search transactions and categories...",none:"No transactions match your search.",clr:"Clear search"},bl:{ph:"Transaction o category khujun...",none:"Kono transaction mile ni.",clr:"Muchun"}}[LANG]||{},g=document.getElementById("gs");
@@ -2846,7 +2849,7 @@ document.addEventListener("change",e=>{if(e.target.id==="prefLang"){try{localSto
   const st=document.createElement("style");st.textContent="#gsx{border:0;background:none;cursor:pointer;font-size:calc(18px*var(--fs,1));line-height:1;padding:0 2px;color:inherit;opacity:.6}#gsx:hover{opacity:1}#gsNone{padding:14px;text-align:center;opacity:.7}";document.head.appendChild(st);
   const ap=()=>{const q=g.value.trim().toLowerCase(),rows=[...document.querySelectorAll("#tb tr")];let n=0;rows.forEach(r=>{r.hidden=!!q&&!r.textContent.toLowerCase().includes(q);if(!r.hidden)n++});x.hidden=!g.value;let e=document.getElementById("gsNone");
    if(rows.length&&q&&!n){if(!e){e=document.createElement("div");e.id="gsNone";const tb=document.getElementById("tb"),tbl=tb&&tb.closest("table");tbl&&tbl.parentNode.insertBefore(e,tbl.nextSibling)}if(e)e.textContent=T.none}else if(e)e.remove()};
-  g.addEventListener("input",()=>{x.hidden=!g.value;if(document.getElementById("tb"))ap()});g.addEventListener("keydown",e=>{if(e.key==="Enter")setTimeout(ap,200)});x.onclick=()=>{g.value="";ap();g.focus()}}}
+  g.addEventListener("input",()=>{x.hidden=!g.value;if(document.getElementById("tb")){clearTimeout(g._t);g._t=setTimeout(ap,120)}});g.addEventListener("keydown",e=>{if(e.key==="Enter")setTimeout(ap,200)});x.onclick=()=>{g.value="";ap();g.focus()}}}
 function run(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT),L=[];let n;
  while(n=w.nextNode()){const e=n.parentElement;if(!e||/^(SCRIPT|STYLE|TEXTAREA)$/.test(e.tagName)||e.closest("#cyc"))continue;if(e.tagName==="OPTION"&&!e.hasAttribute("value"))e.setAttribute("value",n.nodeValue.trim());L.push(n)}
  L.forEach(n=>{const v=tr(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v});
@@ -3070,7 +3073,8 @@ function drawPageOld(){
 
 /*ANX: Analysis v2 (regular spending only; one-offs shown once)*/
 const AN={day:null,cat:null,done:false};
-function drawPage(){
+function drawPage(){if(SEC.hidden)return;drawPage0();try{advDraw()}catch(e){console.error(e)}}
+function drawPage0(){
  if(SEC.hidden)return;
  const m=sel.slice(0,7),td=tdS(),cur=td.startsWith(m),yy=+m.slice(0,4),mo=+m.slice(5),dm=new Date(yy,mo,0).getDate(),el=cur?+td.slice(8):(m<td.slice(0,7)?dm:0),pm=pmo(m),pdm=new Date(+pm.slice(0,4),+pm.slice(5),0).getDate(),bn=getLang()==="bn",ML=k=>(bn?BM:MS)[+k.slice(5)-1];
  if(!db.expenses.length&&!db.income.length){SEC.innerHTML=`<div class="card anx-em"><svg width="72" height="56" viewBox="0 0 72 56" aria-hidden="true"><rect x="6" y="30" width="12" height="20" rx="4" fill="#cfe3dc"/><rect x="24" y="18" width="12" height="32" rx="4" fill="#9cc7ba"/><rect x="42" y="8" width="12" height="42" rx="4" fill="#174a40"/></svg><p>${X("বিশ্লেষণের জন্য এখনো তথ্য নেই।","No data to analyse yet.")}</p><button type="button" class="btn" data-cyadd="e">${X("খরচ যোগ করুন","Add expense")}</button></div>`;return}
@@ -3122,6 +3126,39 @@ let rz=0;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(dr
 {const _g=go;go=function(p){_g.apply(this,arguments);if(Ps[p])try{drawPage()}catch(e){console.error(e)}}}
 {const _r=render;render=function(){_r.apply(this,arguments);drawPage()}}
 
+
+function advDraw(){
+ if(!db.expenses.length)return;
+ const bn=getLang()==="bn",T=(a,b)=>X(a,b),m=sel.slice(0,7),td=tdS(),cur=td.startsWith(m),y=+m.slice(0,4),mo=+m.slice(5),dm=new Date(y,mo,0).getDate();
+ const isR=x=>kindOf(x)==="regular",am=x=>+x.amount||0,iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+ const el=cur?+td.slice(8):(m<td.slice(0,7)?dm:0),reg=Array(dm+1).fill(0),items={};
+ db.expenses.forEach(x=>{const d=dOf(x);if(d.startsWith(m)&&isR(x)){reg[+d.slice(8)]+=am(x);const n=String(x.item||"-").split(",")[0].trim()||"-",o=items[n]||(items[n]={t:0,c:0});o.t+=am(x);o.c++}});
+ // runway
+ const t0=new Date(td+"T00:00:00"),s30=new Date(t0);s30.setDate(s30.getDate()-29);
+ const bal=ND.accounts.filter(a=>a.status!=="Inactive").reduce((a,c)=>a+(+accBal(c)||0),0),avg=regSpend(iso(s30),td)/30;
+ const sl=db.inc.filter(x=>x.type==="Salary"&&!x.bor&&dOf(x)<=td).map(dOf).sort().pop(),sd=sl?+sl.slice(8):25;
+ let nx=new Date(t0.getFullYear(),t0.getMonth(),Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+1,0).getDate()));
+ if(nx<=t0)nx=new Date(t0.getFullYear(),t0.getMonth()+1,Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+2,0).getDate()));
+ const dTo=Math.round((nx-t0)/864e5),left=avg>0?bal/avg:null,ok=left===null||left>=dTo,safe=dTo>0?Math.max(0,bal)/dTo:0;
+ const c1=`<div class="card"><h3><span>${T("বেতন পর্যন্ত টিকবে কি?","Runway to next salary")}</span></h3><div class="kv ${ok?"g":"r"}">${left===null?"–":Math.floor(left)+T(" দিন"," days")}</div><div class="m">${T("ব্যালেন্স","Balance")} ${fmt(bal)} · ${T("দৈনিক গড় (৩০ দিন)","30-day avg/day")} ${fmt(avg)}</div><div class="m">${T("পরবর্তী বেতন","Next salary")}: ~${dTo} ${T("দিন পর","days away")} · ${T("নিরাপদ দৈনিক খরচ","Safe spend/day")} <b>${fmt(safe)}</b></div><div class="m ${ok?"g":"r"}">${ok?T("বর্তমান গতিতে বেতন পর্যন্ত চলবে","At this pace you reach payday"):T("এই গতিতে বেতনের আগেই টাকা শেষ হতে পারে","At this pace money may run out before payday")}</div></div>`;
+ // pace
+ const B=bTot(),W=320,H=110;let cum=0;const pts=[];for(let d=1;d<=Math.min(el,dm);d++){cum+=reg[d];pts.push([d,cum])}
+ const mx=Math.max(B||0,cum,1)*1.08,px=d=>(d/dm*(W-10)+5).toFixed(1),py=v=>(H-8-v/mx*(H-16)).toFixed(1);
+ const c2=`<div class="card"><h3><span>${T("বাজেট গতি","Budget pace")}</span></h3>${B>0?`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-height:150px"><line x1="${px(0)}" y1="${py(0)}" x2="${px(dm)}" y2="${py(B)}" stroke="#94a3b8" stroke-dasharray="4 3"/>${pts.length?`<polyline fill="none" stroke="${cum>B*el/dm?"#a95043":"#1f5c50"}" stroke-width="2.4" points="${pts.map(p=>px(p[0])+","+py(p[1])).join(" ")}"/>`:""}</svg><div class="m">${T("আদর্শ এখন","Ideal now")} ${fmt(B*el/dm)} · ${T("প্রকৃত","Actual")} <b class="${cum>B*el/dm?"r":"g"}">${fmt(cum)}</b> · ${T("বাজেট","Budget")} ${fmt(B)}</div>`:`<div class="m">${T("বাজেট সেট করুন","Set a monthly budget to see the pace line.")}</div>`}</div>`;
+ // heatmap
+ const mxd=Math.max(...reg,1),off=new Date(y,mo-1,1).getDay();let cells="";for(let i=0;i<off;i++)cells+="<i></i>";
+ for(let d=1;d<=dm;d++){const a=reg[d]/mxd;cells+=`<b data-d="${d}" data-tip="${d} · ${fmt(reg[d])}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:11px;cursor:pointer;background:rgba(31,92,80,${reg[d]?(.12+a*.78).toFixed(2):.05});color:${a>.55?"#fff":"inherit"};${d>el&&cur?"opacity:.4":""}">${d}</b>`}
+ const c3=`<div class="card"><h3><span>${T("খরচের হিটম্যাপ","Spending heatmap")}</span></h3><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-weight:400">${cells}</div><div class="m">${T("গাঢ় = বেশি নিয়মিত খরচ; দিনে ক্লিক করুন","Darker = more regular spend; click a day")}</div></div>`;
+ // top items
+ const top=Object.entries(items).sort((a,b)=>b[1].t-a[1].t).slice(0,5),tm=top.length?top[0][1].t:1;
+ const c4=`<div class="card"><h3><span>${T("শীর্ষ আইটেম (মোট)","Top items by total")}</span></h3>${top.map(([n,o])=>`<div class="wr"><span class="m" style="min-width:90px">${esc(n)}</span><div class="pb"><i class="pb-gl" style="width:${o.t/tm*100}%"></i></div><b>${fmt(o.t)} <span class="m">×${o.c}</span></b></div>`).join("")||`<span class="m">–</span>`}</div>`;
+ // wallets
+ const ms=[];{let k=m;for(let i=0;i<6;i++){ms.unshift(k);k=pmo(k)}}
+ const ks=Object.keys(PM),D=ms.map(k=>ks.map(p=>db.expenses.filter(x=>isR(x)&&dOf(x).startsWith(k)&&x.method===p).reduce((a,x)=>a+am(x),0))),mt=Math.max(...D.map(r=>r.reduce((a,b)=>a+b,0)),1);
+ const bw=44;let bars="";D.forEach((r,i)=>{let yy=H-14;r.forEach((v,j)=>{const h=v/mt*(H-26);if(h>0){yy-=h;bars+=`<rect x="${i*(bw+8)+6}" y="${yy.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" fill="${PM[ks[j]]}" data-tip="${ks[j]} · ${fmt(v)}"/>`}});bars+=`<text x="${i*(bw+8)+6+bw/2}" y="${H-2}" font-size="9" text-anchor="middle" fill="#68736e">${(bn?BM:MS)[+ms[i].slice(5)-1]}</text>`});
+ const c5=`<div class="card"><h3><span>${T("পেমেন্ট মাধ্যম ট্রেন্ড (৬ মাস)","Payment method trend (6 mo)")}</span></h3><svg viewBox="0 0 ${6*(bw+8)+4} ${H}" style="width:100%;max-height:150px">${bars}</svg><div class="m">${ks.map(p=>`<span style="color:${PM[p]}">●</span> ${p}`).join(" &nbsp;")}</div></div>`;
+ let b=document.getElementById("advBox");if(!b){b=document.createElement("div");b.id="advBox";const st=document.createElement("style");st.textContent="#advBox{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}#advBox .card{min-width:0}";document.head.appendChild(st)}
+ SEC.appendChild(b);b.innerHTML=c1+c2+c3+c4+c5}
 
 /* ---- hover tooltip for all analysis charts ---- */
 {const tip=document.createElement("div");tip.id="anTip";tip.hidden=true;document.body.appendChild(tip);
