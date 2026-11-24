@@ -2763,6 +2763,14 @@ function cyParts(){
   :c.res<0?`<div class="cyb bad">${B(cyF("bad",fmt(c.extra),fmt(c.fromSave),fmt(c.fromBor),fmt(c.unk)))}${c.unk>0?`<br><small>${cyT("badn")}</small>`:""}</div>`
   :`<div class="cyb eq">${cyT("eq")}</div>`;
  return{L,c,nm,rg,ban}}
+function runwayInfo(){
+ const td=tdS(),iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),t0=new Date(td+"T00:00:00"),s30=new Date(t0);s30.setDate(s30.getDate()-29);
+ const bal=ND.accounts.filter(a=>a.status!=="Inactive").reduce((a,c)=>a+(+accBal(c)||0),0),avg=regSpend(iso(s30),td)/30;
+ const sl=db.inc.filter(x=>x.type==="Salary"&&!x.bor&&dOf(x)<=td).map(dOf).sort().pop(),sd=sl?+sl.slice(8):25;
+ let nx=new Date(t0.getFullYear(),t0.getMonth(),Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+1,0).getDate()));
+ if(nx<=t0)nx=new Date(t0.getFullYear(),t0.getMonth()+1,Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+2,0).getDate()));
+ const dTo=Math.round((nx-t0)/864e5),left=avg>0?bal/avg:null;
+ return{bal,avg,dTo,left,ok:left===null||left>=dTo,safe:dTo>0?Math.max(0,bal)/dTo:0}}
 function pcRender(){
  try{
   const host=document.querySelector("#p-dash .r3");if(!host)return;
@@ -2775,8 +2783,8 @@ function pcRender(){
   const S=L.slice(-6),mx=Math.max(1,...S.map(x=>Math.max(x.inc,x.exp)));
   const k=v=>{v=Math.abs(v);if(v>=1e6)return(v/1e6).toFixed(1).replace(/\.0$/,"")+"M";if(v>=1e3)return(v/1e3).toFixed(v>=1e5?0:1).replace(/\.0$/,"")+"k";return String(Math.round(v))};
   const last=L[L.length-1];
-  c.innerHTML=`<h3><span>${ttl}</span><span class="pcl"><b class="pi"></b>${cyT("inc")}<b class="pe"></b>${cyT("exp")}</span></h3><div class="pcb">`+
-   S.map(x=>`<div class="pcg${x===last?" cur":""}" title="${cyT("per")}${x.n}: ${cyT("inc")} ${fmt(x.inc)} · ${cyT("exp")} ${fmt(x.exp)} · ${cyT("res")} ${x.res<0?"−":"+"}${fmt(Math.abs(x.res))}"><div class="pcbars"><i class="pi" style="height:${(x.inc/mx*100).toFixed(1)}%"><em>${k(x.inc)}</em></i><i class="pe" style="height:${(x.exp/mx*100).toFixed(1)}%"><em>${k(x.exp)}</em></i></div><small class="pcn">${cyT("per")}${x.n}</small><small class="pcr ${x.res<0?"neg":"pos"}">${x.res<0?"−":"+"}${k(x.res)}</small></div>`).join("")+`</div>`;
+  const R=runwayInfo(),sg=last.res<0?"−":"+",pc=last.inc>0?Math.min(100,last.exp/last.inc*100):0;
+  c.innerHTML=`<h3><span>${en?"Cash runway":"বেতন পর্যন্ত টিকবে কি?"}</span><span class="pcl">${en?"Next salary in "+R.dTo+" days":"বেতন আসতে "+R.dTo+" দিন"}</span></h3><div class="pcq"><div class="${R.ok?"pos":"neg"}"><small>${en?"Money lasts":"টাকা চলবে"}</small><b>${R.left===null?"–":Math.floor(R.left)+(en?" days":" দিন")}</b></div><div><small>${en?"Safe spend / day":"নিরাপদ দৈনিক খরচ"}</small><b>${fmt(R.safe)}</b></div><div><small>${en?"30-day avg / day":"৩০ দিনের দৈনিক গড়"}</small><b>${fmt(R.avg)}</b></div><div class="${last.res<0?"neg":"pos"}"><small>${cyT("per")}${last.n} ${cyT("res")}</small><b>${sg}${fmt(Math.abs(last.res))}</b></div></div><div class="pcbar" title="${pc.toFixed(0)}%"><i style="width:${pc.toFixed(1)}%"></i></div><small class="pcn">${cyT("inc")} ${fmt(last.inc)} · ${cyT("exp")} ${fmt(last.exp)}</small>`;
  }catch(e){}
 }
 function cyRender(){try{pcRender()}catch(e){}
@@ -5221,5 +5229,15 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #axp .ax-ha .ax-go{position:static!important;margin-left:54px}
 #axp .ax-ha .ax-tg{position:static!important;margin-left:auto;max-width:none!important}
 #axp .ax-dd{margin-top:8px}
+</style>
+<style id="ax-fix5">
+#pcc{align-self:start}
+#pcc .pcq{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
+#pcc .pcq>div{background:#f4f6f3;border-radius:.6em;padding:.4em .65em;min-width:0}
+#pcc .pcq small{display:block;color:var(--mut,#68736e);font-size:.78em}
+#pcc .pcq b{font-size:1.2em;white-space:nowrap}
+#pcc .pcq .pos b{color:#1f5c50}#pcc .pcq .neg b{color:#a95043}
+#pcc .pcbar{height:.5em;border-radius:1em;background:#e4e6dc;margin-top:.6em;overflow:hidden}
+#pcc .pcbar i{display:block;height:100%;background:#e0a458}
 </style>
 </body></html>
