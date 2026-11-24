@@ -3158,7 +3158,7 @@ function advDraw(){
  const bw=44;let bars="";D.forEach((r,i)=>{let yy=H-14;r.forEach((v,j)=>{const h=v/mt*(H-26);if(h>0){yy-=h;bars+=`<rect x="${i*(bw+8)+6}" y="${yy.toFixed(1)}" width="${bw}" height="${h.toFixed(1)}" fill="${PM[ks[j]]}" data-tip="${ks[j]} · ${fmt(v)}"/>`}});bars+=`<text x="${i*(bw+8)+6+bw/2}" y="${H-2}" font-size="9" text-anchor="middle" fill="#68736e">${(bn?BM:MS)[+ms[i].slice(5)-1]}</text>`});
  const c5=`<div class="card"><h3><span>${T("পেমেন্ট মাধ্যম ট্রেন্ড (৬ মাস)","Payment method trend (6 mo)")}</span></h3><svg viewBox="0 0 ${6*(bw+8)+4} ${H}" style="width:100%;max-height:150px">${bars}</svg><div class="m">${ks.map(p=>`<span style="color:${PM[p]}">●</span> ${p}`).join(" &nbsp;")}</div></div>`;
  let b=document.getElementById("advBox");if(!b){b=document.createElement("div");b.id="advBox";const st=document.createElement("style");st.textContent="#advBox{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;margin-top:12px}#advBox .card{min-width:0}";document.head.appendChild(st)}
- SEC.appendChild(b);b.innerHTML=c1+c2+c3+c4+c5}
+ SEC.appendChild(b);b.innerHTML=c1+c2+c3+c4+c5;const fx=()=>{const q=SEC.querySelector(".anx");if(q)b.style.marginTop=(Math.max(0,q.scrollHeight-q.offsetHeight)+16)+"px"};fx();requestAnimationFrame(()=>{fx();setTimeout(fx,300)})}
 
 /* ---- hover tooltip for all analysis charts ---- */
 {const tip=document.createElement("div");tip.id="anTip";tip.hidden=true;document.body.appendChild(tip);
