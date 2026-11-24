@@ -5253,7 +5253,6 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #axp .ax-dd{margin-top:8px}
 </style>
 <style id="ax-fix5">
-#pcc{align-self:start}
 #pcc .pcq{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
 #pcc .pcq>div{background:#f4f6f3;border-radius:.6em;padding:.4em .65em;min-width:0}
 #pcc .pcq small{display:block;color:var(--mut,#68736e);font-size:.78em}
@@ -5273,5 +5272,16 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #pcc .pr3 i{display:block;height:.5em;border-radius:1em;background:#e4e6dc;overflow:hidden}
 #pcc .pr3 u{display:block;height:100%;background:#1f5c50;text-decoration:none}
 #pcc .pr3 b{white-space:nowrap;font-size:.95em}
+</style>
+<style id="ax-fix7">
+html body #p-dash .r3 #pcc{align-self:stretch!important;width:auto!important;min-width:0}
+@media(min-width:1201px){
+html body #p-dash .r3 #pcc{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45em .7em;align-content:start}
+#pcc>*{grid-column:1/-1;margin:0!important}
+#pcc>.pc3{grid-column:auto}
+#pcc .pcq{grid-template-columns:repeat(4,minmax(0,1fr))}
+#pcc .pcx .pcbar{margin:.3em 0}
+#pcc>.pcbar{margin-top:.1em!important}
+}
 </style>
 </body></html>
