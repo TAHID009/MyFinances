@@ -3848,7 +3848,7 @@ const _rn3=renderNew;renderNew=function(){_rn3.apply(this,arguments);fdSync()};
 const _rl3=renderLoans;renderLoans=function(){_rl3.apply(this,arguments);fdX()};
 fdSync()}
 /* ===== acx: reference-style Accounts page. Reads the same data, reuses existing forms; old layout stays hidden in the DOM ===== */
-{const AX={tab:"all",rng:6,warn:1},MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+{const AX={tab:"all",rng:6,warn:1,o:{}},dd=(k,t,b)=>`<details class="ax-dd" data-k="${k}"${AX.o[k]?" open":""}><summary>${t}</summary>${b}</details>`,MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const f$=n=>(n<0?"-":"")+"৳"+Math.round(Math.abs(n)).toLocaleString("en-US"),
 cp=v=>{const a=Math.abs(v),s=v<0?"-":"";return s+(a>=1e5?+(a/1e5).toFixed(1)+"L":a>=1e3?Math.round(a/1e3)+"k":Math.round(a))},
 I=(d,w)=>`<svg width="${w||18}" height="${w||18}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`,
@@ -3906,15 +3906,15 @@ ${AX.warn&&unl?`<div class="ax-warn">${I(IC.warn,24)}<span>${unl} account${unl>1
 <section class="ax-pn ax-p-inv">${head("bars","Investments",'<a href="#" class="ax-all" data-acx="det">Details →</a>')}<div class="ax-iv"><div class="ax-dw">${donut(m.cap,m.profit,Math.max(0,oth))}<div class="ax-dc"><b>${f$(m.fund)}</b><small>Total Fund</small></div></div>
 <ul><li><i style="background:#12a05f"></i>Initial Capital<b>${f$(m.cap)}</b></li><li><i style="background:#a9e2c8"></i>Profit Received<b>${f$(m.profit)}</b></li><li><i style="background:#aeb7c0"></i>Other movements (net)<b>${f$(oth)}</b></li><li class="tot"><i></i>Total Fund<b>${f$(m.fund)}</b></li></ul></div>
 <div class="ax-kp"><div><span>Return on capital</span><b>${m.cap>0?(m.profit/m.cap*100).toFixed(1)+"%":"—"}</b></div><div><span>Principal returned</span><b>${f$(m.prinRet+m.wp)}</b></div><div><span>Reinvested</span><b>${f$(m.reinv)}</b></div><div><span>Moved to personal</span><b>${f$(m.xfer)}</b></div></div>
-${ivx.length?`<div class="ax-by">${ivx.map(v=>`<div><b>${esc(v.n)}</b><b>${f$(v.cur)}</b><small>${v.non?"Non-refundable · paid "+f$(v.c):"Currently invested · capital "+f$(v.c)+" · profit "+f$(v.pf)+(v.c>0?" ("+v.rt.toFixed(1)+"%)":"")}</small></div>`).join("")}</div>`:""}
+${ivx.length?dd("iv","Investments by person ("+ivx.length+")",`<div class="ax-by">${ivx.map(v=>`<div><b>${esc(v.n)}</b><b>${f$(v.cur)}</b><small>${v.non?"Non-refundable · paid "+f$(v.c):"Currently invested · capital "+f$(v.c)+" · profit "+f$(v.pf)+(v.c>0?" ("+v.rt.toFixed(1)+"%)":"")}</small></div>`).join("")}</div>`):""}
 <div class="ax-bs">${btn("Add Capital","plus",'data-acx="il" data-v="inv_cap"')}${btn("Record Profit","trend",'data-acx="il" data-v="inv_return"')}${btn("Reinvest","cyc",'data-acx="il" data-v="inv_reinv"')}${btn("Transfer","swap",'data-acx="il" data-v="inv_xfer"')}</div></section>
 <section class="ax-pn ax-p-loan">${head("card","Loans",'<a href="#" class="ax-all" data-acx="det">Details →</a>')}<div class="ax-l5"><div><b>${f$(m.ltT)}</b><span>Total Taken</span></div><div><b>${f$(m.ltR)}</b><span>Principal Repaid</span></div><div><b>${f$(m.ltI)}</b><span>Interest Paid</span></div><div class="pd"><b>${f$(paid)}</b><span>Total Paid (principal + interest)</span></div><div class="o"><b>${f$(m.ltO)}</b><span>Outstanding principal</span></div></div>
 <div class="ax-rp"><span>Repayment Progress (principal)</span><div><div class="ax-bar"><i style="width:${pct}%"></i></div><b>${pct}%</b></div></div>
-${tk.length?`<h4 class="ax-sh">Loans taken</h4><div class="ax-ll">${tk.slice(0,6).map(L=>lrow(L,0)).join("")}</div>`:""}
-${(gv.length||m.lgG>0)?`<h4 class="ax-sh">Loans given</h4><div class="ax-l5 g4"><div><b>${f$(m.lgG)}</b><span>Total Given</span></div><div><b>${f$(m.lgR)}</b><span>Recovered</span></div><div><b>${f$(m.lgI)}</b><span>Interest Received</span></div><div class="o"><b>${f$(m.lgO)}</b><span>Outstanding</span></div></div><div class="ax-ll">${gv.slice(0,6).map(L=>lrow(L,1)).join("")}</div>`:""}
+${tk.length?dd("lt","Loans taken ("+tk.length+") · due "+f$(m.ltO),`<div class="ax-ll">${tk.slice(0,6).map(L=>lrow(L,0)).join("")}</div>`):""}
+${(gv.length||m.lgG>0)?dd("lg","Loans given ("+gv.length+") · outstanding "+f$(m.lgO),`<div class="ax-l5 g4"><div><b>${f$(m.lgG)}</b><span>Total Given</span></div><div><b>${f$(m.lgR)}</b><span>Recovered</span></div><div><b>${f$(m.lgI)}</b><span>Interest Received</span></div><div class="o"><b>${f$(m.lgO)}</b><span>Outstanding</span></div></div><div class="ax-ll">${gv.slice(0,6).map(L=>lrow(L,1)).join("")}</div>`):""}
 ${notes.length?`<p class="ax-note">${notes.join("<br>")}</p>`:""}
 <div class="ax-bs">${btn("Give a Loan","give",'data-acx="il" data-v="loan_give"')}${btn("Take a Loan","swap",'data-acx="il" data-v="loan_take"')}${btn("Repay (Loan Taken)","card",'data-acx="il" data-v="loan_repay"')}${btn("Settlement (Loan Given)","give",'data-acx="il" data-v="loan_recv"')}</div></section>
-<section class="ax-pn ax-p-asset">${head("gem","Hand-held Assets")}<div class="ax-hg">${hold.map((v,i)=>`<div class="ax-ha ${v.k}" role="button" tabindex="0" data-acx="hold" data-i="${i}" title="Tap for details"><span class="ax-hi">${I(IC.user,20)}</span><div><b>${esc(v.n)}</b><small>${v.sub}</small><small>${v.meta||""}</small><em>${f$(v.v)}</em></div><span class="ax-go">Details ›</span><span class="ax-tg">${v.tag}</span></div>`).join("")||'<p class="ax-m">No invested or hand-held assets yet.</p>'}</div>
+<section class="ax-pn ax-p-asset">${head("gem","Hand-held Assets")}${dd("ha","Items ("+hold.length+")",`<div class="ax-hg">${hold.map((v,i)=>`<div class="ax-ha ${v.k}" role="button" tabindex="0" data-acx="hold" data-i="${i}" title="Tap for details"><span class="ax-hi">${I(IC.user,20)}</span><div><b>${esc(v.n)}</b><small>${v.sub}</small><small>${v.meta||""}</small><em>${f$(v.v)}</em></div><span class="ax-go">Details ›</span><span class="ax-tg">${v.tag}</span></div>`).join("")||'<p class="ax-m">No invested or hand-held assets yet.</p>'}</div>`)}
 <div class="ax-sum"><span>Total held <b>${f$(heldT)}</b></span>${ncT>0.005?`<span>Not counted in net worth <b>${f$(ncT)}</b></span>`:""}<span>Items <b>${hold.length}</b></span></div></section>
 </div>`}catch(e){console.error("acx",e)}}
 async function axSetTerm(id,v){const e=ilAll().find(x=>x.id===id);if(!e||(e.type!=="loan_take"&&e.type!=="loan_give"))throw Error("Loan not found");if(e.status!=="ok")throw Error("This loan was reversed");if(e.term==="perm")throw Error("Permanent loans cannot change type");
@@ -3962,6 +3962,7 @@ d.classList.add("axd");d.querySelector(".axd-x").onclick=()=>d.close();d.style.m
 d.addEventListener("click",ev=>{const b=ev.target.closest("[data-axa]");if(!b)return;const t=b.dataset.axa;try{ilForm(t,null,t==="loan_repay"?{}:{party:v.n,ref:non?"non":"refund"})}catch(x){toast(x.message)}});
 const sig=()=>ilAll().map(e=>e.id+e.status).join("|"),s0=sig(),tm0=setInterval(()=>{if(!d.isConnected||!d.open){clearInterval(tm0);return}const n=document.getElementById("dN");if(n&&n.open)return;if(sig()!==s0){clearInterval(tm0);const sc=d.querySelector(".axd-body").scrollTop;axInvD(key);const nd=document.getElementById("dAxD");if(nd){const bd=nd.querySelector(".axd-body");bd&&(bd.scrollTop=sc)}}},600)}
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches&&e.target.matches("#axp [data-acx=hold]")){e.preventDefault();e.target.click()}});
+document.addEventListener("toggle",e=>{const d=e.target;if(d.matches&&d.matches("#axp details.ax-dd"))AX.o[d.dataset.k]=d.open},true);
 document.addEventListener("click",e=>{const c=e.target.closest("#axp");if(!c)return;const b=e.target.closest("[data-acx]"),v=b&&b.dataset.v;
 if(e.target.closest("a[href='#']"))e.preventDefault();
 if(b){const k=b.dataset.acx;if(k==="tab"){AX.tab=v;acx()}else if(k==="rng"){AX.rng=+v;acx()}else if(k==="il")ilForm(v);else if(k==="sett")ilForm(ilOpen("t").length?"loan_repay":"loan_recv");else if(k==="hold")axHold(+b.dataset.i);else if(k==="term")axTerm(b.dataset.id);else if(k==="det")ilDetail();else if(k==="warnx"){AX.warn=0;acx()}else if(k==="lang"){try{localStorage.setItem("mf_lang",v)}catch(x){}location.reload()}}
@@ -5200,5 +5201,18 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #axp[data-tab="all"] .ax-p-asset{grid-column:span 3!important}
 #axp .ax-p-inv,#axp .ax-p-loan,#axp .ax-p-asset{zoom:1.2}
 }
+</style>
+<style id="ax-fix3">
+#axp .ax-dd{border:1px solid #dfe9e4;border-radius:12px;margin-top:6px;background:#fafcfb}
+#axp .ax-dd>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:7px 12px;font-weight:700;font-size:calc(14*var(--u));color:#0f6b57}
+#axp .ax-dd>summary::-webkit-details-marker{display:none}
+#axp .ax-dd>summary::after{content:"▾"}
+#axp .ax-dd[open]>summary::after{content:"▴"}
+#axp .ax-dd>:not(summary){margin:0 8px 8px}
+#axp .ax-kp{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important}
+#axp .ax-kp>div{padding:5px 8px!important}
+#axp .ax-p-inv .ax-iv{padding:6px 10px!important}
+#axp .ax-p-loan .ax-rp{margin-top:6px!important}
+#axp .ax-p-loan .ax-l5>div{padding:6px 10px!important}
 </style>
 </body></html>
