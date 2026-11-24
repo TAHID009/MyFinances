@@ -5165,4 +5165,24 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);else init();
 })();
 </script>
+<style id="ax-fix">
+/* Analysis: drop the two uninformative charts */
+#p-an-ov .anx-g>.card:nth-child(-n+2){display:none!important}
+/* Accounts: remove trend panel (hero sparkline already shows it), Investments full width */
+#axp .ax-p-trend{display:none!important}
+#axp[data-tab="all"] .ax-p-inv{grid-column:1/-1}
+/* Accounts: compact top area */
+#axp .ax-hero{padding:8px 16px!important;gap:12px!important}
+#axp .ax-nw>b{font-size:calc(28*var(--u))!important;margin:0!important}
+#axp .ax-nw h3{font-size:calc(17*var(--u))!important}
+#axp .ax-chips{gap:8px!important}
+#axp .ax-chip{padding:6px 12px!important}
+#axp .ax-chip b{font-size:calc(17*var(--u))!important}
+#axp .ax-tabs button{padding:7px 14px!important}
+#axp .ax-warn{padding:5px 12px!important}
+#axp .ax-grid{gap:10px!important}
+/* Accounts: bigger Loans and Hand-held Assets */
+#axp .ax-p-loan,#axp .ax-p-asset{zoom:1.2}
+#axp .ax-p-loan .ax-ll{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))!important}
+</style>
 </body></html>
