@@ -2771,6 +2771,28 @@ function runwayInfo(){
  if(nx<=t0)nx=new Date(t0.getFullYear(),t0.getMonth()+1,Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+2,0).getDate()));
  const dTo=Math.round((nx-t0)/864e5),left=avg>0?bal/avg:null;
  return{bal,avg,dTo,left,ok:left===null||left>=dTo,safe:dTo>0?Math.max(0,bal)/dTo:0}}
+function ctrlHtml(en,R){try{
+ const td=TD(),p2=n=>String(n).padStart(2,"0"),iso=d=>d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate()),d0=x=>String(x.date).slice(0,10),T=(b,e)=>en?e:b;
+ const t0=new Date(td+"T00:00:00"),ago=n=>{const d=new Date(t0);d.setDate(d.getDate()-n);return iso(d)};
+ const reg=db.expenses.filter(x=>kindOf(x)==="regular"),am=x=>+x.amount||0,day={};
+ reg.forEach(x=>{const d=d0(x);day[d]=(day[d]||0)+am(x)});
+ const m=td.slice(0,7),dn=+td.slice(8),dim=new Date(t0.getFullYear(),t0.getMonth()+1,0).getDate(),spent=regSpend(m+"-01",td),B=typeof bTot==="function"?bTot():0;
+ const today=day[td]||0,safe=(R&&R.safe)||0,left=B-spent,dl=dim-dn+1,per=dl>0?left/dl:0,over=safe>0&&today>safe,pct=safe>0?Math.min(100,today/safe*100):0;
+ const w1=regSpend(ago(6),td),w0=regSpend(ago(13),ago(7)),ch=w0>0?(w1-w0)/w0*100:null;
+ let ns=0;for(let d=1;d<=dn;d++)if(!day[m+"-"+p2(d)])ns++;
+ const cs={};reg.forEach(x=>{const d=d0(x);if(d>=m+"-01"&&d<=td){const c=x.cat||"Other";cs[c]=(cs[c]||0)+am(x)}});
+ const top=Object.entries(cs).sort((a,b)=>b[1]-a[1]).slice(0,3),mx=top.length?top[0][1]:1;
+ const days=[];for(let i=13;i>=0;i--){const k=ago(i);days.push([k,day[k]||0])}
+ const mb=Math.max(...days.map(x=>x[1]),safe,1),bw=100/14;
+ const bars=days.map((x,i)=>{const h=x[1]/mb*46;return `<rect x="${(i*bw+.8).toFixed(2)}" y="${(50-h).toFixed(1)}" width="${(bw-1.6).toFixed(2)}" height="${h.toFixed(1)}" fill="${x[0]===td?"#1f5c50":(safe>0&&x[1]>safe?"#c27a6d":"#9fc8b8")}"><title>${x[0]} · ${fmt(x[1])}</title></rect>`}).join("");
+ const sy=(50-safe/mb*46).toFixed(1);
+ return `<div class="pcq pcx"><div class="${over?"neg":"pos"}"><small>${T("আজ বনাম নিরাপদ সীমা","Today vs safe limit")}</small><b>${fmt(today)}</b><div class="pcbar"><i style="width:${pct.toFixed(0)}%;background:${over?"#a95043":"#2f9e6b"}"></i></div><small>${T("সীমা","Limit")} ${fmt(safe)}</small></div>`+
+ `<div class="${B>0&&left<0?"neg":"pos"}"><small>${T("এই মাসের বাজেট বাকি","Budget left this month")}</small><b>${B>0?fmt(left):"–"}</b><small>${B>0?fmt(Math.max(0,per))+(en?"/day · "+dl+" days":"/দিন · "+dl+" দিন"):T("বাজেট সেট করুন","Set a budget")}</small></div>`+
+ `<div><small>${T("শেষ ৭ দিন","Last 7 days")}</small><b>${fmt(w1)}</b><small class="${ch!==null&&ch>0?"neg":"pos"}">${ch===null?"–":(ch>0?"▲ ":"▼ ")+Math.abs(ch).toFixed(0)+"% "+T("আগের ৭ দিনের তুলনায়","vs prev 7 days")}</small></div>`+
+ `<div><small>${T("খরচহীন দিন","No-spend days")}</small><b>${ns}</b><small>${T(dn+" দিনের মধ্যে","of "+dn+" days")}</small></div></div>`+
+ `<div class="pc3"><small>${T("এই মাসের শীর্ষ খাত","Top categories this month")}</small>${top.map(([c,v])=>`<div class="pr3"><span>${String(c).replace(/[<&]/g,"")}</span><i><u style="width:${(v/mx*100).toFixed(0)}%"></u></i><b>${fmt(v)}${spent>0?" · "+Math.round(v/spent*100)+"%":""}</b></div>`).join("")||"<span>–</span>"}</div>`+
+ `<div class="pc3"><small>${T("শেষ ১৪ দিনের খরচ (ড্যাশ = নিরাপদ সীমা)","Last 14 days (dashed = safe limit)")}</small><svg viewBox="0 0 100 50" preserveAspectRatio="none" style="width:100%;height:60px;display:block">${bars}${safe>0?`<line x1="0" x2="100" y1="${sy}" y2="${sy}" stroke="#68736e" stroke-width=".6" stroke-dasharray="2 1.5" vector-effect="non-scaling-stroke"/>`:""}</svg></div>`
+}catch(e){return ""}}
 function pcRender(){
  try{
   const host=document.querySelector("#p-dash .r3");if(!host)return;
@@ -2784,7 +2806,7 @@ function pcRender(){
   const k=v=>{v=Math.abs(v);if(v>=1e6)return(v/1e6).toFixed(1).replace(/\.0$/,"")+"M";if(v>=1e3)return(v/1e3).toFixed(v>=1e5?0:1).replace(/\.0$/,"")+"k";return String(Math.round(v))};
   const last=L[L.length-1];
   let R;try{R=runwayInfo()}catch(err){R={dTo:0,left:null,ok:true,safe:0,avg:0}}const sg=last.res<0?"−":"+",pc=last.inc>0?Math.min(100,last.exp/last.inc*100):0;
-  c.innerHTML=`<h3><span>${en?"Cash runway":"বেতন পর্যন্ত টিকবে কি?"}</span><span class="pcl">${en?"Next salary in "+R.dTo+" days":"বেতন আসতে "+R.dTo+" দিন"}</span></h3><div class="pcq"><div class="${R.ok?"pos":"neg"}"><small>${en?"Money lasts":"টাকা চলবে"}</small><b>${R.left===null?"–":Math.floor(R.left)+(en?" days":" দিন")}</b></div><div><small>${en?"Safe spend / day":"নিরাপদ দৈনিক খরচ"}</small><b>${fmt(R.safe)}</b></div><div><small>${en?"30-day avg / day":"৩০ দিনের দৈনিক গড়"}</small><b>${fmt(R.avg)}</b></div><div class="${last.res<0?"neg":"pos"}"><small>${cyT("per")}${last.n} ${cyT("res")}</small><b>${sg}${fmt(Math.abs(last.res))}</b></div></div><div class="pcbar" title="${pc.toFixed(0)}%"><i style="width:${pc.toFixed(1)}%"></i></div><small class="pcn">${cyT("inc")} ${fmt(last.inc)} · ${cyT("exp")} ${fmt(last.exp)}</small>`;
+  c.innerHTML=`<h3><span>${en?"Cash runway":"বেতন পর্যন্ত টিকবে কি?"}</span><span class="pcl">${en?"Next salary in "+R.dTo+" days":"বেতন আসতে "+R.dTo+" দিন"}</span></h3><div class="pcq"><div class="${R.ok?"pos":"neg"}"><small>${en?"Money lasts":"টাকা চলবে"}</small><b>${R.left===null?"–":Math.floor(R.left)+(en?" days":" দিন")}</b></div><div><small>${en?"Safe spend / day":"নিরাপদ দৈনিক খরচ"}</small><b>${fmt(R.safe)}</b></div><div><small>${en?"30-day avg / day":"৩০ দিনের দৈনিক গড়"}</small><b>${fmt(R.avg)}</b></div><div class="${last.res<0?"neg":"pos"}"><small>${cyT("per")}${last.n} ${cyT("res")}</small><b>${sg}${fmt(Math.abs(last.res))}</b></div></div><div class="pcbar" title="${pc.toFixed(0)}%"><i style="width:${pc.toFixed(1)}%"></i></div><small class="pcn">${cyT("inc")} ${fmt(last.inc)} · ${cyT("exp")} ${fmt(last.exp)}</small>`+ctrlHtml(en,R);
  }catch(e){}
 }
 function cyRender(){try{pcRender()}catch(e){}
@@ -5239,5 +5261,17 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #pcc .pcq .pos b{color:#1f5c50}#pcc .pcq .neg b{color:#a95043}
 #pcc .pcbar{height:.5em;border-radius:1em;background:#e4e6dc;margin-top:.6em;overflow:hidden}
 #pcc .pcbar i{display:block;height:100%;background:#e0a458}
+</style>
+<style id="ax-fix6">
+#pcc .pcx{margin-top:.55em}
+#pcc .pcx .pcbar{margin:.3em 0}
+#pcc small.neg{color:#a95043;font-weight:600}#pcc small.pos{color:#1f5c50;font-weight:600}
+#pcc .pc3{margin-top:.55em;background:#f4f6f3;border-radius:.6em;padding:.45em .65em}
+#pcc .pc3>small{display:block;color:var(--mut,#68736e);font-size:.78em;margin-bottom:.25em}
+#pcc .pr3{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr) auto;align-items:center;gap:.5em;font-size:.85em;margin:.2em 0}
+#pcc .pr3 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pcc .pr3 i{display:block;height:.5em;border-radius:1em;background:#e4e6dc;overflow:hidden}
+#pcc .pr3 u{display:block;height:100%;background:#1f5c50;text-decoration:none}
+#pcc .pr3 b{white-space:nowrap;font-size:.95em}
 </style>
 </body></html>
