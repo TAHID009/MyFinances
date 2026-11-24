@@ -2764,9 +2764,9 @@ function cyParts(){
   :`<div class="cyb eq">${cyT("eq")}</div>`;
  return{L,c,nm,rg,ban}}
 function runwayInfo(){
- const td=tdS(),iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()),t0=new Date(td+"T00:00:00"),s30=new Date(t0);s30.setDate(s30.getDate()-29);
+ const td=TD(),p2=n=>String(n).padStart(2,"0"),d0=x=>String(x.date).slice(0,10),iso=d=>d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate()),t0=new Date(td+"T00:00:00"),s30=new Date(t0);s30.setDate(s30.getDate()-29);
  const bal=ND.accounts.filter(a=>a.status!=="Inactive").reduce((a,c)=>a+(+accBal(c)||0),0),avg=regSpend(iso(s30),td)/30;
- const sl=db.inc.filter(x=>x.type==="Salary"&&!x.bor&&dOf(x)<=td).map(dOf).sort().pop(),sd=sl?+sl.slice(8):25;
+ const sl=db.inc.filter(x=>x.type==="Salary"&&!x.bor&&d0(x)<=td).map(d0).sort().pop(),sd=sl?+sl.slice(8):25;
  let nx=new Date(t0.getFullYear(),t0.getMonth(),Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+1,0).getDate()));
  if(nx<=t0)nx=new Date(t0.getFullYear(),t0.getMonth()+1,Math.min(sd,new Date(t0.getFullYear(),t0.getMonth()+2,0).getDate()));
  const dTo=Math.round((nx-t0)/864e5),left=avg>0?bal/avg:null;
@@ -2783,7 +2783,7 @@ function pcRender(){
   const S=L.slice(-6),mx=Math.max(1,...S.map(x=>Math.max(x.inc,x.exp)));
   const k=v=>{v=Math.abs(v);if(v>=1e6)return(v/1e6).toFixed(1).replace(/\.0$/,"")+"M";if(v>=1e3)return(v/1e3).toFixed(v>=1e5?0:1).replace(/\.0$/,"")+"k";return String(Math.round(v))};
   const last=L[L.length-1];
-  const R=runwayInfo(),sg=last.res<0?"−":"+",pc=last.inc>0?Math.min(100,last.exp/last.inc*100):0;
+  let R;try{R=runwayInfo()}catch(err){R={dTo:0,left:null,ok:true,safe:0,avg:0}}const sg=last.res<0?"−":"+",pc=last.inc>0?Math.min(100,last.exp/last.inc*100):0;
   c.innerHTML=`<h3><span>${en?"Cash runway":"বেতন পর্যন্ত টিকবে কি?"}</span><span class="pcl">${en?"Next salary in "+R.dTo+" days":"বেতন আসতে "+R.dTo+" দিন"}</span></h3><div class="pcq"><div class="${R.ok?"pos":"neg"}"><small>${en?"Money lasts":"টাকা চলবে"}</small><b>${R.left===null?"–":Math.floor(R.left)+(en?" days":" দিন")}</b></div><div><small>${en?"Safe spend / day":"নিরাপদ দৈনিক খরচ"}</small><b>${fmt(R.safe)}</b></div><div><small>${en?"30-day avg / day":"৩০ দিনের দৈনিক গড়"}</small><b>${fmt(R.avg)}</b></div><div class="${last.res<0?"neg":"pos"}"><small>${cyT("per")}${last.n} ${cyT("res")}</small><b>${sg}${fmt(Math.abs(last.res))}</b></div></div><div class="pcbar" title="${pc.toFixed(0)}%"><i style="width:${pc.toFixed(1)}%"></i></div><small class="pcn">${cyT("inc")} ${fmt(last.inc)} · ${cyT("exp")} ${fmt(last.exp)}</small>`;
  }catch(e){}
 }
