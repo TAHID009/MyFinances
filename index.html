@@ -5312,13 +5312,8 @@ html body #p-an-ov>*{flex:none!important;min-height:auto!important;height:auto!i
 html body #p-an-ov .anx{height:auto!important;min-height:0!important}
 </style>
 <style id="ax-fix10">
-/* other pages: scroll instead of squeezing (prevents overlapping cards) */
-html body main>#p-log:not([hidden]),html body main>#p-budget:not([hidden]),html body main>#p-bills:not([hidden]),html body main>#p-setp:not([hidden]){display:block!important;overflow-y:auto!important;overflow-x:hidden!important;flex:1 1 0!important;min-height:0!important;padding-bottom:24px!important}
-html body main>#p-log>*,html body main>#p-budget>*,html body main>#p-bills>*,html body main>#p-setp>*{flex:none!important;min-height:auto!important}
-html body main>#p-log .card,html body main>#p-budget .card,html body main>#p-bills .card,html body main>#p-setp .card{overflow:visible}
-/* header marks */
+/* header marks (page title + card titles) */
 main>.top h1::before{content:"";display:inline-block;width:6px;height:.85em;margin-right:.45em;border-radius:3px;background:linear-gradient(180deg,#2f9e6b,#1f5c50);vertical-align:-.08em}
-main>.pg:not(#p-dash) .card>h3:first-child::before,#p-an-ov .card>h3::before{content:"";display:inline-block;width:4px;height:.9em;margin-right:.5em;border-radius:2px;background:#1f5c50;vertical-align:-.1em}
-#advBox .card>h3>span::before{content:none}
+main>.pg:not(#p-dash) .card>h3:first-child,#p-an-ov .card>h3{border-left:4px solid #1f5c50;padding-left:.55em;line-height:1.25}
 </style>
 </body></html>
