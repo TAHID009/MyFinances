@@ -5185,4 +5185,20 @@ html body #p-dash.dlx #fo .fsan svg{display:none}
 #axp .ax-p-loan,#axp .ax-p-asset{zoom:1.2}
 #axp .ax-p-loan .ax-ll{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))!important}
 </style>
+<style id="ax-fix2">
+@media(min-width:1100px){
+#axp{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr)!important;gap:8px!important}
+#axp>.ax-hd,#axp>.ax-grid{grid-column:1/-1!important}
+#axp>.ax-hero{grid-template-columns:minmax(130px,.8fr) minmax(200px,1.4fr) minmax(130px,.8fr)!important;gap:10px!important}
+#axp>.ax-chips{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+#axp:not(:has(.ax-warn))>.ax-tabs{grid-column:1/-1}
+#axp[data-tab="all"] .ax-grid{grid-template-columns:repeat(12,minmax(0,1fr))!important;gap:8px!important}
+#axp[data-tab="all"] .ax-p-acc{grid-column:span 8!important}
+#axp[data-tab="all"] .ax-p-act{grid-column:span 4!important}
+#axp[data-tab="all"] .ax-p-inv{grid-column:span 3!important}
+#axp[data-tab="all"] .ax-p-loan{grid-column:span 6!important}
+#axp[data-tab="all"] .ax-p-asset{grid-column:span 3!important}
+#axp .ax-p-inv,#axp .ax-p-loan,#axp .ax-p-asset{zoom:1.2}
+}
+</style>
 </body></html>
