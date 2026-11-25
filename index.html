@@ -5316,4 +5316,96 @@ html body #p-an-ov .anx{height:auto!important;min-height:0!important}
 main>.top h1::before{content:"";display:inline-block;width:6px;height:.85em;margin-right:.45em;border-radius:3px;background:linear-gradient(180deg,#2f9e6b,#1f5c50);vertical-align:-.08em}
 main>.pg:not(#p-dash) .card>h3:first-child,#p-an-ov .card>h3{border-left:4px solid #1f5c50;padding-left:.55em;line-height:1.25}
 </style>
+<style id="txn-redesign">
+/* ===== Income & Expense (Transactions) page redesign — scoped to #p-log only ===== */
+html body main:has(>#p-log:not([hidden])){overflow-y:auto!important;overflow-x:hidden!important;--txt:64px;--txb:52px;background:#f6f6f1}
+html body main:has(>#p-log:not([hidden]))>.top{position:sticky;top:0;z-index:30;background:#f6f6f1;padding:8px 0 10px;margin-bottom:0}
+html body main:has(>#p-log:not([hidden])) #addinc{background:#1a7f4b}
+html body main:has(>#p-log:not([hidden])) #add2{background:#a8433b}
+html body main:has(>#p-log:not([hidden])) .top .btn{border-radius:10px;padding:9px 16px}
+html body main>section#p-log.pg:not([hidden]){flex:0 0 auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:block!important;padding:0 0 28px}
+html body #p-log .inc2{display:flex!important;flex-direction:column;gap:20px;grid-template-columns:none!important;grid-template-rows:none!important}
+html body #p-log .inc2>.col{display:block!important;width:100%;min-height:0;min-width:0}
+html body #p-log .inc2>.col:first-child>#inc{display:none!important}
+html body #p-log[data-tf="inc"] .inc2>.col:last-child{display:none!important}
+html body #p-log[data-tf="exp"] .inc2>.col:first-child{display:none!important}
+/* filter bar */
+#txbar{position:sticky;top:var(--txt);z-index:25;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#f6f6f1;padding:6px 0 12px}
+#txbar .txseg,html body #p-log .tabs{display:inline-flex;background:#eceee7;border-radius:10px;padding:3px;gap:2px;margin:0}
+#txbar .txseg button,html body #p-log .tabs button{border:0;background:none;padding:6px 15px;border-radius:8px;font:inherit;font-weight:500;color:#5b645e;cursor:pointer}
+#txbar .txseg button.on,html body #p-log .tabs button.on{background:#fff;color:#1d2420;font-weight:700;box-shadow:0 1px 2px rgba(20,30,25,.12)}
+#txbar .txseg button[data-tf=inc].on{color:#1a7f4b}#txbar .txseg button[data-tf=exp].on{color:#a8433b}
+/* cards */
+html body #p-log .card{display:block!important;overflow:visible!important;background:#fff;border:1px solid #e4e6df;border-radius:14px;box-shadow:0 1px 3px rgba(20,30,25,.06),0 8px 22px rgba(20,30,25,.04);padding:0!important;margin:0!important;flex:none!important}
+html body #p-log .card>h3:first-child{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0;padding:14px 18px;font-size:calc(16px*var(--fs,1));border-bottom:1px solid #eceee7;border-left:4px solid #1a7f4b;border-radius:14px 14px 0 0;padding-left:14px}
+html body #p-log #log>h3:first-child{border-left-color:#a8433b}
+html body #p-log #itot{color:#1a7f4b;font-size:calc(17px*var(--fs,1))}
+html body #p-log #log>h3 .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+html body #p-log #log>h3 input[type=date]{border:1px solid #dcdfd6;border-radius:9px;padding:6px 10px;background:#fff;font:inherit}
+html body #p-log #log>h3 .btn.w{border-radius:9px;padding:6px 12px}
+/* tables: full width, single page scroll (no nested scrollbars) */
+html body #p-log .tw{overflow:visible!important;max-height:none!important;flex:none!important}
+html body #p-log #il{overflow:visible!important;flex:none!important;min-height:0;padding:0}
+html body #p-log table{width:100%;min-width:0!important;border-collapse:separate;border-spacing:0}
+html body #p-log th{position:sticky;top:calc(var(--txt) + var(--txb));z-index:6;background:#f3f4ee;color:#5b645e;font-size:calc(12.5px*var(--fs,1));font-weight:600;text-align:left;padding:9px 16px;border-bottom:1px solid #e4e6df;white-space:nowrap}
+html body #p-log th.ra,html body #p-log td.ra{text-align:right}
+html body #p-log td{padding:9px 16px;border-bottom:1px solid #eef0ea;vertical-align:middle}
+html body #p-log tbody tr:hover td{background:#fafbf7}
+html body #p-log td:first-child,html body #p-log .dt{white-space:nowrap;color:#5b645e}
+html body #p-log #tb td.ra{color:#a8433b;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+html body #p-log .itbl td.inn{color:#1a7f4b;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+html body #p-log .itbl td.inn::before{content:"+"}
+html body #p-log .itbl tr.mv td{opacity:.75}
+html body #p-log .itag{display:inline-block;padding:2px 11px;border-radius:99px;background:#e3f4ea;color:#17683e;font-weight:600;font-size:calc(12.5px*var(--fs,1));white-space:nowrap}
+html body #p-log td.acx{text-align:right;white-space:nowrap;width:1%}
+html body #p-log td .kb{padding:5px;border-radius:8px}
+html body #p-log td .kb:hover{background:#f0f2ec}
+html body #p-log td.mvn{background:#eef3fa;color:#355b86;font-weight:700;font-size:calc(12px*var(--fs,1))}
+html body #p-log tfoot td{background:#f8f9f4;font-weight:700;border-bottom:0;border-radius:0 0 14px 14px}
+/* popups: shape only */
+html body #dE,html body #incPop{border-radius:18px}
+html body #dE::backdrop{background:rgba(18,28,24,.5);backdrop-filter:blur(2px)}
+@media(max-width:800px){
+ html body main:has(>#p-log:not([hidden]))>.top,#txbar,html body #p-log th{position:static}
+ html body #p-log .tw{overflow-x:auto!important}
+ html body #p-log table{min-width:640px!important}
+}
+</style>
+<script id="txn-redesign-js">
+/* UI-only: adds a type filter bar and lays the existing income list out as a table.
+   It reads the DOM the app already renders; it never touches Firebase, db or save/delete code. */
+(function(){
+ var pg=document.getElementById("p-log"),il=document.getElementById("il");if(!pg||!il)return;
+ var bar=document.createElement("div");bar.id="txbar";
+ bar.innerHTML='<div class="txseg"><button type="button" data-tf="all" class="on">All Transactions</button><button type="button" data-tf="inc">Income</button><button type="button" data-tf="exp">Expenses</button></div>';
+ pg.insertBefore(bar,pg.firstChild);
+ bar.addEventListener("click",function(e){var b=e.target.closest("button[data-tf]");if(!b)return;
+  pg.setAttribute("data-tf",b.getAttribute("data-tf"));
+  [].forEach.call(bar.querySelectorAll("button"),function(x){x.classList.toggle("on",x===b)})});
+ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+ function tx(n){return n?n.textContent.trim():""}
+ var busy=false;
+ function build(){
+  if(busy||!il.querySelector(":scope>.tx"))return;busy=true;
+  var rows="";
+  [].forEach.call(il.children,function(el){
+   if(el.classList.contains("tx")){
+    var inner=el.querySelector(":scope>div"),t=inner&&inner.querySelector("b"),sp=inner?inner.querySelectorAll("span.m"):[],
+     meth=tx(sp[0]).replace(/^•\s*/,""),dn=tx(sp[1]),i=dn.indexOf(" • "),d=i<0?dn:dn.slice(0,i),note=i<0?"":dn.slice(i+3),
+     amt=el.querySelector(":scope>b"),btns=el.querySelectorAll(":scope>button"),mv=!btns.length;
+    rows+='<tr'+(mv?' class="mv"':'')+'><td class="dt">'+esc(d)+'</td><td><span class="itag">'+esc(tx(t))+'</span></td><td class="ra'+(mv?'':' inn')+'">'+esc(tx(amt).replace("৳","").trim())+'</td><td>'+esc(meth)+'</td><td>'+(note?esc(note):"-")+'</td><td class="acx">'+[].map.call(btns,function(b){return b.outerHTML}).join("")+'</td></tr>';
+   }else rows+='<tr><td colspan="6" class="mvn">'+el.innerHTML+'</td></tr>';
+  });
+  il.innerHTML='<table class="itbl"><thead><tr><th>Date</th><th>Source</th><th class="ra">Amount (৳)</th><th>Received In</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+  busy=false;
+ }
+ new MutationObserver(build).observe(il,{childList:true});build();
+ var main=document.querySelector("main");
+ function size(){if(!main)return;var t=main.querySelector(":scope>.top");
+  if(t)main.style.setProperty("--txt",t.offsetHeight+"px");
+  if(bar.offsetHeight)main.style.setProperty("--txb",bar.offsetHeight+"px")}
+ if(window.ResizeObserver){var ro=new ResizeObserver(size);ro.observe(bar);var tp=main&&main.querySelector(":scope>.top");if(tp)ro.observe(tp)}
+ window.addEventListener("resize",size);size();setTimeout(size,600);
+})();
+</script>
 </body></html>
