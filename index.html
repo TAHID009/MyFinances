@@ -1325,7 +1325,7 @@ html.rm .anx-play *{animation:none!important}@media(prefers-reduced-motion:reduc
 <section class="pg" id="p-log" hidden><div class="inc2"><div class="col">
 <div class="card" id="inc"><h3>Quick Income Entry</h3><div class="f" id="tabs" style="margin-bottom:8px"><label>Source</label><select id="srcSel" name="source"><option value="Salary">Salary</option><option value="Family">Family</option><option value="Others">Others</option></select></div>
 <form class="f" id="fi"><div class="f2"><div class="f"><label>Date</label><input type="date" name="date" required></div><div class="f"><label>Amount (৳)</label><input type="number" name="amount" min="0" step="any" placeholder="Enter amount" required></div></div><label>Received In <b class="rq">*</b></label><select name="acct" id="ia" required></select><label>Notes (optional)</label><input name="notes" placeholder="e.g. Monthly salary"><button class="btn" style="margin-top:10px;padding:11px">Save Income</button></form></div>
-<div class="card"><h3><span>Income This Month</span><b id="itot"></b></h3><div id="il"></div></div>
+<div class="card"><h3><span>Income</span><span class="m" id="irg"></span><b id="itot"></b></h3><div id="il"></div></div>
 </div><div class="col">
 <div class="card" id="log"><h3><span>Daily Expense Log</span><span class="row"><input type="date" id="sd"><span class="tabs" id="lr" style="margin:0"><button data-r="day">Day</button><button data-r="week">Week</button><button data-r="month" class="on">Month</button><button data-r="all">All</button></span><button class="btn w" id="ie"><i data-i="swap" data-s="15"></i>Import</button><button class="btn w" id="ex"><i data-i="down" data-s="15"></i>Export</button></span></h3>
 <div class="tw"><table><thead><tr><th>Date</th><th>Category</th><th>Item / Details</th><th class="ra">Amount (৳)</th><th>Payment Method</th><th>Notes</th><th></th></tr></thead><tbody id="tb"></tbody><tfoot><tr><td colspan="3"><b>Total</b></td><td class="ra"><b id="tt"></b></td><td colspan="3"></td></tr></tfoot></table></div></div>
@@ -1721,7 +1721,7 @@ function incEdit(id){const x=db.inc.find(z=>z.id===id);if(!x)return;window.__inc
  const o=document.getElementById("addinc");if(o)o.click()}
 document.addEventListener("close",e=>{if(e.target&&e.target.id==="incPop"){incExit();const f=$("#fi");if(f){f.elements.amount.value=f.elements.notes.value="";f.elements.date.value=sel}}},true);
 $("#il").onclick=async e=>{const ed=e.target.closest("[data-ei]");if(ed)return incEdit(ed.dataset.ei);const b=e.target.closest("[data-di]");if(b&&confirm("Delete this income entry?"))await rm("income",b.dataset.di)};
-function renderInc(){const IM=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date));$("#itot").textContent=fmt(sum(mon(db.income,sel.slice(0,7))));$("#il").innerHTML=mon(db.income,sel.slice(0,7)).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:calc(11px*var(--fs,1))">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b><button class="kb" data-ei="${x.id}" title="Edit">${ico("edit",16)}</button><button class="kb" data-di="${x.id}" title="Delete">${ico("trash",16)}</button></div>`).join("")+(()=>{const mv=mon(db.inc,sel.slice(0,7)).filter(x=>x.bor).sort((a,b)=>b.date.localeCompare(a.date));return mv.length?'<div class="m" style="margin:10px 0 4px;padding:6px 8px;background:#eef3fa;color:#355b86;font-weight:700;font-size:calc(12px*var(--fs,1));border-radius:8px">Loan &amp; investment money in · not income (manage in Loans &amp; Investments)</div>'+mv.map(x=>`<div class="tx" style="opacity:.8"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:calc(11px*var(--fs,1))">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="m">৳ ${num(x.amount)}</b></div>`).join(""):""})()||'<span class="m">No income this month.</span>'}
+function renderInc(){const _st=new Date(Date.UTC(+sel.slice(0,4),+sel.slice(5,7)-1,+sel.slice(8))-6*864e5).toISOString().slice(0,10),_inR=x=>typeof x.date==="string"&&(lrange==="day"?x.date.slice(0,10)===sel:lrange==="week"?x.date.slice(0,10)>=_st&&x.date.slice(0,10)<=sel:lrange==="all"?true:x.date.startsWith(sel.slice(0,7)));const IM=db.income.filter(_inR).sort((a,b)=>b.date.localeCompare(a.date));$("#itot").textContent=fmt(sum(db.income.filter(_inR)));$("#il").innerHTML=db.income.filter(_inR).sort((a,b)=>b.date.localeCompare(a.date)).map(x=>`<div class="tx"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:calc(11px*var(--fs,1))">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="g">৳ ${num(x.amount)}</b><button class="kb" data-ei="${x.id}" title="Edit">${ico("edit",16)}</button><button class="kb" data-di="${x.id}" title="Delete">${ico("trash",16)}</button></div>`).join("")+(()=>{const mv=db.inc.filter(_inR).filter(x=>x.bor).sort((a,b)=>b.date.localeCompare(a.date));return mv.length?'<div class="m" style="margin:10px 0 4px;padding:6px 8px;background:#eef3fa;color:#355b86;font-weight:700;font-size:calc(12px*var(--fs,1));border-radius:8px">Loan &amp; investment money in · not income (manage in Loans &amp; Investments)</div>'+mv.map(x=>`<div class="tx" style="opacity:.8"><div><b>${esc(x.type)}</b> <span class="m">• ${esc(x.method)}</span><br><span class="m" style="font-size:calc(11px*var(--fs,1))">${fs(x.date)}${x.notes?" • "+esc(x.notes):""}</span></div><b class="m">৳ ${num(x.amount)}</b></div>`).join(""):""})()||'<span class="m">No income this month.</span>'}
 // ---- export / import
 const dl=(n,t,ty)=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:ty}));a.download=n;a.click()};
 const q=v=>`"${String(v).replace(/"/g,'""')}"`,toCsv=(h,rows)=>h+"\n"+rows.map(r=>r.map(q).join(",")).join("\n");
@@ -5324,9 +5324,11 @@ html body main:has(>#p-log:not([hidden])) #addinc{background:#1a7f4b}
 html body main:has(>#p-log:not([hidden])) #add2{background:#a8433b}
 html body main:has(>#p-log:not([hidden])) .top .btn{border-radius:10px;padding:9px 16px}
 html body main>section#p-log.pg:not([hidden]){flex:0 0 auto!important;height:auto!important;min-height:0!important;overflow:visible!important;display:block!important;padding:0 0 28px}
-html body #p-log .inc2{display:flex!important;flex-direction:column;gap:20px;grid-template-columns:none!important;grid-template-rows:none!important}
+html body main:has(>#p-log:not([hidden])){--incw:2fr;--expw:3fr}
+html body #p-log .inc2{display:grid!important;grid-template-columns:minmax(340px,var(--incw)) minmax(0,var(--expw))!important;grid-template-rows:none!important;gap:18px;align-items:start}
 html body #p-log .inc2>.col{display:block!important;width:100%;min-height:0;min-width:0}
 html body #p-log .inc2>.col:first-child>#inc{display:none!important}
+html body #p-log[data-tf="inc"] .inc2,html body #p-log[data-tf="exp"] .inc2{grid-template-columns:minmax(0,1fr)!important}
 html body #p-log[data-tf="inc"] .inc2>.col:last-child{display:none!important}
 html body #p-log[data-tf="exp"] .inc2>.col:first-child{display:none!important}
 /* filter bar */
@@ -5365,6 +5367,9 @@ html body #p-log tfoot td{background:#f8f9f4;font-weight:700;border-bottom:0;bor
 /* popups: shape only */
 html body #dE,html body #incPop{border-radius:18px}
 html body #dE::backdrop{background:rgba(18,28,24,.5);backdrop-filter:blur(2px)}
+@media(max-width:1100px){html body #p-log .inc2{grid-template-columns:minmax(0,1fr)!important}}
+html body #p-log #il td,html body #p-log #il th{padding:7px 12px}
+html body #p-log .itbl .sub{display:block;color:#6b756f;font-size:calc(12px*var(--fs,1));margin-top:2px;overflow-wrap:anywhere}
 @media(max-width:800px){
  html body main:has(>#p-log:not([hidden]))>.top,#txbar,html body #p-log th{position:static}
  html body #p-log .tw{overflow-x:auto!important}
@@ -5384,8 +5389,13 @@ html body #dE::backdrop{background:rgba(18,28,24,.5);backdrop-filter:blur(2px)}
   [].forEach.call(bar.querySelectorAll("button"),function(x){x.classList.toggle("on",x===b)})});
  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
  function tx(n){return n?n.textContent.trim():""}
- var busy=false;
+ var busy=false,gs=document.getElementById("gs");
+ function rg(){var b=document.querySelector("#lr button.on"),h=document.getElementById("irg");if(h&&b)h.textContent="· "+b.textContent.trim()}
+ function ap2(){var q=gs?gs.value.trim().toLowerCase():"";[].forEach.call(il.querySelectorAll("tbody tr"),function(r){r.hidden=!!q&&!r.querySelector("td.mvn")&&r.textContent.toLowerCase().indexOf(q)<0})}
+ if(gs){gs.addEventListener("input",function(){clearTimeout(gs._t2);gs._t2=setTimeout(ap2,120)});gs.addEventListener("keydown",function(e){if(e.key==="Enter")setTimeout(ap2,200)});
+  document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("#gsx"))setTimeout(ap2,30)})}
  function build(){
+  rg();
   if(busy||!il.querySelector(":scope>.tx"))return;busy=true;
   var rows="";
   [].forEach.call(il.children,function(el){
@@ -5393,11 +5403,11 @@ html body #dE::backdrop{background:rgba(18,28,24,.5);backdrop-filter:blur(2px)}
     var inner=el.querySelector(":scope>div"),t=inner&&inner.querySelector("b"),sp=inner?inner.querySelectorAll("span.m"):[],
      meth=tx(sp[0]).replace(/^•\s*/,""),dn=tx(sp[1]),i=dn.indexOf(" • "),d=i<0?dn:dn.slice(0,i),note=i<0?"":dn.slice(i+3),
      amt=el.querySelector(":scope>b"),btns=el.querySelectorAll(":scope>button"),mv=!btns.length;
-    rows+='<tr'+(mv?' class="mv"':'')+'><td class="dt">'+esc(d)+'</td><td><span class="itag">'+esc(tx(t))+'</span></td><td class="ra'+(mv?'':' inn')+'">'+esc(tx(amt).replace("৳","").trim())+'</td><td>'+esc(meth)+'</td><td>'+(note?esc(note):"-")+'</td><td class="acx">'+[].map.call(btns,function(b){return b.outerHTML}).join("")+'</td></tr>';
-   }else rows+='<tr><td colspan="6" class="mvn">'+el.innerHTML+'</td></tr>';
+    rows+='<tr'+(mv?' class="mv"':'')+'><td class="dt">'+esc(d)+'</td><td><span class="itag">'+esc(tx(t))+'</span><small class="sub">'+esc(meth)+(note?' · '+esc(note):'')+'</small></td><td class="ra'+(mv?'':' inn')+'">'+esc(tx(amt).replace("৳","").trim())+'</td><td class="acx">'+[].map.call(btns,function(b){return b.outerHTML}).join("")+'</td></tr>';
+   }else rows+='<tr><td colspan="4" class="mvn">'+el.innerHTML+'</td></tr>';
   });
-  il.innerHTML='<table class="itbl"><thead><tr><th>Date</th><th>Source</th><th class="ra">Amount (৳)</th><th>Received In</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
-  busy=false;
+  il.innerHTML='<table class="itbl"><thead><tr><th>Date</th><th>Source</th><th class="ra">Amount (৳)</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+  busy=false;ap2();
  }
  new MutationObserver(build).observe(il,{childList:true});build();
  var main=document.querySelector("main");
