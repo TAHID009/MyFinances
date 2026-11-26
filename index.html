@@ -5472,4 +5472,43 @@ html body #p-dash .cal span{border-radius:8px}
 /* progress bars: rounded and flat */
 html body #p-dash .pb,html body #p-dash .pcbar{border-radius:99px;box-shadow:none}
 </style>
+<style id="txn-fit2">
+/* Transactions: compact rows + hard screen fit (height is also set by txn-fit2-js so no older rule can stop it) */
+html body #p-log td{padding:5px 12px!important;line-height:1.3}
+html body #p-log th{padding:7px 12px!important}
+html body #p-log #il td,html body #p-log #il th{padding:5px 10px!important}
+html body #p-log td .kb{display:inline-flex!important;margin:0 1px!important;vertical-align:middle}
+html body #p-log td:last-child{white-space:nowrap!important;width:1%}
+html body #p-log #tb .tag,html body #p-log .itag{white-space:nowrap!important}
+html body #p-log #tb td:nth-child(3){white-space:normal;min-width:120px}
+html body #p-log .itbl .sub{margin-top:0;font-size:calc(11.5px*var(--fs,1))}
+html body main:has(>#p-log:not([hidden]))>.top{margin-bottom:6px!important}
+html body #p-log #txbar{padding:0 0 8px!important}
+html body #p-log .card>h3:first-child{padding-top:9px!important;padding-bottom:9px!important}
+html body #p-log #log>h3 input[type=date]{padding:4px 8px!important}
+</style>
+<script id="txn-fit2-js">
+/* UI-only: makes the Income & Expense page exactly as tall as the window; the two lists scroll inside their cards. */
+(function(){
+ var pg=document.getElementById("p-log"),main=document.querySelector("main");if(!pg||!main)return;
+ var P=function(el,k,v){el.style.setProperty(k,v,"important")},R=function(el,k){el.style.removeProperty(k)};
+ function fit(){
+  if(pg.hidden||!pg.offsetParent){return}
+  var desk=window.innerWidth>1100;
+  if(!desk){["height","flex","overflow","display","flex-direction"].forEach(function(k){R(pg,k)});R(main,"overflow");return}
+  main.scrollTop=0;
+  var top=pg.getBoundingClientRect().top,h=Math.floor(window.innerHeight-top-10);
+  if(h<240)h=240;
+  P(main,"overflow","hidden");
+  P(pg,"flex","none");P(pg,"display","flex");P(pg,"flex-direction","column");P(pg,"overflow","hidden");P(pg,"height",h+"px");
+ }
+ window.addEventListener("resize",fit);
+ new MutationObserver(function(){setTimeout(fit,0)}).observe(pg,{attributes:true,attributeFilter:["hidden"]});
+ var tp=main.querySelector(":scope>.top");
+ if(window.ResizeObserver&&tp){new ResizeObserver(fit).observe(tp)}
+ document.addEventListener("click",function(){setTimeout(fit,60)},true);
+ window.addEventListener("hashchange",function(){setTimeout(fit,60)});
+ setInterval(fit,900);fit();setTimeout(fit,400);
+})();
+</script>
 </body></html>
