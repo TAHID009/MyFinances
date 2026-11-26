@@ -5418,4 +5418,58 @@ html body #p-log .itbl .sub{display:block;color:#6b756f;font-size:calc(12px*var(
  window.addEventListener("resize",size);size();setTimeout(size,600);
 })();
 </script>
+<style id="txn-fit">
+/* Transactions page: fit the screen, scroll inside each list (income / expense), headers stay visible */
+html body main:has(>#p-log:not([hidden])){overflow:hidden!important}
+html body main>section#p-log.pg:not([hidden]){flex:1 1 0!important;min-height:0!important;height:auto!important;display:flex!important;flex-direction:column;overflow:hidden!important;padding:0 0 4px}
+html body #p-log #txbar{position:static;flex:none;padding:2px 0 10px}
+html body #p-log .inc2{flex:1 1 0;min-height:0;grid-template-rows:minmax(0,1fr)!important;align-items:stretch}
+html body #p-log .inc2>.col{display:flex!important;flex-direction:column;min-height:0;height:100%}
+html body #p-log .inc2>.col>.card{flex:1 1 0!important;min-height:0;display:flex!important;flex-direction:column;overflow:hidden!important}
+html body #p-log .card>h3:first-child{flex:none}
+html body #p-log #il{flex:1 1 0!important;min-height:0;overflow:auto!important}
+html body #p-log #log>.tw{flex:1 1 0!important;min-height:0;overflow:auto!important}
+html body #p-log #il>.m{display:block;padding:18px}
+html body #p-log th{top:0!important;z-index:6}
+html body #p-log tfoot td{position:sticky;bottom:0;z-index:5;border-top:1px solid #e4e6df}
+html body #p-log .tw,html body #p-log #il{scrollbar-width:thin;scrollbar-color:#c9cfc6 transparent}
+html body #p-log .tw::-webkit-scrollbar,html body #p-log #il::-webkit-scrollbar{width:8px;height:8px}
+html body #p-log .tw::-webkit-scrollbar-thumb,html body #p-log #il::-webkit-scrollbar-thumb{background:#c9cfc6;border-radius:8px}
+html body #p-log[data-tf="inc"] .inc2,html body #p-log[data-tf="exp"] .inc2{grid-template-columns:minmax(0,1fr)!important}
+@media(max-width:1100px){
+ html body main:has(>#p-log:not([hidden])){overflow-y:auto!important}
+ html body main>section#p-log.pg:not([hidden]){flex:none!important;overflow:visible!important}
+ html body #p-log .inc2{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important}
+ html body #p-log .inc2>.col{height:auto}
+ html body #p-log .inc2>.col>.card{flex:none!important;height:70vh}
+}
+</style>
+<style id="dash-pro">
+/* Dashboard visual polish — scoped to #p-dash. Colours, borders, shadows and weights only:
+   no sizes, no layout, no JS, so the app's own fit-to-screen engine and all figures are untouched. */
+html body main:has(>#p-dash:not([hidden])){background:#F5F6F1}
+html body #p-dash .card{background:#fff;border:1px solid #E4E7DF;box-shadow:0 1px 3px rgba(20,30,25,.06),0 6px 16px rgba(20,30,25,.03)}
+html body #p-dash .card>h3,html body #p-dash .card h3>span:first-child{color:#1D2420;font-weight:700;letter-spacing:0}
+html body #p-dash b,html body #p-dash .kv,html body #p-dash .kfi b,html body #p-dash .dtc b{font-variant-numeric:tabular-nums}
+/* KPI row: thin semantic accent on top (income / expense / result / balance) */
+html body #p-dash #kp .card:nth-child(1){box-shadow:inset 0 3px 0 #1A7F4B,0 1px 3px rgba(20,30,25,.06)}
+html body #p-dash #kp .card:nth-child(2){box-shadow:inset 0 3px 0 #A8433B,0 1px 3px rgba(20,30,25,.06)}
+html body #p-dash #kp .card:nth-child(3){box-shadow:inset 0 3px 0 #2E8B6A,0 1px 3px rgba(20,30,25,.06)}
+html body #p-dash #kp .card:nth-child(4){box-shadow:inset 0 3px 0 #1F5C50,0 1px 3px rgba(20,30,25,.06)}
+/* tiles: one calm surface everywhere */
+html body #p-dash #kfl .kfi,html body #p-dash #td .dtc,html body #p-dash #td .dtt,html body #p-dash #sdl .sdr,html body #p-dash .pcq>div{background:#F7F8F3;border:1px solid #EDEFE8}
+html body #p-dash .g,html body #p-dash .pos b{color:#1A7F4B}
+html body #p-dash .r,html body #p-dash .neg b{color:#A8433B}
+/* financial position: solid, not gradient */
+html body #p-dash #fo .fsc[data-fs=nw]{background:#1F5C50;border-color:#1F5C50}
+html body #p-dash #fo .fsc{border-color:#E8EBE3}
+/* header add buttons: green = income, muted red = expense */
+html body .top .dlx-ab.inc{background:#1A7F4B;border-color:#1A7F4B;color:#fff;box-shadow:none}
+html body .top .dlx-ab.exp{background:#A8433B;border-color:#A8433B;color:#fff;box-shadow:none}
+html body #p-dash #addinc2{background:#1A7F4B;box-shadow:none}html body #p-dash #add3{background:#A8433B;color:#fff;box-shadow:none}
+/* calendar: calmer cells */
+html body #p-dash .cal span{border-radius:8px}
+/* progress bars: rounded and flat */
+html body #p-dash .pb,html body #p-dash .pcbar{border-radius:99px;box-shadow:none}
+</style>
 </body></html>
