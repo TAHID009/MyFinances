@@ -5498,14 +5498,17 @@ html body #p-log #log>h3 input[type=date]{padding:4px 8px!important}
 (function(){
  var pg=document.getElementById("p-log"),main=document.querySelector("main");if(!pg||!main)return;
  var P=function(el,k,v){el.style.setProperty(k,v,"important")},R=function(el,k){el.style.removeProperty(k)};
+ var applied=false;
+ function release(){if(!applied)return;applied=false;["height","flex","overflow","display","flex-direction"].forEach(function(k){R(pg,k)});R(main,"overflow")}
  function fit(){
-  if(pg.hidden||!pg.offsetParent){return}
+  if(pg.hidden){release();return}
+  if(!pg.offsetParent){return}
   var desk=window.innerWidth>1100;
-  if(!desk){["height","flex","overflow","display","flex-direction"].forEach(function(k){R(pg,k)});R(main,"overflow");return}
+  if(!desk){applied=true;release();return}
   main.scrollTop=0;
   var top=pg.getBoundingClientRect().top,h=Math.floor(window.innerHeight-top-10);
   if(h<240)h=240;
-  P(main,"overflow","hidden");
+  applied=true;P(main,"overflow","hidden");
   P(pg,"flex","none");P(pg,"display","flex");P(pg,"flex-direction","column");P(pg,"overflow","hidden");P(pg,"height",h+"px");
  }
  window.addEventListener("resize",fit);
